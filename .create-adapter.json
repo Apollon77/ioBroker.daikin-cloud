@@ -1,0 +1,38 @@
+{
+    "cli": true,
+    "adapterName": "daikin-cloud",
+    "title": "Daikin Cloud",
+    "description": "Control Daikin Devices that are only connected to the Daikin Cloud",
+    "keywords": [
+        "Daikin",
+        "Daikin Cloud"
+    ],
+    "expert": "yes",
+    "features": [
+        "adapter"
+    ],
+    "adminFeatures": [],
+    "type": "climate-control",
+    "startMode": "daemon",
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "connectionIndicator": "yes",
+    "language": "JavaScript",
+    "adminReact": "no",
+    "tools": [
+        "ESLint",
+        "type checking"
+    ],
+    "indentation": "Space (4)",
+    "quotes": "single",
+    "es6class": "yes",
+    "authorName": "Apollon77",
+    "authorGithub": "Apollon77",
+    "authorEmail": "iobroker@fischer-ka.de",
+    "gitRemoteProtocol": "HTTPS",
+    "gitCommit": "yes",
+    "license": "MIT License",
+    "ci": "gh-actions",
+    "dependabot": "yes",
+    "creatorVersion": "1.32.0"
+}

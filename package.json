@@ -19,7 +19,7 @@
   "dependencies": {
     "@apollon/iobroker-tools": "^0.2.0",
     "@iobroker/adapter-core": "^2.5.1",
-    "daikin-controller-cloud": "^0.1.1",
+    "daikin-controller-cloud": "^0.2.0",
     "qrcode": "^1.4.4"
   },
   "devDependencies": {

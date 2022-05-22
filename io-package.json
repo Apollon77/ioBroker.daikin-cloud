@@ -59,8 +59,10 @@
         "mode": "daemon",
         "type": "climate-control",
         "compact": true,
+        "messagebox": true,
         "connectionType": "cloud",
         "dataSource": "poll",
+        "tier": 2,
         "materialize": true,
         "dependencies": [
             {
@@ -68,9 +70,15 @@
             }
         ]
     },
+    "protectedNative": [
+        "tokenSet"
+    ],
     "native": {
-        "option1": true,
-        "option2": "42"
+        "pollingInterval": 60,
+        "proxyOwnIp": "",
+        "proxyPort": 8888,
+        "proxyWebPort": 8889,
+        "tokenSet": null
     },
     "objects": [],
     "instanceObjects": [

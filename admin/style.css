@@ -30,3 +30,22 @@ label > i[title] {
 }
 
 /* Add your styles here */
+.m .col .select-wrapper + label {
+    top: -26px;
+}
+
+.m .page {
+    height: calc(100% - 10px) !important;
+}
+
+.m span {
+    font-size: 0.9em;
+}
+
+#startProxy:hover {
+    cursor: pointer;
+}
+
+#stopProxy:hover {
+    cursor: pointer;
+}

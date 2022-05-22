@@ -1,0 +1,14 @@
+{
+    "DiscoveredInfo": "Powodzenie! %s urządzeń wykrytych na połączonym koncie w chmurze! Serwer proxy zostanie wyłączony za 15 sekund",
+    "Polling Interval": "Interwał odpytywania (jeśli urządzenie nie było zsynchronizowane z aplikacją)",
+    "Proxy External IP": "Zewnętrzny adres IP proxy (opcjonalnie, użyj dla Dockera)",
+    "Proxy Port": "Port proxy",
+    "Proxy Web Info Port": "Port proxy SSL-Zertifikat Port",
+    "Proxy-Info": "Aby móc zobaczyć i sterować urządzeniami Daikin, które są połączone z kontem Daikin Cloud i aplikacją Onecta, należy raz połączyć ten adapter z kontem w chmurze. Odbywa się to za pomocą adaptera Web-Proxy w połączeniu WLAN wraz z certyfikatem SSL. Więcej informacji w <a href=\"https://github.com/Apollon77/ioBroker.daikin-cloud/blob/master/PROXY.md\" target=\"_blank\">README</a><br/><br/> Uruchom proxy za pomocą przycisku poniżej i postępuj zgodnie z dodatkowymi instrukcjami.",
+    "ProxyInfoText": "Jeśli potrzebujesz drugiej próby, pamiętaj o ponownym załadowaniu początkowej wyświetlanej strony w dowolnym momencie, w przeciwnym razie proces się nie powiedzie!",
+    "ProxySteps": "Kliknij kod QR, aby rozpocząć proces proxy na tym komputerze lub zeskanuj kod QR telefonem komórkowym.",
+    "Start proxy": "Uruchom proxy (bądź cierpliwy, może zająć kilka sekund!)",
+    "StatusInfo": "Status: %s urządzeń znalezionych na połączonym koncie w chmurze, %s urządzeń jest online",
+    "Stop proxy": "Zatrzymaj proxy",
+    "daikin-cloud adapter settings": "Ustawienia adaptera dla daikin-cloud"
+}

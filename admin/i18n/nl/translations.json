@@ -1,0 +1,14 @@
+{
+    "DiscoveredInfo": "Succes! %s apparaten ontdekt in het verbonden cloudaccount! Proxy wordt over 15 seconden uitgeschakeld",
+    "Polling Interval": "Polling-interval (als apparaat niet met app was gesynchroniseerd)",
+    "Proxy External IP": "Proxy Extern IP (optioneel, gebruik voor Docker)",
+    "Proxy Port": "Proxypoort",
+    "Proxy Web Info Port": "Proxy SSL-Zertifikat-poort",
+    "Proxy-Info": "Om uw Daikin-apparaten die zijn verbonden met uw Daikin Cloud-account en de Onecta-app te kunnen zien en bedienen, moet u deze adapter eenmalig verbinden met uw cloudaccount. Dit doet u door de Adapter Web-Proxy in uw WLAN-verbinding samen met een SSL-certificaat te gebruiken. Meer informatie in <a href=\"https://github.com/Apollon77/ioBroker.daikin-cloud/blob/master/PROXY.md\" target=\"_blank\">README</a><br/><br/> Start de proxy met onderstaande knop en volg de aanvullende instructies.",
+    "ProxyInfoText": "Als je een tweede poging nodig hebt, zorg er dan voor dat je de aanvankelijk weergegeven pagina een keer opnieuw laadt, anders zal het proces mislukken!",
+    "ProxySteps": "Klik op de QR-code om het proxyproces op deze computer te starten of scan de QR-code met uw mobiele telefoon.",
+    "Start proxy": "Start proxy (wees geduldig, kan enkele seconden duren!)",
+    "StatusInfo": "Status: %s apparaten gevonden in verbonden cloudaccount, %s apparaten zijn online",
+    "Stop proxy": "Stop proxy",
+    "daikin-cloud adapter settings": "Adapterinstellingen voor daikin-cloud"
+}

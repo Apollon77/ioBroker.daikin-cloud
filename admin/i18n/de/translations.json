@@ -1,0 +1,14 @@
+{
+    "DiscoveredInfo": "Erfolg! %s Geräte im verbundenen Cloud-Konto entdeckt! Der Proxy wird in 15 Sekunden deaktiviert",
+    "Polling Interval": "Abrufintervall (wenn das Gerät nicht mit der App synchronisiert wurde)",
+    "Proxy External IP": "Proxy External IP (optional, für Docker verwenden)",
+    "Proxy Port": "Proxy-Port",
+    "Proxy Web Info Port": "Proxy SSL-Zertifikat Port",
+    "Proxy-Info": "Um die mit dem Daikin Cloud-Konto und der Onecta-App verbundenen Daikin-Geräte sehen und steuern zu können, muss der Adapter einmalig mit Ihrem Cloud-Konto verbunden werden. Dies geschieht durch die Verwendung des Adapter Web-Proxy in der WLAN-Verbindung zusammen mit einem SSL-Zertifikat. Weitere Informationen in <a href=\"https://github.com/Apollon77/ioBroker.daikin-cloud/blob/master/PROXY.md\" target=\"_blank\">README</a><br/><br/> Nach start des Proxy mit der Schaltfläche unten sind die weiteren Anweisungen zu befolgen.",
+    "ProxyInfoText": "Wenn ein weiterer Versuch benötigt wird, bitte unbedingt die anfänglich angezeigte Seite jederzeit einmal neu laden, da der Vorgang sonst fehlschlägt!",
+    "ProxySteps": "Klicken Sie auf den QR-Code, um den Proxy-Prozess auf diesem Computer zu starten oder scannen Sie den QR-Code mit Ihrem Mobiltelefon.",
+    "Start proxy": "Proxy starten (geduldig sein, kann einige Sekunden dauern!)",
+    "StatusInfo": "Status: %s Geräte im verbundenen Cloud-Konto gefunden, %s Geräte sind online",
+    "Stop proxy": "Proxy stoppen",
+    "daikin-cloud adapter settings": "Adaptereinstellungen für daikin-cloud"
+}

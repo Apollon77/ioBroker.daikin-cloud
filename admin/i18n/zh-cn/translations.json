@@ -1,0 +1,14 @@
+{
+    "DiscoveredInfo": "成功！在连接的云帐户中发现 %s 台设备！代理将在 15 秒后关闭",
+    "Polling Interval": "轮询间隔（如果设备未与 App 同步）",
+    "Proxy External IP": "代理外部 IP（可选，用于 Docker）",
+    "Proxy Port": "代理端口",
+    "Proxy Web Info Port": "代理SSL-Zertifikat端口",
+    "Proxy-Info": "为了能够查看和控制连接到您的大金云帐户和 Onecta 应用程序的大金设备，您需要将此适配器与您的云帐户连接一次。这是通过在您的 WLAN 连接中使用 Adapter Web-Proxy 以及 SSL 证书来完成的。 <a href=\"https://github.com/Apollon77/ioBroker.daikin-cloud/blob/master/PROXY.md\" target=\"_blank\">自述文件</a>中的更多信息<br/><br/>使用下面的按钮启动代理并按照附加说明进行操作。",
+    "ProxyInfoText": "如果您需要第二次尝试，请确保随时重新加载初始显示页面，否则该过程将失败！",
+    "ProxySteps": "点击二维码在这台电脑上启动代理进程或用您的手机扫描二维码。",
+    "Start proxy": "启动代理（请耐心等待，可能需要几秒钟！）",
+    "StatusInfo": "状态：在连接的云帐户中找到 %s 台设备，%s 台设备在线",
+    "Stop proxy": "停止代理",
+    "daikin-cloud adapter settings": "daikin-cloud的适配器设置"
+}

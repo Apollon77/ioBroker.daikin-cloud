@@ -60,5 +60,8 @@
   "bugs": {
     "url": "https://github.com/Apollon77/ioBroker.daikin-cloud/issues"
   },
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "engines": {
+    "node": "^12.19.0 || ^14.15.0 || ^16.13.0"
+  }
 }

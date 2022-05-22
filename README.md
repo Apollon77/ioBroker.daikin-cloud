@@ -13,6 +13,12 @@
 
 Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta App. The adapter connects to the Daikin-Cloud and polls the data from there. 
 
+**This adapter can be installed with the folloowing Node.js versions:**
+* 12.19.0+
+* 14.15.0+
+* 16.13.0+
+* Node.js 18 is currently NOT supported because the usen OAuth library do not support it!
+
 ## Compatibility
 
 This adapter should be compatible to devices with the Daikin WLAN-Adapters **BRP069C4x** that can be controlled via the Daikin Onecta App. A local connection to these devices is not possible!
@@ -33,7 +39,7 @@ After connecting to the Daikin Cloud account the adapter will automatically crea
 
 ## Changelog
 
-### 0.1.0
+### __WORK IN PROGRESS__
 * (Apollon77) initial release
 
 ## Disclaimer

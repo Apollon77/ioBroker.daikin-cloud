@@ -73,7 +73,16 @@
       {
         "admin": ">=4.0.9"
       }
-    ]
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://3ac7b6d04c3e4faf8c0bfe0cd38396a6@sentry.iobroker.net/197",
+        "pathWhitelist": [
+          "@apollon",
+          "daikin-controller-cloud"
+        ]
+      }
+    }
   },
   "encryptedNative": [
     "email",

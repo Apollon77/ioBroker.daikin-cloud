@@ -262,6 +262,8 @@ class DaikinCloudAdapter extends utils.Adapter {
         // Reset the connection indicator during startup
         await this.setStateAsync('info.connection', false, true);
 
+        await this.initDaikinCloud();
+
         if (!this.tokenSet || !this.tokenSet.refresh_token || !this.tokenSet.access_token) {
             if (this.config.email && this.config.password) {
                 this.log.info(`Login to Daikin Cloud with email ${this.config.email} and password`);
@@ -282,8 +284,6 @@ class DaikinCloudAdapter extends utils.Adapter {
         }
 
         await this.objectHelper.loadExistingObjects();
-
-        await this.initDaikinCloud();
 
         try {
             await this.initDaikinDevices();

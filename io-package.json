@@ -2,8 +2,7 @@
     "common": {
         "name": "daikin-cloud",
         "version": "0.0.1",
-        "news": {
-        },
+        "news": {},
         "title": "Daikin Cloud",
         "titleLang": {
             "en": "Daikin Cloud",
@@ -54,19 +53,32 @@
         "materialize": true,
         "dependencies": [
             {
-                "js-controller": ">=2.0.0"
+                "js-controller": ">=3.0.0"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=4.0.9"
             }
         ]
     },
+    "encryptedNative": [
+        "email",
+        "password"
+    ],
     "protectedNative": [
-        "tokenSet"
+        "tokenSet",
+        "email",
+        "password"
     ],
     "native": {
         "pollingInterval": 60,
         "proxyOwnIp": "",
         "proxyPort": 8888,
         "proxyWebPort": 8889,
-        "tokenSet": null
+        "tokenSet": null,
+        "email": "",
+        "password": ""
     },
     "objects": [],
     "instanceObjects": [

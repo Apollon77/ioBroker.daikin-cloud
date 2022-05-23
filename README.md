@@ -13,7 +13,7 @@
 
 Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta App. The adapter connects to the Daikin-Cloud and polls the data from there. 
 
-**This adapter can be installed with the folloowing Node.js versions:**
+**This adapter can be installed with the following Node.js versions:**
 * 12.19.0+
 * 14.15.0+
 * 16.13.0+
@@ -31,11 +31,24 @@ The newer Daikin devices sold since 2020 contain a newer Wifi Adapter (e.g. BRP0
 
 This adapter allows to initially (hopefully once) retrieve tokens by using a proxy to login to the Daikin Cloud. After that these tokens can be used and refreshed to interact with teh devices.
 
-**For more information on the Proxy progress for end users - because you need to trust and whitelist them and such - can be found in [PROXY.md](PROXY.md)!**
-Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin reset tokens or they expire that you need to do this process again!
-
 After connecting to the Daikin Cloud account the adapter will automatically create a new device for each device that is connected to the Daikin Cloud. All available data are displayed and several states allow to control the device.
 **Please note that the command speed of the Daikin cloud is not mega fast which means that it can take up to 3 minutes before the command is really executed or states are updated!**
+
+### Login via E-mail/Password
+
+If you want to provide the Daikin Cloud Credentials then the adapter can try to automatically login to the Cloud. The E-Mail and Password are stored encrypted in the configuration.
+
+It can happen that this process do not work because the Daikin Website requires you to solve a captcha. In this can you can use the following trick:
+* Start the proxy via Adapter-Configuration in Admin
+* Click on the QR-Code in the Proxy popup
+* You **do not** need to import the certificate!
+* Just click on the `Login into the Daikin Cloud to retrieve the tokens` link at the end of the instructions page and login there once and solve the captcha.
+* Close the browser window and restart the adapter
+
+### Login via Proxy
+
+**For more information on the Proxy progress for end users - because you need to trust and whitelist them and such - can be found in [PROXY.md](PROXY.md)!**
+Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin reset tokens or they expire that you need to do this process again!
 
 ## Changelog
 

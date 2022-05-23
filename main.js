@@ -60,7 +60,10 @@ class DaikinCloudAdapter extends utils.Adapter {
 
         // Event that will be triggered on new or updated tokens, save into file
         this.daikinCloud.on('token_update', async tokenSet => {
-            this.log.info('Updated tokens ...');
+            this.log.info('Daikin-Cloud tokens updated ...');
+            if (!this.tokenSet || !this.tokenSet.access_token || !this.tokenSet.refresh_token) {
+                this.updateTokenSetForAdapter(tokenSet)
+            }
             this.tokenSet = tokenSet;
         });
     }
@@ -86,6 +89,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.knownDevices[deviceId].device = dev;
         this.knownDevices[deviceId].pollTimeout && clearTimeout(this.knownDevices[deviceId].pollTimeout);
         this.knownDevices[deviceId].pollTimeout = null;
+        this.knownDevices[deviceId].errorCount = 0;
 
         this.objectHelper.setOrUpdateObject(deviceId, {
             type: 'device',
@@ -202,7 +206,24 @@ class DaikinCloudAdapter extends utils.Adapter {
                             this.setState(`${deviceId}.lastUpdateReceived`, {val: dev.getLastUpdated().getTime(), ack: true});
                         }
                     } catch (err) {
-                        this.log.warn(`${deviceId}: Error on device update: ${err.message}`);
+                        this.knownDevices[deviceId].errorCount++;
+                        const errorDetails = err.response && err.response.body && err.response.body.message;
+                        this.log.warn(`${deviceId}: Error on device update (${this.knownDevices[deviceId].errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
+                        if (/*this.knownDevices[deviceId].errorCount > 30 || */(errorDetails === 'Invalid Refresh Token')) {
+                            this.log.warn(`${deviceId}: Try to reinitialize adapter`);
+                            if (!this.config.email || !this.config.password) {
+                                this.log.warn('Please Re-Login the your Daikin Cloud account in the adapter settings');
+                                return;
+                            } else {
+                                this.tokenSet = null;
+                                this.config.tokenSet = null;
+                                this.log.info('Token seems to be invalid, try automatic re-login ...');
+                                this.onUnload(() => {
+                                    this.onReady();
+                                });
+                                return;
+                            }
+                        }
                     }
                 }
             }
@@ -241,12 +262,26 @@ class DaikinCloudAdapter extends utils.Adapter {
         // Reset the connection indicator during startup
         await this.setStateAsync('info.connection', false, true);
 
-        await this.objectHelper.loadExistingObjects();
-
         if (!this.tokenSet || !this.tokenSet.refresh_token || !this.tokenSet.access_token) {
-            this.log.warn('No token set, please Login the your Daikin Cloud account in the adapter settings');
+            if (this.config.email && this.config.password) {
+                this.log.info(`Login to Daikin Cloud with email ${this.config.email} and password`);
+                try {
+                    await this.daikinCloud.login(this.config.email, this.config.password);
+                } catch (err) {
+                    this.log.error(`Error on login: ${err.message}`);
+                    if (err.message.includes('Captcha')) {
+                        this.log.error(`It seems that a caotcha is required to allow an automatic login process. Please follow the instructions in the Readme!`);
+                    }
+                    return;
+                }
+                this.tokenSet = this.daikinCloud.getTokenSet();
+                this.log.info(`Login successful`);
+            }
+            this.log.warn('No tokens existing, please check the username and password in Adapter settings or Login to your Daikin Cloud account using the proxy in the adapter settings');
             return;
         }
+
+        await this.objectHelper.loadExistingObjects();
 
         await this.initDaikinCloud();
 
@@ -255,8 +290,18 @@ class DaikinCloudAdapter extends utils.Adapter {
         } catch (err) {
             const errorDetails = err.response && err.response.body && err.response.body.message;
             this.log.warn(`Error on Daikin Cloud communication: ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
-            this.log.warn('Please Re-Login the your Daikin Cloud account in the adapter settings');
-            return;
+            if (!this.config.email || !this.config.password) {
+                this.log.warn('Please Re-Login the your Daikin Cloud account in the adapter settings');
+                return;
+            } else {
+                this.tokenSet = null;
+                this.config.tokenSet = null;
+                this.log.info('Token seems to be invalid, try automatic re-login ...');
+                this.onUnload(() => {
+                   this.onReady();
+                });
+                return;
+            }
         }
 
         await this.createOrUpdateAllObjects();
@@ -375,11 +420,13 @@ class DaikinCloudAdapter extends utils.Adapter {
             }
 
             this.proxyOptions = {
-                proxyOwnIp: ownIp, // TODO
+                proxyOwnIp: ownIp,
                 proxyPort: altProxyPort,
                 proxyWebPort: altProxyWebPort,
                 proxyListenBind: '0.0.0.0',   // TODO??
-                proxyDataDir: configPath
+                proxyDataDir: configPath,
+                logger: this.log.debug,
+                logLevel: 'debug', // TODO??
             };
 
             try {
@@ -446,17 +493,21 @@ class DaikinCloudAdapter extends utils.Adapter {
                 this.proxyAdminMessageCallback = null;
             }
 
-            this.log.info('Daikin token updated in adapter configuration ... restarting adapter in 1s...');
             setTimeout(() => {
-                this.extendForeignObject(`system.adapter.${this.namespace}`, {
-                    native: {
-                        tokenSet: resultTokenSet
-                    }
-                });
+                this.updateTokenSetForAdapter(resultTokenSet);
             }, 1000);
         } catch (err) {
             this.log.error(`Error while waiting for Proxy Result: ${err.message}`);
         }
+    }
+
+    updateTokenSetForAdapter(tokenSet) {
+        this.log.info('Daikin token updated in adapter configuration ... restarting adapter in 1s...');
+        this.extendForeignObject(`system.adapter.${this.namespace}`, {
+            native: {
+                tokenSet
+            }
+        });
     }
 
     async stopProxy(msg) {

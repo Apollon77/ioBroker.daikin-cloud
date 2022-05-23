@@ -1,107 +1,120 @@
 {
-    "common": {
-        "name": "daikin-cloud",
-        "version": "0.0.1",
-        "news": {},
-        "title": "Daikin Cloud",
-        "titleLang": {
-            "en": "Daikin Cloud",
-            "de": "Daikin Cloud",
-            "ru": "Daikin Cloud",
-            "pt": "Daikin Cloud",
-            "nl": "Daikin Cloud",
-            "fr": "Daikin Cloud",
-            "it": "Daikin Cloud",
-            "es": "Nube Daikin",
-            "pl": "Chmura Daikin",
-            "zh-cn": "大金云"
-        },
-        "desc": {
-            "en": "Control Daikin Devices that are only connected to the Daikin Cloud",
-            "de": "Steuern Sie Daikin-Geräte, die nur mit der Daikin-Cloud verbunden sind",
-            "ru": "Управление устройствами Daikin, подключенными только к Daikin Cloud",
-            "pt": "Controlar dispositivos Daikin que estão conectados apenas à nuvem Daikin",
-            "nl": "Beheer Daikin-apparaten die alleen met de Daikin Cloud zijn verbonden",
-            "fr": "Contrôlez les appareils Daikin qui sont uniquement connectés au Daikin Cloud",
-            "it": "Controlla i dispositivi Daikin che sono collegati solo a Daikin Cloud",
-            "es": "Controle los dispositivos Daikin que solo están conectados a Daikin Cloud",
-            "pl": "Kontroluj urządzenia Daikin, które są podłączone tylko do chmury Daikin",
-            "zh-cn": "控制仅连接到大金云的大金设备"
-        },
-        "authors": [
-            "Apollon77 <iobroker@fischer-ka.de>"
-        ],
-        "keywords": [
-            "Daikin",
-            "Daikin Cloud"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "daikin-cloud.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/Apollon77/ioBroker.daikin-cloud/master/admin/daikin-cloud.png",
-        "readme": "https://github.com/Apollon77/ioBroker.daikin-cloud/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "climate-control",
-        "compact": true,
-        "messagebox": true,
-        "connectionType": "cloud",
-        "dataSource": "poll",
-        "tier": 2,
-        "materialize": true,
-        "dependencies": [
-            {
-                "js-controller": ">=3.0.0"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=4.0.9"
-            }
-        ]
+  "common": {
+    "name": "daikin-cloud",
+    "version": "0.1.0",
+    "news": {
+      "0.1.0": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Первый выпуск",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "初始发行"
+      }
     },
-    "encryptedNative": [
-        "email",
-        "password"
-    ],
-    "protectedNative": [
-        "tokenSet",
-        "email",
-        "password"
-    ],
-    "native": {
-        "pollingInterval": 60,
-        "proxyOwnIp": "",
-        "proxyPort": 8888,
-        "proxyWebPort": 8889,
-        "tokenSet": null,
-        "email": "",
-        "password": ""
+    "title": "Daikin Cloud",
+    "titleLang": {
+      "en": "Daikin Cloud",
+      "de": "Daikin Cloud",
+      "ru": "Daikin Cloud",
+      "pt": "Daikin Cloud",
+      "nl": "Daikin Cloud",
+      "fr": "Daikin Cloud",
+      "it": "Daikin Cloud",
+      "es": "Nube Daikin",
+      "pl": "Chmura Daikin",
+      "zh-cn": "大金云"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "Control Daikin Devices that are only connected to the Daikin Cloud",
+      "de": "Steuern Sie Daikin-Geräte, die nur mit der Daikin-Cloud verbunden sind",
+      "ru": "Управление устройствами Daikin, подключенными только к Daikin Cloud",
+      "pt": "Controlar dispositivos Daikin que estão conectados apenas à nuvem Daikin",
+      "nl": "Beheer Daikin-apparaten die alleen met de Daikin Cloud zijn verbonden",
+      "fr": "Contrôlez les appareils Daikin qui sont uniquement connectés au Daikin Cloud",
+      "it": "Controlla i dispositivi Daikin che sono collegati solo a Daikin Cloud",
+      "es": "Controle los dispositivos Daikin que solo están conectados a Daikin Cloud",
+      "pl": "Kontroluj urządzenia Daikin, które są podłączone tylko do chmury Daikin",
+      "zh-cn": "控制仅连接到大金云的大金设备"
+    },
+    "authors": [
+      "Apollon77 <iobroker@fischer-ka.de>"
+    ],
+    "keywords": [
+      "Daikin",
+      "Daikin Cloud"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "daikin-cloud.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/Apollon77/ioBroker.daikin-cloud/master/admin/daikin-cloud.png",
+    "readme": "https://github.com/Apollon77/ioBroker.daikin-cloud/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "climate-control",
+    "compact": true,
+    "messagebox": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "tier": 2,
+    "materialize": true,
+    "dependencies": [
+      {
+        "js-controller": ">=3.0.0"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=4.0.9"
+      }
     ]
+  },
+  "encryptedNative": [
+    "email",
+    "password"
+  ],
+  "protectedNative": [
+    "tokenSet",
+    "email",
+    "password"
+  ],
+  "native": {
+    "pollingInterval": 60,
+    "proxyOwnIp": "",
+    "proxyPort": 8888,
+    "proxyWebPort": 8889,
+    "tokenSet": null,
+    "email": "",
+    "password": ""
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }

@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "news": {
+      "0.1.1": {
+        "en": "Add Sentry for crash reporting",
+        "de": "Fügen Sie Sentry für Absturzberichte hinzu",
+        "ru": "Добавьте Sentry для отчетов о сбоях",
+        "pt": "Adicionar Sentinela para relatórios de falhas",
+        "nl": "Sentry toevoegen voor crashrapportage",
+        "fr": "Ajouter Sentry pour les rapports de plantage",
+        "it": "Aggiungi Sentinella per la segnalazione degli arresti anomali",
+        "es": "Agregar Sentry para informes de fallas",
+        "pl": "Dodaj Sentry do zgłaszania awarii",
+        "zh-cn": "添加 Sentry 以进行崩溃报告"
+      },
       "0.1.0": {
         "en": "initial release",
         "de": "Erstveröffentlichung",

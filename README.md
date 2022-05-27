@@ -53,6 +53,10 @@ It can happen that this process do not work because the Daikin Website requires 
 Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin reset tokens or they expire that you need to do this process again!
 
 ## Changelog
+
+### __WORK IN PROGRESS__
+* (Apollon77) Prevent crash reported by Sentry
+
 ### 0.1.1 (2022-05-23)
 * (Apollon77) Add Sentry for crash reporting
 

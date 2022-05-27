@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "news": {
+      "0.1.2": {
+        "en": "Prevent crash reported by Sentry",
+        "de": "Von Sentry gemeldeter Absturz verhindern",
+        "ru": "Предотвратить сбой сообщил/а Sentry",
+        "pt": "Prevenir travamento reportado pelo Sentinela",
+        "nl": "Voorkom crash gemeld door Sentry",
+        "fr": "Empêcher le crash signalé par Sentry",
+        "it": "Prevenire l'arresto anomalo segnalato da Sentry",
+        "es": "Evitar el bloqueo informado por Sentry",
+        "pl": "Zapobiegaj awariom zgłoszonym przez Sentry",
+        "zh-cn": "防止 Sentry 报告的崩溃"
+      },
       "0.1.1": {
         "en": "Add Sentry for crash reporting",
         "de": "Fügen Sie Sentry für Absturzberichte hinzu",

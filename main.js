@@ -84,12 +84,13 @@ class DaikinCloudAdapter extends utils.Adapter {
     }
 
     async initDaikinDevice(deviceId, dev) {
-        this.log.info(`Initialize device ${deviceId}`);
         this.knownDevices[deviceId] = this.knownDevices[deviceId] || {};
         this.knownDevices[deviceId].device = dev;
         this.knownDevices[deviceId].pollTimeout && clearTimeout(this.knownDevices[deviceId].pollTimeout);
         this.knownDevices[deviceId].pollTimeout = null;
         this.knownDevices[deviceId].errorCount = 0;
+        this.knownDevices[deviceId].cloudConnected = dev.isCloudConnectionUp();
+        this.log.info(`Initialize device ${deviceId}: connected ${dev.isCloudConnectionUp()}, lastUpdated ${dev.getLastUpdated()}`);
 
         this.objectHelper.setOrUpdateObject(deviceId, {
             type: 'device',
@@ -104,7 +105,6 @@ class DaikinCloudAdapter extends utils.Adapter {
             }
         }, ['name']);
 
-        this.knownDevices[deviceId].cloudConnected = dev.isCloudConnectionUp();
         this.objectHelper.setOrUpdateObject(`${deviceId}.cloudConnected`, {
             common: {
                 name: 'connected',

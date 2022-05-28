@@ -127,7 +127,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         }, undefined, this.knownDevices[deviceId].lastUpdated);
 
         const deviceData = dev.getData();
-        adapter.log.debug(`${deviceId} Device data: ${JSON.stringify(deviceData)}`);
+        this.log.debug(`${deviceId} Device data: ${JSON.stringify(deviceData)}`);
         const objIds = this.dataMapper.getObjectsForStructure(deviceData, deviceId);
         if (objIds) {
             objIds.forEach(objId => {

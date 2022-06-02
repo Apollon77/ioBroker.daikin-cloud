@@ -19,7 +19,7 @@ Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta 
 * 12.19.0+
 * 14.15.0+
 * 16.13.0+
-* Node.js 18 is currently NOT supported because the usen OAuth library do not support it!
+* Node.js 18 is currently NOT supported because the used OAuth library does not support it!
 
 ## Compatibility
 
@@ -31,16 +31,16 @@ Note: For devices with older WLAN-Adapters like **BRP069A4x** which can only be 
 
 The newer Daikin devices sold since 2020 contain a newer Wifi Adapter (e.g. BRP069C4x) which only connects to the Daikin Cloud and is no longer reachable locally. These devices are only controllable with the Daikin Onecta App.
 
-This adapter allows to initially (hopefully once) retrieve tokens by using a proxy to login to the Daikin Cloud. After that these tokens can be used and refreshed to interact with teh devices.
+This adapter allows to initially (hopefully once) retrieve tokens by using a proxy to login to the Daikin Cloud. After that these tokens can be used and refreshed to interact with the devices.
 
-After connecting to the Daikin Cloud account the adapter will automatically create a new device for each device that is connected to the Daikin Cloud. All available data are displayed and several states allow to control the device.
+After connecting to the Daikin Cloud account the adapter will automatically create a new device for each device that is connected to the Daikin Cloud. All available data is displayed and several states allow to control the device.
 **Please note that the command speed of the Daikin cloud is not mega fast which means that it can take up to 3 minutes before the command is really executed or states are updated!**
 
 ### Login via E-mail/Password
 
 If you want to provide the Daikin Cloud Credentials then the adapter can try to automatically login to the Cloud. The E-Mail and Password are stored encrypted in the configuration.
 
-It can happen that this process do not work because the Daikin Website requires you to solve a captcha. In this can you can use the following trick:
+It can happen that this process does not work because the Daikin Website requires you to solve a captcha. In this can you can use the following trick:
 * Start the proxy via Adapter-Configuration in Admin
 * Click on the QR-Code in the Proxy popup
 * You **do not** need to import the certificate!
@@ -49,8 +49,8 @@ It can happen that this process do not work because the Daikin Website requires 
 
 ### Login via Proxy
 
-**For more information on the Proxy progress for end users - because you need to trust and whitelist them and such - can be found in [PROXY.md](PROXY.md)!**
-Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin reset tokens or they expire that you need to do this process again!
+**For more information on the Proxy progress for end users - because you need to trust and whitelist certificates and such - can be found in [PROXY.md](PROXY.md)!**
+Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin resets tokens or they expire that you need to do this process again!
 
 ## Changelog
 ### 0.1.2 (2022-05-27)

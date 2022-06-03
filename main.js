@@ -338,6 +338,9 @@ class DaikinCloudAdapter extends utils.Adapter {
                 await this.daikinCloud.stopProxyServer();
                 this.proxyOptions = null;
             }
+            for (let deviceId in this.knownDevices) {
+                this.knownDevices[deviceId].pollTimeout && clearTimeout(this.knownDevices[deviceId].pollTimeout);
+            }
 
             callback();
         } catch (e) {

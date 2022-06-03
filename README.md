@@ -53,8 +53,7 @@ It can happen that this process does not work because the Daikin Website require
 Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin resets tokens or they expire that you need to do this process again!
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 0.1.3 (2022-06-03)
 * (Apollon77/Garfonso) Optimizations and fixes
 
 ### 0.1.2 (2022-05-27)

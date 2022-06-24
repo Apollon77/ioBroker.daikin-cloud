@@ -21,6 +21,11 @@ Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta 
 * 16.13.0+
 * Node.js 18 is currently NOT supported because the used OAuth library does not support it!
 
+
+## Disclaimer
+**All product and company names or logos are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them or any associated subsidiaries! This personal project is maintained in spare time and has no business goal.**
+**Daikin is a trademark of DAIKIN INDUSTRIES, LTD.**
+
 ## Compatibility
 
 This adapter should be compatible to devices with the Daikin WLAN-Adapters **BRP069C4x** that can be controlled via the Daikin Onecta App. A local connection to these devices is not possible!

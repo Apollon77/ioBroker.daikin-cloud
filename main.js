@@ -279,9 +279,13 @@ class DaikinCloudAdapter extends utils.Adapter {
                     return;
                 }
                 this.tokenSet = this.daikinCloud.getTokenSet();
-                this.log.info(`Login successful`);
+                if (this.tokenSet) {
+                    this.log.info(`Login successful. Adapter should restart soon ...`);
+                }
             }
-            this.log.warn('No tokens existing, please check the username and password in Adapter settings or Login to your Daikin Cloud account using the proxy in the adapter settings');
+            if (!this.tokenSet || !this.tokenSet.refresh_token || !this.tokenSet.access_token) {
+                this.log.warn('No tokens existing, please check the username and password in Adapter settings or Login to your Daikin Cloud account using the proxy in the adapter settings');
+            }
             return;
         }
 

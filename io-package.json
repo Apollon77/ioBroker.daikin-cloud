@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "news": {
+      "0.1.4": {
+        "en": "Adjust logging on Login to be more clear",
+        "de": "Loggen Sie sich auf Login ein, um deutlicher zu sein",
+        "ru": "Отрегулируйте вход в систему, чтобы быть более ясным",
+        "pt": "Ajuste o login para ser mais claro",
+        "nl": "Aanpassen op Login om duidelijker te zijn",
+        "fr": "Ajuster la connexion sur Login pour être plus clair",
+        "it": "Regolare la registrazione su Login per essere più chiaro",
+        "es": "Ajuste el registro en Iniciar sesión para ser más claro",
+        "pl": "Adjust logowanie na Loginie jest bardziej jasne",
+        "zh-cn": "更清楚的逻辑调整"
+      },
       "0.1.3": {
         "en": "Optimizations and fixes",
         "de": "Optimierungen und Korrekturen",

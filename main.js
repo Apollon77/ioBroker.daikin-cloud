@@ -92,10 +92,17 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.knownDevices[deviceId].cloudConnected = dev.isCloudConnectionUp();
         this.log.info(`Initialize device ${deviceId}: connected ${dev.isCloudConnectionUp()}, lastUpdated ${dev.getLastUpdated()}`);
 
+        let deviceNameObj = dev.getData('climateControl', 'name');
+        let deviceName = deviceId;
+        if (deviceNameObj) {
+            deviceName = deviceNameObj.value;
+        } else {
+            this.log.debug(`No name found for device ${deviceId}: ${JSON.stringify(dev.getData())}`);
+        }
         this.objectHelper.setOrUpdateObject(deviceId, {
             type: 'device',
             common: {
-                name: dev.getData('climateControl', 'name').value || deviceId,
+                name: deviceName,
                 statusStates: {
                     onlineId: `${this.namespace}.${deviceId}.cloudConnected`
                 }

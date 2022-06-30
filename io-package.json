@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "news": {
+      "0.2.0": {
+        "en": "Add name lookup for Altherma devices\nSend data to Sentry on unknown device types",
+        "de": "Name Lookup für Altherma-Geräte hinzufügen\nDaten an Sentry über unbekannte Gerätetypen senden",
+        "ru": "Добавьте имя для устройств Altherma\nОтправьте данные в Sentry на неизвестные типы устройств",
+        "pt": "Adicionar pesquisa de nome para dispositivos Altherma\nEnviar dados para Sentry em tipos de dispositivos desconhecidos",
+        "nl": "Voeg de naam op voor Altherma apparatuur\nStuur gegevens naar Sentry op onbekende apparaten",
+        "fr": "Ajouter le lookup de nom pour les appareils Altherma\nEnvoyer des données à Sentry sur des types de périphériques inconnus",
+        "it": "Aggiungi ricerca nome per dispositivi Altherma\nInvia i dati a Sentry su tipi di dispositivo sconosciuti",
+        "es": "Agregar nombre de búsqueda para dispositivos Altherma\nEnviar datos a Sentry en tipos de dispositivo desconocidos",
+        "pl": "Addd – nazwa urządzeń Altherma\nDane dotyczące wjazdu na nieznane typy urządzeń",
+        "zh-cn": "圣诞节装置的名称调查\n未知装置类型的数据"
+      },
       "0.1.4": {
         "en": "Adjust logging on Login to be more clear",
         "de": "Loggen Sie sich auf Login ein, um deutlicher zu sein",

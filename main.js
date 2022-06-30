@@ -37,6 +37,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.proxyRunning = false;
         this.proxyStopTimeout = null;
         this.knownDevices = {};
+        this.deviceInfoSent = {};
 
         this.daikinOptions = null;
         this.proxyOptions = null;
@@ -94,10 +95,22 @@ class DaikinCloudAdapter extends utils.Adapter {
 
         let deviceNameObj = dev.getData('climateControl', 'name');
         let deviceName = deviceId;
+        if (!deviceNameObj) { // Fallback for Altherma devices
+            deviceNameObj = dev.getData('climateControlMainZone', 'name');
+        }
         if (deviceNameObj) {
             deviceName = deviceNameObj.value;
         } else {
-            this.log.debug(`No name found for device ${deviceId}: ${JSON.stringify(dev.getData())}`);
+            if (!this.deviceInfoSent[deviceId]) {
+                const devDataStr = JSON.stringify(dev.getData());
+                this.log.debug(`No name found for device ${deviceId}: ${devDataStr}`);
+                this.deviceInfoSent[deviceId] = true;
+                this.Sentry && this.Sentry.withScope(scope => {
+                    scope.setLevel('info');
+                    scope.setExtra('deviceData', devDataStr);
+                    this.Sentry.captureMessage(`Unknown Device Name ${deviceId}`, 'info');
+                });
+            }
         }
         this.objectHelper.setOrUpdateObject(deviceId, {
             type: 'device',
@@ -261,6 +274,13 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.dataMapper = new DataMapper();
 
         this.tokenSet = this.config.tokenSet;
+
+        if (!this.Sentry && this.supportsFeature && this.supportsFeature('PLUGINS')) {
+            const sentryInstance = this.getPluginInstance('sentry');
+            if (sentryInstance) {
+                this.Sentry = sentryInstance.getSentryObject();
+            }
+        }
 
         this.config.pollingInterval = parseInt(this.config.pollingInterval, 10) || 60;
         if (this.config.pollingInterval < 30) {

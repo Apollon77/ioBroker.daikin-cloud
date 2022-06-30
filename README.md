@@ -58,6 +58,11 @@ It can happen that this process does not work because the Daikin Website require
 Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin resets tokens or they expire that you need to do this process again!
 
 ## Changelog
+
+### __WORK IN PROGRESS__
+* (Apollon77) Add name lookup for Altherma devices
+* (Apollon77) Send data to Sentry on unknown device types
+
 ### 0.1.4 (2022-06-28)
 * (Apollon77) Adjust logging on Login to be more clear
 

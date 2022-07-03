@@ -570,7 +570,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         let numDevices = Object.keys(this.knownDevices).length;
         let numConnectedToCloud = 0;
         for (let deviceId in this.knownDevices) {
-            if (this.knownDevices[deviceId].connectedToCloud) {
+            if (this.knownDevices[deviceId].cloudConnected) {
                 numConnectedToCloud++;
             }
         }

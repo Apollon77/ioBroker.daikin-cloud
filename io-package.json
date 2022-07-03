@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "news": {
+      "0.2.1": {
+        "en": "Fix the device info and count for connected devices in Admin UI",
+        "de": "Festlegen der Geräte-Info und Zählung für angeschlossene Geräte in Admin UI",
+        "ru": "Исправьте информацию о устройстве и рассчитывайте на подключенные устройства в Admin UI",
+        "pt": "Corrigir a informação do dispositivo e contar para dispositivos conectados na interface do administrador",
+        "nl": "Repareer het apparaat info en tel op verbonden apparatuur in Admin UI",
+        "fr": "Fixer les informations de l'appareil et compter pour les appareils connectés dans Admin UI",
+        "it": "Fissare le informazioni del dispositivo e contare per i dispositivi collegati in Admin UI",
+        "es": "Fijar la información del dispositivo y contar para dispositivos conectados en Admin UI",
+        "pl": "Fix info i count dla urządzeń połączonych w Admin UI",
+        "zh-cn": "Fix 在阿德明·乌伊内设计和计算相关装置的装置"
+      },
       "0.2.0": {
         "en": "Add name lookup for Altherma devices\nSend data to Sentry on unknown device types",
         "de": "Name Lookup für Altherma-Geräte hinzufügen\nDaten an Sentry über unbekannte Gerätetypen senden",

@@ -20,7 +20,7 @@
     "@apollon/iobroker-tools": "^0.2.0",
     "@iobroker/adapter-core": "^2.6.0",
     "daikin-controller-cloud": "^1.0.3",
-    "qrcode": "^1.5.0"
+    "qrcode": "^1.5.1"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.5.9",

@@ -58,8 +58,7 @@ It can happen that this process does not work because the Daikin Website require
 Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin resets tokens or they expire that you need to do this process again!
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 0.2.2 (2022-08-13)
 * (Apollon77) Add naming support for devices using old WLAN adapters but updated for Onecta
 
 ### 0.2.1 (2022-07-03)

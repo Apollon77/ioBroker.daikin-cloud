@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "news": {
+      "0.2.2": {
+        "en": "Add naming support for devices using old WLAN adapters but updated for Onecta",
+        "de": "Hinzufügen von Namensunterstützung für Geräte mit alten WLAN-Adaptern, aber aktualisiert für Onecta",
+        "ru": "Добавьте поддержку для устройств с использованием старых адаптеров WLAN, но обновлен для Onecta",
+        "pt": "Adicionar suporte de nome para dispositivos usando adaptadores WLAN antigos, mas atualizado para Onecta",
+        "nl": "Vermelden voor apparatuur met gebruik van oude WLAN adapters maar update voor Onecta",
+        "fr": "Ajouter le support de dénomination pour les appareils utilisant les anciens adaptateurs WLAN mais mis à jour pour Onecta",
+        "it": "Aggiungi supporto per i nomi per i dispositivi che utilizzano vecchi adattatori WLAN ma aggiornati per Onecta",
+        "es": "Añadir soporte para nombres de dispositivos con adaptadores WLAN antiguos pero actualizado para Onecta",
+        "pl": "Addd naming support dla urządzeń korzystających ze starych adapterów WLAN, ale aktualizował dla Onecta",
+        "zh-cn": "增加使用旧的WLAN适应器对装置的命名支助,但对单一气体的更新"
+      },
       "0.2.1": {
         "en": "Fix the device info and count for connected devices in Admin UI",
         "de": "Festlegen der Geräte-Info und Zählung für angeschlossene Geräte in Admin UI",
@@ -74,18 +86,6 @@
         "es": "Agregar Sentry para informes de fallas",
         "pl": "Dodaj Sentry do zgłaszania awarii",
         "zh-cn": "添加 Sentry 以进行崩溃报告"
-      },
-      "0.1.0": {
-        "en": "initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Первый выпуск",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "zh-cn": "初始发行"
       }
     },
     "title": "Daikin Cloud",

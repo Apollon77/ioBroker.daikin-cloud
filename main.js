@@ -45,6 +45,7 @@ class DaikinCloudAdapter extends utils.Adapter {
 
     async initDaikinCloud() {
         if (this.proxyRunning) {
+            this.log.info('Proxy is already running on initialization ... stopping it now');
             await this.daikinCloud.stopProxyServer();
             this.proxyOptions = null;
         }
@@ -97,6 +98,20 @@ class DaikinCloudAdapter extends utils.Adapter {
         let deviceName = deviceId;
         if (!deviceNameObj) { // Fallback for Altherma devices
             deviceNameObj = dev.getData('climateControlMainZone', 'name');
+        }
+        if (!deviceNameObj) { // Fallback for other Daikin devices
+            const allData = dev.getData();
+            for (let key of Object.keys(allData)) {
+                if (
+                    allData[key].name &&
+                    allData[key].name.value !== 'Gateway' &&
+                    typeof allData[key].name.value === 'string' &&
+                    allData[key].name.value.length > 0
+                ) {
+                    deviceName = allData[key].name;
+                    break;
+                }
+            }
         }
         if (deviceNameObj) {
             deviceName = deviceNameObj.value;
@@ -421,10 +436,12 @@ class DaikinCloudAdapter extends utils.Adapter {
             const certPath = path.join(configPath, 'certs/ca.pm');
             if (fs.existsSync(configPath)) {
                 try {
-                    const certStat = fs.statSync(certPath);
-                    if (certStat && Date.now() - certStat.ctimeMs > 90 * 24 * 60 * 60 * 1000) { // > 90d
-                        fs.unlinkSync(certPath);
-                        this.log.info(`Proxy certificates recreated. You need to load new certificate!`);
+                    if (fs.existsSync(certPath)) {
+                        const certStat = fs.statSync(certPath);
+                        if (certStat && Date.now() - certStat.ctimeMs > 90 * 24 * 60 * 60 * 1000) { // > 90d
+                            fs.unlinkSync(certPath);
+                            this.log.info(`Proxy certificates recreated. You need to load new certificate!`);
+                        }
                     }
                 } catch (err) {
                     this.log.info(`Could not check/recreate proxy certificates: ${err.message}`);
@@ -547,6 +564,7 @@ class DaikinCloudAdapter extends utils.Adapter {
     }
 
     async stopProxy(msg) {
+        this.log.info('Stopping Proxy Server ...');
         this.proxyStopTimeout && clearTimeout(this.proxyStopTimeout);
 
         if (this.daikinCloud) {

@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "news": {
+      "0.2.3": {
+        "en": "Clear the tokenset when email or password is changed in config",
+        "de": "Löschen Sie den Tokenset, wenn E-Mail oder Passwort in config geändert wird",
+        "ru": "Очистить токены, когда электронная почта или пароль изменены в config",
+        "pt": "Limpar o tokenset quando e-mail ou senha é alterado em config",
+        "nl": "Ontruim het tokenet als e-mail of wachtwoord veranderd is",
+        "fr": "Effacer le bouton lorsque l'email ou le mot de passe est modifié dans la configuration",
+        "it": "Cancellare il tokenset quando l'email o la password viene modificata in configurazione",
+        "es": "Despejar el tokenset cuando el correo electrónico o la contraseña se cambia en config",
+        "pl": "Wyraźny symbol, gdy e-mail lub hasło zmienia się w konfiguście",
+        "zh-cn": "当电子邮件或密码发生变化时,明示点"
+      },
       "0.2.2": {
         "en": "Add naming support for devices using old WLAN adapters but updated for Onecta",
         "de": "Hinzufügen von Namensunterstützung für Geräte mit alten WLAN-Adaptern, aber aktualisiert für Onecta",
@@ -74,18 +86,6 @@
         "es": "Evitar el bloqueo informado por Sentry",
         "pl": "Zapobiegaj awariom zgłoszonym przez Sentry",
         "zh-cn": "防止 Sentry 报告的崩溃"
-      },
-      "0.1.1": {
-        "en": "Add Sentry for crash reporting",
-        "de": "Fügen Sie Sentry für Absturzberichte hinzu",
-        "ru": "Добавьте Sentry для отчетов о сбоях",
-        "pt": "Adicionar Sentinela para relatórios de falhas",
-        "nl": "Sentry toevoegen voor crashrapportage",
-        "fr": "Ajouter Sentry pour les rapports de plantage",
-        "it": "Aggiungi Sentinella per la segnalazione degli arresti anomali",
-        "es": "Agregar Sentry para informes de fallas",
-        "pl": "Dodaj Sentry do zgłaszania awarii",
-        "zh-cn": "添加 Sentry 以进行崩溃报告"
       }
     },
     "title": "Daikin Cloud",

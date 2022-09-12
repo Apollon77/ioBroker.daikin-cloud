@@ -19,6 +19,7 @@
 
     <script type="text/javascript">
         var active = false;
+        var originalData = null;
 
         function sprintf(format) {
             var args = Array.prototype.slice.call(arguments, 1);
@@ -40,6 +41,7 @@
         function load(settings, onChange) {
             // example: select elements with id=key and class=value and insert value
             if (!settings) return;
+            originalData = settings;
             $('.value').each(function () {
                 var $key = $(this);
                 var id = $key.attr('id');
@@ -135,6 +137,9 @@
                     obj[$this.attr('id')] = $this.val();
                 }
             });
+            if (obj.email !== originalData.email || obj.password !== originalData.password) {
+                obj.tokenSet = null;
+            }
             callback(obj);
         }
     </script>

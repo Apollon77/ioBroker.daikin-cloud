@@ -200,10 +200,10 @@ class DaikinCloudAdapter extends utils.Adapter {
 
     async initDaikinDevices() {
         const devices = await this.daikinCloud.getCloudDevices();
-
         if (!devices && !devices.length) {
             this.log.info('No Devices found in the Daikin Cloud account')
         }
+        this.log.info(`Initialize ${devices.length} Daikin devices`);
         for (let dev of devices) {
             await this.initDaikinDevice(dev.getId(), dev);
         }

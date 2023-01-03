@@ -1,6 +1,6 @@
 {
     "DiscoveredInfo": "Erfolg! %s Geräte im verbundenen Cloud-Konto entdeckt! Der Proxy wird in 15 Sekunden deaktiviert",
-    "E-Mail": "Email",
+    "E-Mail": "E-Mail",
     "EmailPassword": "Login mit E-Mail und Passwort",
     "Password": "Passwort",
     "Polling Interval": "Abrufintervall (wenn das Gerät nicht mit der App synchronisiert wurde)",

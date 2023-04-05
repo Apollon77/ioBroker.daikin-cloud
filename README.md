@@ -15,13 +15,6 @@
 
 Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta App. The adapter connects to the Daikin-Cloud and polls the data from there. 
 
-**This adapter can be installed with the following Node.js versions:**
-* 12.19.0+
-* 14.15.0+
-* 16.13.0+
-* Node.js 18 is currently NOT supported because the used OAuth library does not support it!
-
-
 ## Disclaimer
 **All product and company names or logos are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them or any associated subsidiaries! This personal project is maintained in spare time and has no business goal.**
 **Daikin is a trademark of DAIKIN INDUSTRIES, LTD.**

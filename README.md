@@ -53,6 +53,7 @@ Info: This project is not grabbing any username or password, just the created to
 ## Changelog
 ### __WORK IN PROGRESS__
 * (Apollon77) Make compatible with Node.js 18+ too
+* (Apollon77) Adjust name fallback
 
 ### 0.2.3 (2022-09-12)
 * (Apollon77) Clear the tokenset when email or password is changed in config

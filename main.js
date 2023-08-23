@@ -108,7 +108,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                     typeof allData[key].name.value === 'string' &&
                     allData[key].name.value.length > 0
                 ) {
-                    deviceName = allData[key].name;
+                    deviceNameObj = allData[key].name;
                     break;
                 }
             }

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "news": {
+      "0.3.0": {
+        "en": "Make compatible with Node.js 18+ too\nAdjust name fallback",
+        "de": "Kompatibel mit Node.js 18+ machen\nAdjust name fallback",
+        "ru": "Сделайте совместимость с Node.js 18+ слишком\nОтрегулируйте имя fallback",
+        "pt": "Faça compatível com Node.js 18+ também\nAjuste o nome fallback",
+        "nl": "Maak het ook goed met Node\nVertaling:",
+        "fr": "Make compatible with Node.js 18+ too\nAjuster le nom",
+        "it": "Rendere compatibile anche con Node.js 18+\nRegolare il nome fallback",
+        "es": "Hacer compatible con Node.js 18+ también\nRetroceder de nombre ajustado",
+        "pl": "Jest kompatybilny z Node.js 18+\nAdjust name fallback (ang.)",
+        "uk": "Використовуйте сумісний з Node.js 18+ занадто\nРегулювання назви",
+        "zh-cn": "与第18+号不相容\n独立名称"
+      },
       "0.2.3": {
         "en": "Clear the tokenset when email or password is changed in config",
         "de": "Löschen Sie den Tokenset, wenn E-Mail oder Passwort in config geändert wird",
@@ -74,18 +87,6 @@
         "es": "Optimizaciones y arreglos",
         "pl": "Optymalizacje i poprawki",
         "zh-cn": "优化和修复"
-      },
-      "0.1.2": {
-        "en": "Prevent crash reported by Sentry",
-        "de": "Von Sentry gemeldeter Absturz verhindern",
-        "ru": "Предотвратить сбой сообщил/а Sentry",
-        "pt": "Prevenir travamento reportado pelo Sentinela",
-        "nl": "Voorkom crash gemeld door Sentry",
-        "fr": "Empêcher le crash signalé par Sentry",
-        "it": "Prevenire l'arresto anomalo segnalato da Sentry",
-        "es": "Evitar el bloqueo informado por Sentry",
-        "pl": "Zapobiegaj awariom zgłoszonym przez Sentry",
-        "zh-cn": "防止 Sentry 报告的崩溃"
       }
     },
     "title": "Daikin Cloud",

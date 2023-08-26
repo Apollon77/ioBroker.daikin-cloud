@@ -70,6 +70,35 @@ class DaikinCloudAdapter extends utils.Adapter {
         });
     }
 
+    normalizeDataStructure(data) {
+        // normalize the special format of "electical data" to look like all others.
+        // We need to check for the main property "consumptionData" and then check for the sub property "electrical".
+        // Electrical data have a "unit" field with value "kWh" on the main level with property "/electrical" but below
+        // it data fields for "cooling" and "heating" (and probably others) with sub properties "d", "w", "m" and "y" with values as array
+        // we need to move the "unit" field to the sub properties and remove the "unit" field on the main level.
+
+        if (data && data.consumptionData && data.consumptionData.electrical) {
+            const electrical = data.consumptionData.electrical;
+            if (typeof electrical.unit === "string") {
+                const unit = electrical.unit;
+                delete electrical.unit;
+                Object.keys(electrical).forEach(key => {
+                    if (electrical[key] && typeof electrical[key] === 'object') {
+                        Object.keys(electrical[key]).forEach(subKey => {
+                            if (Array.isArray(electrical[key][subKey])) {
+                                const value = electrical[key][subKey];
+                                electrical[key][`${subKey}-raw`] = { unit, value };
+                            } else {
+                                this.log.debug(`Ignore electrical data for ${key}/${subKey} because not an array.`);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        return data;
+    }
+
     async cleanupObsoleteObjects() {
         const delIds = Object.keys(this.objectHelper.existingStates);
         if (delIds.length) {
@@ -86,6 +115,10 @@ class DaikinCloudAdapter extends utils.Adapter {
     }
 
     async initDaikinDevice(deviceId, dev) {
+        if (this.dataMapper === undefined) {
+            this.log.error(`DataMapper not initialized!`);
+            return;
+        }
         this.knownDevices[deviceId] = this.knownDevices[deviceId] || {};
         this.knownDevices[deviceId].device = dev;
         this.knownDevices[deviceId].pollTimeout && clearTimeout(this.knownDevices[deviceId].pollTimeout);
@@ -163,9 +196,11 @@ class DaikinCloudAdapter extends utils.Adapter {
 
         const deviceData = dev.getData();
         this.log.debug(`${deviceId} Device data: ${JSON.stringify(deviceData)}`);
-        const objIds = this.dataMapper.getObjectsForStructure(deviceData, deviceId);
+        const normalizedDeviceData = this.normalizeDataStructure(deviceData);
+        this.log.debug(`${deviceId} Normalized device data: ${JSON.stringify(normalizedDeviceData)}`);
+        const objIds = this.dataMapper.getObjectsForStructure(normalizedDeviceData, deviceId);
         if (objIds) {
-            objIds.forEach(objId => {
+            for (const objId of objIds) {
                 const obj = this.dataMapper.objects.get(objId);
                 let onChange;
                 if (obj && obj.type === 'state' && obj.common) {
@@ -191,10 +226,10 @@ class DaikinCloudAdapter extends utils.Adapter {
                         };
                     }
                 }
-                const val = obj && obj.type === 'state' ? this.dataMapper.values.get(objId) :  undefined;
+                const val = obj && obj.type === 'state' ? this.dataMapper.values.get(objId) : undefined;
                 this.objectHelper.setOrUpdateObject(objId, obj, ['name'], val, onChange);
                 this.log.debug(`Added object ${objId} (${obj && obj.type})${obj && obj.type === 'state' ? ` with initial value = ${val}` : ''}`);
-            });
+            }
         }
     }
 

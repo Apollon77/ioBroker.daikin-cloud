@@ -77,7 +77,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         // it data fields for "cooling" and "heating" (and probably others) with sub properties "d", "w", "m" and "y" with values as array
         // we need to move the "unit" field to the sub properties and remove the "unit" field on the main level.
 
-        for (const dataKeys in Object.keys(data)) {
+        for (const dataKeys of Object.keys(data)) {
             this.log.debug(`Normalize data for ${dataKeys} - electrical found? ${data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData.electrical ? 'yes' : 'no'}`);
             if (data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData.electrical) {
                 const electrical = data[dataKeys].consumptionData.electrical;

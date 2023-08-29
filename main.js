@@ -77,23 +77,28 @@ class DaikinCloudAdapter extends utils.Adapter {
         // it data fields for "cooling" and "heating" (and probably others) with sub properties "d", "w", "m" and "y" with values as array
         // we need to move the "unit" field to the sub properties and remove the "unit" field on the main level.
 
-        if (data && data.consumptionData && data.consumptionData.electrical) {
-            const electrical = data.consumptionData.electrical;
-            if (typeof electrical.unit === "string") {
-                const unit = electrical.unit;
-                delete electrical.unit;
-                Object.keys(electrical).forEach(key => {
-                    if (electrical[key] && typeof electrical[key] === 'object') {
-                        Object.keys(electrical[key]).forEach(subKey => {
-                            if (Array.isArray(electrical[key][subKey])) {
-                                const value = electrical[key][subKey];
-                                electrical[key][`${subKey}-raw`] = { unit, value };
-                            } else {
-                                this.log.debug(`Ignore electrical data for ${key}/${subKey} because not an array.`);
-                            }
-                        });
-                    }
-                });
+        for (const dataKeys in Object.keys(data)) {
+            this.log.debug(`Normalize data for ${dataKeys} - electrical found? ${data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData.electrical ? 'yes' : 'no'}`);
+            if (data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData.electrical) {
+                const electrical = data[dataKeys].consumptionData.electrical;
+                if (typeof electrical.unit === "string") {
+                    const unit = electrical.unit;
+                    delete electrical.unit;
+                    Object.keys(electrical).forEach(key => {
+                        if (electrical[key] && typeof electrical[key] === 'object') {
+                            Object.keys(electrical[key]).forEach(subKey => {
+                                if (Array.isArray(electrical[key][subKey])) {
+                                    const value = electrical[key][subKey];
+                                    electrical[key][`${subKey}-raw`] = {unit, value};
+                                } else {
+                                    this.log.debug(`Ignore electrical data for ${key}/${subKey} because not an array.`);
+                                }
+                            });
+                        }
+                    });
+                    this.log.debug(`Normalize data for ${dataKeys} - electrical found and normalized: ${JSON.stringify(electrical)}`);
+                    data[dataKeys].consumptionData.electrical = electrical;
+                }
             }
         }
         return data;

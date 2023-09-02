@@ -71,7 +71,7 @@ class DaikinCloudAdapter extends utils.Adapter {
     }
 
     normalizeDataStructure(data) {
-        // normalize the special format of "electical data" to look like all others.
+        // normalize the special format of "electrical data" to look like all others.
         // We need to check for the main property "consumptionData" and then check for the sub property "electrical".
         // Electrical data have a "unit" field with value "kWh" on the main level with property "/electrical" but below
         // it data fields for "cooling" and "heating" (and probably others) with sub properties "d", "w", "m" and "y" with values as array
@@ -90,6 +90,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                                 if (Array.isArray(electrical[key][subKey])) {
                                     const value = electrical[key][subKey];
                                     electrical[key][`${subKey}-raw`] = {unit, value};
+                                    delete electrical[key][subKey];
                                 } else {
                                     this.log.debug(`Ignore electrical data for ${key}/${subKey} because not an array.`);
                                 }
@@ -270,6 +271,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                             await this.createOrUpdateAllObjects();
                         }
                         if (newLastUpdated !== this.knownDevices[deviceId].lastUpdated) {
+                            const normalizedDeviceData = this.normalizeDataStructure(dev.getData());
                             const updatedStateIds = this.dataMapper.updateValues(dev.getData(), deviceId);
                             if (updatedStateIds) {
                                 updatedStateIds.forEach(stateId => {

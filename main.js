@@ -272,7 +272,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                         }
                         if (newLastUpdated !== this.knownDevices[deviceId].lastUpdated) {
                             const normalizedDeviceData = this.normalizeDataStructure(dev.getData());
-                            const updatedStateIds = this.dataMapper.updateValues(dev.getData(), deviceId);
+                            const updatedStateIds = this.dataMapper.updateValues(normalizedDeviceData, deviceId);
                             if (updatedStateIds) {
                                 updatedStateIds.forEach(stateId => {
                                     const val = this.dataMapper.values.get(stateId);

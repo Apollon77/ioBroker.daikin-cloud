@@ -78,9 +78,9 @@ class DaikinCloudAdapter extends utils.Adapter {
         // we need to move the "unit" field to the sub properties and remove the "unit" field on the main level.
 
         for (const dataKeys of Object.keys(data)) {
-            this.log.debug(`Normalize data for ${dataKeys} - electrical found? ${data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData.electrical ? 'yes' : 'no'}`);
-            if (data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData.electrical) {
-                const electrical = data[dataKeys].consumptionData.electrical;
+            this.log.debug(`Normalize data for ${dataKeys} - /electrical found? ${data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData['/electrical'] ? 'yes' : 'no'}`);
+            if (data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData['/electrical']) {
+                const electrical = data[dataKeys].consumptionData['/electrical'];
                 if (typeof electrical.unit === "string") {
                     const unit = electrical.unit;
                     delete electrical.unit;
@@ -97,7 +97,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                         }
                     });
                     this.log.debug(`Normalize data for ${dataKeys} - electrical found and normalized: ${JSON.stringify(electrical)}`);
-                    data[dataKeys].consumptionData.electrical = electrical;
+                    data[dataKeys].consumptionData['/electrical'] = electrical;
                 }
             }
         }

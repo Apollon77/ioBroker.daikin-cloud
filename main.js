@@ -288,7 +288,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                         this.knownDevices[deviceId].errorCount++;
                         const errorDetails = err.response && err.response.body && err.response.body.message;
                         this.log.warn(`${deviceId}: Error on device update (${this.knownDevices[deviceId].errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
-                        if (/*this.knownDevices[deviceId].errorCount > 30 || */(errorDetails === 'Invalid Refresh Token')) {
+                        if (/*this.knownDevices[deviceId].errorCount > 30 || */(errorDetails === 'Invalid Refresh Token' || errorDetails === 'Refresh Token has expired')) {
                             this.log.warn(`${deviceId}: Try to reinitialize adapter`);
                             if (!this.config.email || !this.config.password) {
                                 this.log.warn('Please Re-Login the your Daikin Cloud account in the adapter settings');

@@ -3,9 +3,9 @@
     "E-Mail": "E-Mail",
     "EmailPassword": "Login mit E-Mail und Passwort",
     "Password": "Passwort",
-    "Polling Interval": "Abrufintervall (wenn das Gerät nicht mit der App synchronisiert wurde)",
+    "Polling Interval": "Abfrageintervall (wenn das Gerät nicht mit der App synchronisiert wurde)",
     "Proxy": "Alternative: Anmeldung über Proxy",
-    "Proxy External IP": "Proxy External IP (optional, für Docker verwenden)",
+    "Proxy External IP": "Proxy externe IP (optional, für Docker verwenden)",
     "Proxy Port": "Proxy-Port",
     "Proxy Web Info Port": "Proxy SSL-Zertifikat Port",
     "Proxy-Info": "Um die mit dem Daikin Cloud-Konto und der Onecta-App verbundenen Daikin-Geräte sehen und steuern zu können, muss der Adapter einmal mit Ihrem Cloud-Konto verbunden werden. Dies geschieht entweder per <b>E-Mail und Passwort</b> oder über den <b>Adapter Web-Proxy</b> in der WLAN-Verbindung zusammen mit einem SSL-Zertifikat.<br/><br/> Wenn bei der Verwendung von E-Mail und Passwort ein Anmeldefehler ausgegeben wird, dass ein Captcha gelöst werden muss, sind die Anweisungen auf der <a href=\"https://github.com/Apollon77/ioBroker.daikin-cloud/blob/master/README.md\" target=\"_blank\">README-Seite</a><br/><br/> zu befolgen. Weitere Informationen zur Verwendung des Proxys befinden sich auf der <a href=\"https://github.com/Apollon77/ioBroker.daikin-cloud/blob/master/PROXY.md\" target=\"_blank\">PROXY-Seite</a>.<br/><br/> Der Proxy wird mit der Schaltfläche rechts gestartet und zeigt weitere Anweisungen an.",
@@ -14,5 +14,5 @@
     "Start proxy": "Proxy starten (geduldig sein, kann einige Sekunden dauern!)",
     "StatusInfo": "Status: %s Geräte im verbundenen Cloud-Konto gefunden, %s Geräte sind online",
     "Stop proxy": "Proxy stoppen",
-    "daikin-cloud adapter settings": "Adaptereinstellungen für daikin-cloud"
+    "daikin-cloud adapter settings": "Adaptereinstellungen für Daikin-Cloud"
 }

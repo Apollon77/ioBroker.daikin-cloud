@@ -121,7 +121,10 @@
       "Daikin",
       "Daikin Cloud"
     ],
-    "license": "MIT",
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
     "platform": "Javascript/Node.js",
     "main": "main.js",
     "icon": "daikin-cloud.jpg",
@@ -158,22 +161,18 @@
     }
   },
   "encryptedNative": [
-    "email",
-    "password"
+    "clientId",
+    "clientSecret"
   ],
   "protectedNative": [
-    "tokenSet",
-    "email",
-    "password"
+    "clientId",
+    "clientSecret"
   ],
   "native": {
-    "pollingInterval": 60,
-    "proxyOwnIp": "",
-    "proxyPort": 8888,
-    "proxyWebPort": 8889,
-    "tokenSet": null,
-    "email": "",
-    "password": ""
+    "clientId": "",
+    "clientSecret": "",
+    "pollingInterval": 900,
+    "slowPollingInterval": 1800
   },
   "objects": [],
   "instanceObjects": [
@@ -194,6 +193,30 @@
         "type": "boolean",
         "read": true,
         "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "_config",
+      "type": "config",
+      "common": {
+        "name": "Token data for Daikin Onecta cloud",
+        "expert": true
+      },
+      "native": {
+        "tokenSet": null
+      }
+    },
+    {
+      "_id": "useSlowPolling",
+      "type": "state",
+      "common": {
+        "role": "switch",
+        "name": "Use Slow polling interval for e.g night times",
+        "type": "boolean",
+        "read": true,
+        "write": true,
         "def": false
       },
       "native": {}

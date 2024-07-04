@@ -522,7 +522,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                     if (!args.redirectUriBase.endsWith('/')) args.redirectUriBase += '/';
                     args.redirectUriBase = `${args.redirectUriBase}oauth2_callbacks/${this.namespace}/`;
                     this.log.debug(`Get OAuth start link data: ${JSON.stringify(args)}`);
-                    msg.callback && this.sendTo(msg.from, msg.command, {error: `Redirect URL: <b>${args.redirectUriBase}</b>. Enter in Daikin Devdeloper App!`} , msg.callback);
+                    msg.callback && this.sendTo(msg.from, msg.command, {error: `Redirect URL: ${args.redirectUriBase} ... Enter in Daikin Developer App!`} , msg.callback);
                     break;
                 case 'getOAuthStartLink': {
                     const args = msg.message;

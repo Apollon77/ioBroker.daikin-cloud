@@ -54,7 +54,7 @@
             "color": "primary",
             "disabled": "!_alive",
             "type": "sendTo",
-            "label": "4. Press this button to get the Redirect URL ...",
+            "label": "4. Press this button to get the Redirect URL ... (Ignore 'Error' in headline of popup)",
             "icon": "info",
             "command": "getRedirectBaseUrl",
             "jsonData": "{ \"clientId\": \"${data.clientId}\",\"clientSecret\": \"${data.clientSecret}\",\"redirectUriBase\": \"${data._origin}\" }"

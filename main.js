@@ -9,9 +9,6 @@
 const utils = require('@iobroker/adapter-core');
 const Tools = require('@apollon/iobroker-tools');
 const { DaikinCloudController, RateLimitedError} = require('daikin-controller-cloud');
-const os = require('os');
-const path = require('path');
-const fs = require('fs');
 const DataMapper = require('./lib/mapper');
 
 /**
@@ -515,10 +512,17 @@ class DaikinCloudAdapter extends utils.Adapter {
                         }, msg.callback);
                         return;
                     }
+                    if (args.redirectUriBase.includes('127.0.0.1') || args.redirectUriBase.includes('localhost')) {
+                        this.sendTo(msg.from, msg.command, {
+                            result: null,
+                            error: 'Please use a local IP or domain for the redirect URL. Localhost is not allowed.'
+                        }, msg.callback);
+                        return;
+                    }
                     if (!args.redirectUriBase.endsWith('/')) args.redirectUriBase += '/';
                     args.redirectUriBase = `${args.redirectUriBase}oauth2_callbacks/${this.namespace}/`;
                     this.log.debug(`Get OAuth start link data: ${JSON.stringify(args)}`);
-                    msg.callback && this.sendTo(msg.from, msg.command, {error: `Please make sure ${args.redirectUriBase} is set in the ....`} , msg.callback);
+                    msg.callback && this.sendTo(msg.from, msg.command, {error: `Redirect URL: <b>${args.redirectUriBase}</b>. Enter in Daikin Devdeloper App!`} , msg.callback);
                     break;
                 case 'getOAuthStartLink': {
                     const args = msg.message;
@@ -566,7 +570,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                             });
                         });
 
-                        const apiInfo = daikinCloud.getApiInfo();
+                        await daikinCloud.getApiInfo(); // trigger authentication
                     });
                     break;
                 }

@@ -8,17 +8,35 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 const Tools = require('@apollon/iobroker-tools');
-const DaikinCloud = require('daikin-controller-cloud');
+const { DaikinCloudController, RateLimitedError} = require('daikin-controller-cloud');
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const DataMapper = require('./lib/mapper');
 
-// Load your modules here, e.g.:
-// const fs = require("fs");
+/**
+ * Utility function to create a Promise that can be resolved/rejected deferred
+ *
+ * @returns {Promise<any>}
+ */
+function getDeferredPromise() {
+    let res;
+    let rej;
+
+    const resultPromise = new Promise((resolve, reject) => {
+        res = resolve;
+        rej = reject;
+    });
+
+    // @ts-ignore
+    resultPromise.resolve = res;
+    // @ts-ignore
+    resultPromise.reject = rej;
+
+    return resultPromise;
+}
 
 class DaikinCloudAdapter extends utils.Adapter {
-
     /**
      * @param {Partial<utils.AdapterOptions>} [options={}]
      */
@@ -40,34 +58,39 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.deviceInfoSent = {};
 
         this.daikinOptions = null;
-        this.proxyOptions = null;
+
+        this.pollTimeout = null;
+        this.pollingInterval = 900;
+        this.errorCount = 0;
+
+        this.unloaded = false;
+        this.authenticationPromise = null;
+        this.expectedAuthenticationState = null;
     }
 
     async initDaikinCloud() {
-        if (this.proxyRunning) {
-            this.log.info('Proxy is already running on initialization ... stopping it now');
-            await this.daikinCloud.stopProxyServer();
-            this.proxyOptions = null;
-        }
         /**
          * Options to initialize the DaikinCloud instance with
          */
         this.daikinOptions = {
-            logger: this.log.debug,
-            logLevel: 'debug', // TODO??
+            tokenSet: this.tokenSet,
+            oidcClientId: this.config.clientId,
+            oidcClientSecret: this.config.clientSecret,
         };
 
         // Initialize Daikin Cloud Instance
-        this.daikinCloud = new DaikinCloud(this.tokenSet, this.daikinOptions);
+        this.daikinCloud = new DaikinCloudController(this.daikinOptions);
 
         // Event that will be triggered on new or updated tokens, save into file
         this.daikinCloud.on('token_update', async tokenSet => {
             this.log.info('Daikin-Cloud tokens updated ...');
-            if (!this.tokenSet || !this.tokenSet.access_token || !this.tokenSet.refresh_token) {
-                this.updateTokenSetForAdapter(tokenSet)
-            }
             this.tokenSet = tokenSet;
+            await this.updateTokenSetForAdapter(tokenSet)
         });
+
+        this.daikinCloud.on('rate_limit_status', async rateLimitStatus => {
+            this.log.debug(`Rate Limit Status: ${JSON.stringify(rateLimitStatus)}`);
+        })
     }
 
     normalizeDataStructure(data) {
@@ -106,12 +129,12 @@ class DaikinCloudAdapter extends utils.Adapter {
     }
 
     async cleanupObsoleteObjects() {
-        const delIds = Object.keys(this.objectHelper.existingStates);
+        const delIds = Object.keys(this.objectHelper.existingStates).filter(id => id.includes("."));
         if (delIds.length) {
             this.log.info(`Deleting the following obsolete states: ${JSON.stringify(delIds)}`);
             for (let i = 0; i < delIds.length; i++) {
                 try {
-                    await this.delObject(delIds[i],);
+                    await this.delObject(delIds[i]);
                 } catch (err) {
                     this.log.info(`Can not delete object ${delIds[i]} ${err}`);
                 }
@@ -127,9 +150,6 @@ class DaikinCloudAdapter extends utils.Adapter {
         }
         this.knownDevices[deviceId] = this.knownDevices[deviceId] || {};
         this.knownDevices[deviceId].device = dev;
-        this.knownDevices[deviceId].pollTimeout && clearTimeout(this.knownDevices[deviceId].pollTimeout);
-        this.knownDevices[deviceId].pollTimeout = null;
-        this.knownDevices[deviceId].errorCount = 0;
         this.knownDevices[deviceId].cloudConnected = dev.isCloudConnectionUp();
         this.log.info(`Initialize device ${deviceId}: connected ${dev.isCloudConnectionUp()}, lastUpdated ${dev.getLastUpdated()}`);
 
@@ -200,6 +220,32 @@ class DaikinCloudAdapter extends utils.Adapter {
             }
         }, undefined, this.knownDevices[deviceId].lastUpdated);
 
+        dev.on('updated', async () => {
+            if (this.unloaded) return;
+            const newLastUpdated = dev.getLastUpdated().getTime();
+            const newCloudConnected = dev.isCloudConnectionUp();
+            if (newCloudConnected !== this.knownDevices[deviceId].cloudConnected) {
+                await this.setState(`${deviceId}.cloudConnected`, {val: dev.isCloudConnectionUp(), ack: true});
+                this.log.info(`${deviceId}: Cloud connection status changed to ${dev.isCloudConnectionUp()} - Reinitialize all Objects`);
+                await this.initDaikinDevice(dev.getId(), dev);
+                await this.createOrUpdateAllObjects();
+            }
+            if (newLastUpdated !== this.knownDevices[deviceId].lastUpdated) {
+                const normalizedDeviceData = this.normalizeDataStructure(dev.getData());
+                const updatedStateIds = this.dataMapper.updateValues(normalizedDeviceData, deviceId);
+                if (updatedStateIds) {
+                    for (const stateId of updatedStateIds) {
+                        const val = this.dataMapper.values.get(stateId);
+                        this.log.debug(`update state: ${stateId} = ${val}`);
+                        if (val !== undefined) {
+                            await this.setState(stateId, val, true);
+                        }
+                    }
+                }
+                await this.setState(`${deviceId}.lastUpdateReceived`, {val: dev.getLastUpdated().getTime(), ack: true});
+            }
+        });
+
         const deviceData = dev.getData();
         this.log.debug(`${deviceId} Device data: ${JSON.stringify(deviceData)}`);
         const normalizedDeviceData = this.normalizeDataStructure(deviceData);
@@ -208,6 +254,10 @@ class DaikinCloudAdapter extends utils.Adapter {
         if (objIds) {
             for (const objId of objIds) {
                 const obj = this.dataMapper.objects.get(objId);
+                const existingObj = this.objectHelper.getObject(objId);
+                if (existingObj && existingObj.common && existingObj.common.write !== undefined) {
+                    obj.common.write = existingObj.common.write || obj.common.write; // once true we leave it true
+                }
                 let onChange;
                 if (obj && obj.type === 'state' && obj.common) {
                     if (obj.common.write) {
@@ -220,14 +270,14 @@ class DaikinCloudAdapter extends utils.Adapter {
                             } catch (err) {
                                 this.log.warn(`Error on State update for ${objId} with value=${writeValue}: ${err.message}`);
                             }
-                            await this.pollDevice(deviceId, 10000);
+                            await this.pollDevices(60000);
                         };
                     } else {
                         onChange = async () => {
                             this.log.info(`Ignore state change for ${objId} because not writable!`);
                             const lastValue = this.dataMapper.values.get(objId);
                             if (lastValue !== undefined) {
-                                this.setState(objId, {val: lastValue, ack: true});
+                                await this.setState(objId, {val: lastValue, ack: true});
                             }
                         };
                     }
@@ -250,65 +300,34 @@ class DaikinCloudAdapter extends utils.Adapter {
         }
     }
 
-    async pollDevice(deviceId, delay) {
-        if (this.knownDevices[deviceId].pollTimeout) {
-            clearTimeout(this.knownDevices[deviceId].pollTimeout);
-            this.knownDevices[deviceId].pollTimeout = null;
-        }
+    async pollDevices(delay) {
+        this.pollTimeout && clearTimeout(this.pollTimeout);
         if (!delay) {
-            delay = this.config.pollingInterval * 1000;
-            if (this.knownDevices[deviceId]) {
-                const dev = this.knownDevices[deviceId].device;
-                if (dev) {
-                    try {
-                        await dev.updateData();
-                        const newLastUpdated = dev.getLastUpdated().getTime();
-                        const newCloudConnected = dev.isCloudConnectionUp();
-                        if (newCloudConnected !== this.knownDevices[deviceId].cloudConnected) {
-                            this.setState(`${deviceId}.cloudConnected`, {val: dev.isCloudConnectionUp(), ack: true});
-                            this.log.info(`${deviceId}: Cloud connection status changed to ${dev.isCloudConnectionUp()} - Reinitialize all Objects`);
-                            await this.initDaikinDevice(dev.getId(), dev);
-                            await this.createOrUpdateAllObjects();
-                        }
-                        if (newLastUpdated !== this.knownDevices[deviceId].lastUpdated) {
-                            const normalizedDeviceData = this.normalizeDataStructure(dev.getData());
-                            const updatedStateIds = this.dataMapper.updateValues(normalizedDeviceData, deviceId);
-                            if (updatedStateIds) {
-                                updatedStateIds.forEach(stateId => {
-                                    const val = this.dataMapper.values.get(stateId);
-                                    this.log.debug(`update state: ${stateId} = ${val}`);
-                                    if (val !== undefined) {
-                                        this.setState(stateId, val, true);
-                                    }
-                                });
-                            }
-                            this.setState(`${deviceId}.lastUpdateReceived`, {val: dev.getLastUpdated().getTime(), ack: true});
-                        }
-                    } catch (err) {
-                        this.knownDevices[deviceId].errorCount++;
-                        const errorDetails = err.response && err.response.body && err.response.body.message;
-                        this.log.warn(`${deviceId}: Error on device update (${this.knownDevices[deviceId].errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
-                        if (/*this.knownDevices[deviceId].errorCount > 30 || */(errorDetails === 'Invalid Refresh Token' || errorDetails === 'Refresh Token has expired')) {
-                            this.log.warn(`${deviceId}: Try to reinitialize adapter`);
-                            if (!this.config.email || !this.config.password) {
-                                this.log.warn('Please Re-Login the your Daikin Cloud account in the adapter settings');
-                                return;
-                            } else {
-                                this.tokenSet = null;
-                                this.config.tokenSet = null;
-                                this.log.info('Token seems to be invalid, try automatic re-login ...');
-                                this.onUnload(() => {
-                                    this.onReady();
-                                });
-                                return;
-                            }
-                        }
-                    }
+            delay = this.pollingInterval * 1000;
+            try {
+                await this.daikinCloud.updateAllDeviceData();
+            } catch (err) {
+                if (err instanceof RateLimitedError) {
+                    this.log.warn(`Rate Limit reached, you did too many requests to the Daikin Cloud API!`);
+                } else {
+                    this.errorCount++;
+                }
+                const errorDetails = err.response && err.response.body && err.response.body.message;
+                this.log.warn(`Error on update (${this.errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
+                if (/*this.knownDevices[deviceId].errorCount > 30 || */(errorDetails === 'Invalid Refresh Token' || errorDetails === 'Refresh Token has expired')) {
+                    this.log.warn(`Try to reinitialize adapter`);
+                    this.tokenSet = null;
+                    await this.updateTokenSetForAdapter(null);
+                    this.log.info('Token seems to be invalid, try automatic re-login ...');
+                    await this.onUnload(() => {
+                        this.onReady();
+                    });
+                    return;
                 }
             }
         }
-        this.knownDevices[deviceId].pollTimeout = setTimeout(async () => {
-            await this.pollDevice(deviceId);
+        this.pollTimeout = setTimeout(async () => {
+            await this.pollDevices();
         }, delay);
     }
 
@@ -325,12 +344,14 @@ class DaikinCloudAdapter extends utils.Adapter {
      */
     async onReady() {
         // Initialize your adapter here
+        this.unloaded = false;
         this.objectHelper = Tools.objectHelper;
         this.objectHelper.init(this);
 
         this.dataMapper = new DataMapper();
 
-        this.tokenSet = this.config.tokenSet;
+        const tokenObject = await this.getObjectAsync('_config');
+        this.tokenSet = tokenObject && tokenObject.native && tokenObject.native.tokenSet ? tokenObject.native.tokenSet : null;
 
         if (!this.Sentry && this.supportsFeature && this.supportsFeature('PLUGINS')) {
             const sentryInstance = this.getPluginInstance('sentry');
@@ -339,39 +360,38 @@ class DaikinCloudAdapter extends utils.Adapter {
             }
         }
 
-        this.config.pollingInterval = parseInt(this.config.pollingInterval, 10) || 60;
-        if (this.config.pollingInterval < 30) {
-            this.log.info(`Polling interval too low, set to 30 seconds`);
-            this.config.pollingInterval = 30;
+        this.config.pollingInterval = parseInt(this.config.pollingInterval, 10) || 900;
+        this.config.slowPollingInterval = parseInt(this.config.slowPollingInterval, 10) || 1800;
+        if (isNaN(this.config.pollingInterval) || this.config.pollingInterval < 300) {
+            this.log.warn(`Polling interval invalid or too low, set to 300 seconds (5 minutes)`);
+            this.config.pollingInterval = 300;
+        } else if (this.config.pollingInterval < 600) {
+            this.log.warn(`Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`);
+        }
+        if (isNaN(this.config.slowPollingInterval) || this.config.slowPollingInterval < 300) {
+            this.log.warn(`Slow Polling interval invalid or too low, set to 6000 seconds (10 minutes)`);
+            this.config.slowPollingInterval = 600;
+        } else if (this.config.slowPollingInterval < 600) {
+            this.log.warn(`Slow Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`);
+        }
+
+        if (this.config.slowPollingInterval < this.config.pollingInterval) {
+            this.log.warn(`Slow Polling interval is lower than the normal polling interval, this could lead to problems with the rate limit of 200 calls per day! be aware! Adjusting to polling interval`);
+            this.config.slowPollingInterval = this.config.pollingInterval;
         }
 
         // Reset the connection indicator during startup
-        await this.setStateAsync('info.connection', false, true);
-
-        await this.initDaikinCloud();
+        await this.setState('info.connection', false, true);
 
         if (!this.tokenSet || !this.tokenSet.refresh_token || !this.tokenSet.access_token) {
-            if (this.config.email && this.config.password) {
-                this.log.info(`Login to Daikin Cloud with email ${this.config.email} and password`);
-                try {
-                    await this.daikinCloud.login(this.config.email, this.config.password);
-                } catch (err) {
-                    this.log.error(`Error on login: ${err.message}`);
-                    if (err.message.includes('Captcha')) {
-                        this.log.error(`It seems that a caotcha is required to allow an automatic login process. Please follow the instructions in the Readme!`);
-                    }
-                    return;
-                }
-                this.tokenSet = this.daikinCloud.getTokenSet();
-                if (this.tokenSet) {
-                    this.log.info(`Login successful. Adapter should restart soon ...`);
-                }
-            }
-            if (!this.tokenSet || !this.tokenSet.refresh_token || !this.tokenSet.access_token) {
-                this.log.warn('No tokens existing, please check the username and password in Adapter settings or Login to your Daikin Cloud account using the proxy in the adapter settings');
-            }
+            this.log.warn('No tokens existing, please enter client id and secret of your Daikin Developer Account in Adapter settings and Authenticate via Admin Interface!');
             return;
         }
+
+        const useSlowPolling = await this.getStateAsync(`${this.namespace}.useSlowPolling`);
+        this.pollingInterval = useSlowPolling && useSlowPolling.val ? this.config.slowPollingInterval : this.config.pollingInterval;
+
+        await this.initDaikinCloud();
 
         await this.objectHelper.loadExistingObjects();
 
@@ -380,18 +400,13 @@ class DaikinCloudAdapter extends utils.Adapter {
         } catch (err) {
             const errorDetails = err.response && err.response.body && err.response.body.message;
             this.log.warn(`Error on Daikin Cloud communication: ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
-            if (!this.config.email || !this.config.password) {
-                this.log.warn('Please Re-Login the your Daikin Cloud account in the adapter settings');
-                return;
-            } else {
-                this.tokenSet = null;
-                this.config.tokenSet = null;
-                this.log.info('Token seems to be invalid, try automatic re-login ...');
-                this.onUnload(() => {
-                   this.onReady();
-                });
-                return;
-            }
+            this.tokenSet = null;
+            await this.updateTokenSetForAdapter(null);
+            this.log.info('Token seems to be invalid, try automatic re-login ...');
+            await this.onUnload(() => {
+               this.onReady();
+            });
+            return;
         }
 
         await this.createOrUpdateAllObjects();
@@ -399,20 +414,17 @@ class DaikinCloudAdapter extends utils.Adapter {
         for (const [stateId, val] of this.dataMapper.values.entries()) {
             if (val !== undefined) {
                 this.log.debug(`Set initial state value: ${stateId} = ${val}`);
-                await this.setStateAsync(stateId, val, true);
+                await this.setState(stateId, val, true);
             }
         }
 
         await this.cleanupObsoleteObjects();
 
-        await this.setStateAsync('info.connection', true, true);
+        await this.setState('info.connection', true, true);
 
         this.subscribeStates('*');
 
-        let cnt = 0;
-        for (let deviceId in this.knownDevices) {
-            await this.pollDevice(deviceId, (this.config.pollingInterval + cnt++ * 2) * 1000);
-        }
+        await this.pollDevices(this.pollingInterval * 1000);
     }
 
     /**
@@ -420,16 +432,9 @@ class DaikinCloudAdapter extends utils.Adapter {
      * @param {() => void} callback
      */
     async onUnload(callback) {
+        this.unloaded = true;
         try {
-            this.proxyStopTimeout && clearTimeout(this.proxyStopTimeout);
-            if (this.proxyRunning) {
-                await this.daikinCloud.stopProxyServer();
-                this.proxyOptions = null;
-            }
-            for (let deviceId in this.knownDevices) {
-                this.knownDevices[deviceId].pollTimeout && clearTimeout(this.knownDevices[deviceId].pollTimeout);
-            }
-
+            this.pollTimeout && clearTimeout(this.pollTimeout);
             callback();
         } catch (e) {
             callback();
@@ -441,10 +446,21 @@ class DaikinCloudAdapter extends utils.Adapter {
      * @param {string} id
      * @param {ioBroker.State | null | undefined} state
      */
-    onStateChange(id, state) {
+    async onStateChange(id, state) {
         if (state) {
             // The state was changed
             this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+            if (id === `${this.namespace}.useSlowPolling` && !state.ack) {
+                if (state.val) {
+                    this.log.info(`Switch to slow polling interval`);
+                    this.pollingInterval = this.config.slowPollingInterval;
+                } else {
+                    this.log.info(`Switch to normal polling interval`);
+                    this.pollingInterval = this.config.pollingInterval;
+                }
+                await this.setState(id, state.val, true);
+                return;
+            }
             this.objectHelper.handleStateChange(id, state);
         } else {
             // The state was deleted
@@ -452,178 +468,13 @@ class DaikinCloudAdapter extends utils.Adapter {
         }
     }
 
-    async startProxy(msg) {
-        if (!this.proxyRunning) {
-
-            const ifaces = os.networkInterfaces();
-            let ownIp;
-            if (msg && msg.message && msg.message.proxyOwnIp) {
-                ownIp = msg.message.proxyOwnIp;
-            } else if (this.config.proxyOwnIp) {
-                ownIp = this.config.proxyOwnIp;
-            } else if (ifaces) {
-                for (let eth of Object.keys(ifaces)) {
-                    if (!ifaces[eth] || !Array.isArray(ifaces[eth])) continue;
-                    for (let ethIFace of ifaces[eth]) {
-                        if (ethIFace.family !== 'IPv6' && ethIFace.family !== 6 && ethIFace.address !== '127.0.0.1' && ethIFace.address !== '0.0.0.0') {
-                            ownIp = ethIFace.address;
-                            this.log.debug(`Use first network interface (${ownIp})`);
-                            break;
-                        }
-                    }
-                    if (ownIp) break;
-                }
-            }
-            const configPath = utils.getAbsoluteInstanceDataDir(this);
-            const certPath = path.join(configPath, 'certs/ca.pm');
-            if (fs.existsSync(configPath)) {
-                try {
-                    if (fs.existsSync(certPath)) {
-                        const certStat = fs.statSync(certPath);
-                        if (certStat && Date.now() - certStat.ctimeMs > 90 * 24 * 60 * 60 * 1000) { // > 90d
-                            fs.unlinkSync(certPath);
-                            this.log.info(`Proxy certificates recreated. You need to load new certificate!`);
-                        }
-                    }
-                } catch (err) {
-                    this.log.info(`Could not check/recreate proxy certificates: ${err.message}`);
-                }
-            } else {
-                fs.mkdirSync(configPath);
-            }
-
-            this.config.proxyPort = parseInt(this.config.proxyPort, 10);
-            if (isNaN(this.config.proxyPort) || this.config.proxyPort < 1024 || this.config.proxyPort > 65535) {
-                this.log.warn('Invalid port set for Proxy. Reset to 8888');
-                this.config.proxyPort = 8888;
-            }
-            this.config.proxyWebPort = parseInt(this.config.proxyWebPort, 10);
-            if (isNaN(this.config.proxyWebPort) || this.config.proxyWebPort < 1024 || this.config.proxyWebPort > 65535) {
-                this.log.warn('Invalid port set for Proxy web port. Reset to 8889');
-                this.config.proxyWebPort = 8889;
-            }
-
-            let altProxyPort = parseInt(msg && msg.message && msg.message.proxyPort, 10);
-            if (isNaN(altProxyPort) || altProxyPort < 1024 || altProxyPort > 65535) {
-                this.log.warn(`Invalid port set for Proxy. Reset to ${this.config.proxyPort}`);
-                altProxyPort = this.config.proxyPort;
-            }
-            let altProxyWebPort = parseInt(msg && msg.message && msg.message.proxyWebPort, 10);
-            if (isNaN(altProxyWebPort) || altProxyWebPort < 1024 || altProxyWebPort > 65535) {
-                this.log.warn(`Invalid port set for Proxy web port. Reset to ${this.config.proxyWebPort}`);
-                altProxyWebPort = this.config.proxyWebPort;
-            }
-
-            this.proxyOptions = {
-                proxyOwnIp: ownIp,
-                proxyPort: altProxyPort,
-                proxyWebPort: altProxyWebPort,
-                proxyListenBind: '0.0.0.0',   // TODO??
-                proxyDataDir: configPath,
-                logger: this.log.debug,
-                logLevel: 'debug', // TODO??
-            };
-
-            try {
-                await this.daikinCloud.initProxyServer(this.proxyOptions);
-                this.proxyRunning = true;
-            } catch (err) {
-                this.log.error(`Error while starting Proxy: ${err}`);
-                this.sendTo(msg.from, msg.command, {
-                    result: {},
-                    error: err
-                }, msg.callback);
-                return;
-            }
-        }
-
-        const dataUrl = `http://${this.proxyOptions.proxyOwnIp}:${this.proxyOptions.proxyWebPort}`;
-        this.log.info(`SSL-Proxy ready to receive requests. Please visit ${dataUrl} and follow instructions there.`);
-
-        let QRCode4Url;
-        try {
-            const QRCode = require('qrcode');
-            QRCode4Url = await QRCode.toDataURL(dataUrl);
-        } catch (err) {
-            this.log.error(`Error while creating QR Code for Admin: ${err}`);
-        }
-        this.sendTo(msg.from, msg.command, {
-            result: {
-                url: dataUrl,
-                qrcodeUrl: QRCode4Url ? QRCode4Url : 'Not existing'
-            },
-            error: null
-        }, msg.callback);
-
-        this.proxyStopTimeout && clearTimeout(this.proxyStopTimeout);
-        this.proxyStopTimeout = setTimeout(async () => {
-            this.proxyStopTimeout = null;
-            if (this.daikinCloud) {
-                await this.daikinCloud.stopProxyServer();
-                this.log.info(`Proxy stopped. Restart adapter or start Proxy via Adapter configuration interface!`);
-            }
-            this.proxyRunning = false;
-        }, 600 * 1000);
-
-        try {
-            // wait for user Login and getting the tokens
-            const resultTokenSet = await this.daikinCloud.waitForTokenFromProxy();
-            this.log.debug(`Token data: ${JSON.stringify(resultTokenSet)}`);
-
-            // show some details about the tokens (could be outdated because first real request is done afterwards
-            const claims = this.daikinCloud.getTokenSet().claims();
-            this.log.debug(`Use Token with the following claims: ${JSON.stringify(claims)}`);
-            this.log.info(`Successfully retrieved tokens for user ${claims.name} / ${claims.email}`);
-
-            const devices = await this.daikinCloud.getCloudDevices();
-
-            if (this.proxyAdminMessageCallback) {
-                this.log.info(`${devices.length} devices found in Daikin account.`);
-                this.sendTo(this.proxyAdminMessageCallback.from, this.proxyAdminMessageCallback.command, {
-                    result: {
-                        deviceCount: devices.length
-                    },
-                    error: null
-                }, this.proxyAdminMessageCallback.callback);
-                this.proxyAdminMessageCallback = null;
-            }
-
-            setTimeout(() => {
-                this.updateTokenSetForAdapter(resultTokenSet);
-            }, 1000);
-        } catch (err) {
-            this.log.error(`Error while waiting for Proxy Result: ${err.message}`);
-        }
-    }
-
-    updateTokenSetForAdapter(tokenSet) {
-        this.log.info('Daikin token updated in adapter configuration ... restarting adapter in 1s...');
-        this.extendForeignObject(`system.adapter.${this.namespace}`, {
+    async updateTokenSetForAdapter(tokenSet) {
+        this.log.info('Daikin token updated in adapter configuration ...');
+        await this.extendObject(`_config`, {
             native: {
                 tokenSet
             }
         });
-    }
-
-    async stopProxy(msg) {
-        this.log.info('Stopping Proxy Server ...');
-        this.proxyStopTimeout && clearTimeout(this.proxyStopTimeout);
-
-        if (this.daikinCloud) {
-            await this.daikinCloud.stopProxyServer();
-        }
-        this.proxyRunning = false;
-
-        if (msg) {
-            this.sendTo(msg.from, msg.command, {
-                result: true,
-                error: null
-            }, msg.callback);
-        }
-    }
-
-    getProxyResult(msg) {
-        this.proxyAdminMessageCallback = msg;
     }
 
     getDeviceInfo(msg) {
@@ -650,19 +501,106 @@ class DaikinCloudAdapter extends utils.Adapter {
      * Using this method requires "common.messagebox" property to be set to true in io-package.json
      * @param {ioBroker.Message} msg
      */
-    onMessage(msg) {
+    async onMessage(msg) {
         if (typeof msg === 'object' && msg.message) {
             this.log.debug(`Message received: ${JSON.stringify(msg)}`);
             switch (msg.command) {
-                case 'startProxy':
-                    this.startProxy(msg);
+                case 'getRedirectBaseUrl':
+                    const args = msg.message;
+                    this.log.debug(`Received OAuth start message: ${JSON.stringify(args)}`);
+                    if (!args || !args.clientId || !args.clientSecret || !args.redirectUriBase) {
+                        this.sendTo(msg.from, msg.command, {
+                            result: null,
+                            error: 'Invalid arguments'
+                        }, msg.callback);
+                        return;
+                    }
+                    if (!args.redirectUriBase.endsWith('/')) args.redirectUriBase += '/';
+                    args.redirectUriBase = `${args.redirectUriBase}oauth2_callbacks/${this.namespace}/`;
+                    this.log.debug(`Get OAuth start link data: ${JSON.stringify(args)}`);
+                    msg.callback && this.sendTo(msg.from, msg.command, {error: `Please make sure ${args.redirectUriBase} is set in the ....`} , msg.callback);
                     break;
-                case 'stopProxy':
-                    this.stopProxy(msg);
+                case 'getOAuthStartLink': {
+                    const args = msg.message;
+                    this.log.debug(`Received OAuth start message: ${JSON.stringify(args)}`);
+                    if (!args || !args.clientId || !args.clientSecret || !args.redirectUriBase) {
+                        this.sendTo(msg.from, msg.command, {
+                            result: null,
+                            error: 'Invalid arguments'
+                        }, msg.callback);
+                        return;
+                    }
+                    if (!args.redirectUriBase.endsWith('/')) args.redirectUriBase += '/';
+                    args.redirectUriBase = `${args.redirectUriBase}oauth2_callbacks/${this.namespace}/`;
+                    this.log.debug(`Get OAuth start link data: ${JSON.stringify(args)}`);
+
+                    await this.onUnload(async () => {
+                        const daikinCloud = new DaikinCloudController({
+                            oidcClientId: args.clientId,
+                            oidcClientSecret: args.clientSecret,
+                            oidcCallbackServerBaseUrl: args.redirectUriBase,
+
+                            oidcAuthorizationTimeoutS: 600,
+                            oidcCallbackServerBindAddr: '0.0.0.0', // remove
+                            oidcCallbackServerPort: 1234, // remove
+                            customOidcCodeReceiver: async (authUrl, reqState) => {
+                                this.log.debug(`Get OAuth start link: ${authUrl} / reqState: ${reqState}`);
+                                msg.callback && this.sendTo(msg.from, msg.command, {openUrl: authUrl}, msg.callback);
+                                const authenticationPromise = getDeferredPromise();
+                                this.authenticationPromise = authenticationPromise;
+                                this.expectedAuthenticationState = reqState;
+                                return authenticationPromise;
+                            }
+                        });
+
+                        daikinCloud.on('token_update', async tokenSet => {
+                            this.log.info('Daikin-Cloud tokens updated ...');
+                            await this.updateTokenSetForAdapter(tokenSet);
+
+                            this.log.info('Update data in adapter configuration ... restarting ...');
+                            this.extendForeignObject(`system.adapter.${this.namespace}`, {
+                                native: {
+                                    clientId: this.encrypt(args.clientId),
+                                    clientSecret: this.encrypt(args.clientSecret)
+                                }
+                            });
+                        });
+
+                        const apiInfo = daikinCloud.getApiInfo();
+                    });
                     break;
-                case 'getProxyResult':
-                    this.getProxyResult(msg);
+                }
+                case 'oauth2Callback': {
+                    const args = msg.message;
+                    this.log.debug(`OAuthRedirectReceived: ${JSON.stringify(args)}`);
+
+                    if (!args.state || !args.code) {
+                        this.log.warn(`Error on OAuth callback: ${JSON.stringify(args)}`);
+                        if (args.error) {
+                            msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud error: ${args.error}. Please try again.`}, msg.callback);
+                        } else {
+                            msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud invalid response: ${JSON.stringify(args)}. Please try again.`}, msg.callback);
+                        }
+                        return;
+                    }
+
+                    if (this.expectedAuthenticationState !== args.state) {
+                        this.log.warn(`Error on OAuth callback: Invalid state received: ${args.state} (expected: ${this.expectedAuthenticationState})`);
+                        msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud invalid state received. Please try again.`}, msg.callback);
+                        return;
+                    }
+                    if (!this.authenticationPromise) {
+                        this.log.warn(`Error on OAuth callback: No authentication promise available!`);
+                        msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud internal error. Please try again.`}, msg.callback);
+                        return;
+                    }
+                    // @ts-ignore
+                    this.authenticationPromise.resolve(args.code);
+
+
+                    msg.callback && this.sendTo(msg.from, msg.command, {result: 'Tokens updated successfully.'}, msg.callback);
                     break;
+                }
                 case 'getDeviceInfo':
                     this.getDeviceInfo(msg);
                     break;

@@ -53,6 +53,7 @@ Info: This project is not grabbing any username or password, just the created to
 ## Changelog
 
 ### __WORK IN PROGRESS__
+* (Apollon77) BREAKING: Adjusted to new Daiking Cloud API - You need to reauthenticate!
 * (Apollon77) Make electrical data available as states (arrays for now)
 * (Apollon77) Restore last data updated timestamp
 * (Apollon77) Make sure cloudConnection always contains a boolean

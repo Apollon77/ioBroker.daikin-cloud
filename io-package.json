@@ -139,15 +139,17 @@
     "connectionType": "cloud",
     "dataSource": "poll",
     "tier": 2,
-    "materialize": true,
+    "adminUI": {
+      "config": "json"
+    },
     "dependencies": [
       {
-        "js-controller": ">=3.0.0"
+        "js-controller": ">=5.0.0"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=4.0.9"
+        "admin": ">=6.2.13"
       }
     ],
     "plugins": {

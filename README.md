@@ -34,25 +34,10 @@ This adapter allows to initially (hopefully once) retrieve tokens by using a pro
 After connecting to the Daikin Cloud account the adapter will automatically create a new device for each device that is connected to the Daikin Cloud. All available data is displayed and several states allow to control the device.
 **Please note that the command speed of the Daikin cloud is not mega fast which means that it can take up to 3 minutes before the command is really executed or states are updated!**
 
-### Login via E-mail/Password
-
-If you want to provide the Daikin Cloud Credentials then the adapter can try to automatically login to the Cloud. The E-Mail and Password are stored encrypted in the configuration.
-
-It can happen that this process does not work because the Daikin Website requires you to solve a captcha. In this can you can use the following trick:
-* Start the proxy via Adapter-Configuration in Admin
-* Click on the QR-Code in the Proxy popup
-* You **do not** need to import the certificate!
-* Just click on the `Login into the Daikin Cloud to retrieve the tokens` link at the end of the instructions page and login there once and solve the captcha.
-* Close the browser window and restart the adapter
-
-### Login via Proxy
-
-**For more information on the Proxy progress for end users - because you need to trust and whitelist certificates and such - can be found in [PROXY.md](PROXY.md)!**
-Info: This project is not grabbing any username or password, just the created tokens after you logged in. This also means that, if Daikin resets tokens or they expire that you need to do this process again!
-
 ## Changelog
 
 ### __WORK IN PROGRESS__
+* IMPORTANT: Minimum Node.js version is 18.2
 * (Apollon77) BREAKING: Adjusted to new Daiking Cloud API - You need to reauthenticate!
 * (Apollon77) Make electrical data available as states (arrays for now)
 * (Apollon77) Restore last data updated timestamp

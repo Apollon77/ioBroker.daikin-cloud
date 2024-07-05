@@ -9,28 +9,28 @@
                 "marginTop": 20
             },
             "sm": 12,
-            "text": "Authentication process with Daikin Cloud instructions"
+            "text": "auth_header"
         },
         "_auth1": {
             "newLine":  true,
             "type": "staticText",
-            "text": "1. Make sure your admin instance you use for the following Authentication <b>has HTTPS enabled!</b> if not please use a second Admin instance!"
+            "text": "auth_step1"
         },
         "_auth2": {
             "newLine":  true,
             "type": "staticText",
-            "text": "2. Please sign up for a Daikin Developer Account and add one \"App\" there to rget a Client ID and client secret. Please leave the \"Redirect URL\", field empty for this signup step!"
+            "text": "auth_step2"
         },
         "_authlink": {
             "newLine":  true,
             "type": "staticLink",
-            "text": "Sign up at Daikin Europe Developer Portal",
+            "text": "auth_link",
             "href": "https://developer.cloud.daikineurope.com/"
         },
         "_auth3": {
             "newLine":  true,
             "type": "staticText",
-            "text": "3. Please enter the client ID and Secret in the following fields."
+            "text": "auth_step3"
         },
         "clientId": {
             "type": "text",
@@ -43,7 +43,7 @@
         "clientSecret": {
             "type": "password",
             "repeat": false,
-            "help": "Daikin Developer Account Client Password",
+            "help": "Daikin Developer Account Client Secret",
             "label": "ClientSecret",
             "sm": 6,
             "lg": 3
@@ -54,7 +54,7 @@
             "color": "primary",
             "disabled": "!_alive",
             "type": "sendTo",
-            "label": "4. Press this button to get the Redirect URL ... (Ignore 'Error' in headline of popup)",
+            "label": "auth_step4",
             "icon": "info",
             "command": "getRedirectBaseUrl",
             "jsonData": "{ \"clientId\": \"${data.clientId}\",\"clientSecret\": \"${data.clientSecret}\",\"redirectUriBase\": \"${data._origin}\" }"
@@ -62,12 +62,12 @@
         "_auth5": {
             "newLine":  true,
             "type": "staticText",
-            "text": "5. Edit the App in the Daikin Developer Portal and add the Redirect URL you got in the previous step!"
+            "text": "auth_step5"
         },
         "_auth6": {
             "newLine":  true,
             "type": "staticText",
-            "text": "6. Press the following button to authenticate with the Daikin Cloud in a new Window/Tab. If the window does not open, please check your popup blocker settings to allow popups!"
+            "text": "auth_step6"
         },
         "_authenticate": {
             "newLine": true,
@@ -81,14 +81,14 @@
             "icon": "auth",
             "command": "getOAuthStartLink",
             "jsonData": "{ \"clientId\": \"${data.clientId}\",\"clientSecret\": \"${data.clientSecret}\",\"redirectUriBase\": \"${data._origin}\" }",
-            "label": "7. Authenticate with Daikin Cloud",
+            "label": "auth_step7",
             "openUrl": true,
             "window": "Login with Daikin Cloud"
         },
         "_auth8": {
             "newLine":  true,
             "type": "staticText",
-            "text": "8. After the successfull authentication and after you saw the success page in the other window please save the settings and press the \"Save and Close\" button below!"
+            "text": "auth_step8"
         },
         "_pollingIntervalsHeader": {
             "type": "header",
@@ -98,17 +98,17 @@
                 "marginTop": 20
             },
             "sm": 12,
-            "text": "Polling Interval headers"
+            "text": "polling_header"
         },
         "_poplling8": {
             "newLine":  true,
             "type": "staticText",
-            "text": "The Daikin cloud introduces some rate limitations for the API. The main limit are <b>maximum 200 requests per day</b>! Use the slow polling in times were not that frequent updates are needed."
+            "text": "polling_info"
         },
         "pollingInterval": {
             "newLine": true,
             "type": "number",
-            "label": "Polling Interval",
+            "label": "polling_interval",
             "sm": 6,
             "lg": 3,
             "min": 300
@@ -116,7 +116,7 @@
         "slowPollingInterval": {
             "newLine": true,
             "type": "number",
-            "label": "Slow Polling Interval",
+            "label": "polling_interval_slow",
             "sm": 6,
             "lg": 3,
             "min": 300

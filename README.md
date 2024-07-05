@@ -9,11 +9,11 @@
 [![Translation status](https://weblate.iobroker.net/widgets/adapters/-/daikin-cloud/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.daikin-cloud.svg)](https://www.npmjs.com/package/iobroker.daikin-cloud)
 
-**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
+**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 5.0.
 
 ## daikin-cloud adapter for ioBroker
 
-Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta App. The adapter connects to the Daikin-Cloud and polls the data from there. 
+Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta App. The adapter connects to the Daikin-Cloud and polls the data from there. In order for this to work you need to dign up for a "Dailin Europe Developer Account" and create an application there. The adapter will then use the credentials of this application to connect to the Daikin Cloud.
 
 ## Disclaimer
 **All product and company names or logos are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them or any associated subsidiaries! This personal project is maintained in spare time and has no business goal.**
@@ -29,16 +29,26 @@ Note: For devices with older WLAN-Adapters like **BRP069A4x** which can only be 
 
 The newer Daikin devices sold since 2020 contain a newer Wifi Adapter (e.g. BRP069C4x) which only connects to the Daikin Cloud and is no longer reachable locally. These devices are only controllable with the Daikin Onecta App.
 
-This adapter allows to initially (hopefully once) retrieve tokens by using a proxy to login to the Daikin Cloud. After that these tokens can be used and refreshed to interact with the devices.
+This adapter allows to initially (hopefully once) retrieve tokens by using the personal developer account and a one time Login flow. After that these tokens can be used and refreshed to interact with the devices.
 
 After connecting to the Daikin Cloud account the adapter will automatically create a new device for each device that is connected to the Daikin Cloud. All available data is displayed and several states allow to control the device.
 **Please note that the command speed of the Daikin cloud is not mega fast which means that it can take up to 3 minutes before the command is really executed or states are updated!**
+
+Additionally, there is a rate limit of 200 requests per day for the Daikin Cloud API. Because of this please consider the following best practices:
+
+* A default polling interval of 15 minutes should be sufficient for most use cases while leaving some space for controlling the devices too. Consider that each control action requires 2 requests (one to control, one to update the data 1 minute after the control call). Especially with many devices this can really get problematic.
+* The adapter also supports "Slow Polling" where you can define an own interval. Use the state `useSlowPolling`to enableor disable the slow polling based on your needs (e.g at night times poll just hourly ...)
+* Ideally have at least 10 minutes time between switching the device power status because else thats bad for the moving parts of the devices
+
+The current rate limit details are contained in the adapter i fo states and are updated every time the adapter makes a request to the Daikin Cloud.
 
 ## Changelog
 
 ### __WORK IN PROGRESS__
 * IMPORTANT: Minimum Node.js version is 18.2
 * (Apollon77) BREAKING: Adjusted to new Daiking Cloud API - You need to reauthenticate!
+* (Apollon77) BREAKING: New rate limit of new API is 200 requests per day!! Adjust your usage!
+* (Apollon77) Added option to set "slow polling" interval
 * (Apollon77) Make electrical data available as states (arrays for now)
 * (Apollon77) Restore last data updated timestamp
 * (Apollon77) Make sure cloudConnection always contains a boolean

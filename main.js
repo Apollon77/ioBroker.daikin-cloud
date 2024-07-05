@@ -87,7 +87,15 @@ class DaikinCloudAdapter extends utils.Adapter {
 
         this.daikinCloud.on('rate_limit_status', async rateLimitStatus => {
             this.log.debug(`Rate Limit Status: ${JSON.stringify(rateLimitStatus)}`);
-        })
+            const limitMinute = typeof(rateLimitStatus.limitMinute) === "number" ? rateLimitStatus.limitMinute : null;
+            const limitDay = typeof(rateLimitStatus.limitDay) === "number" ? rateLimitStatus.limitDay : null;
+            const remainingMinute = typeof(rateLimitStatus.remainingMinute) === "number" ? rateLimitStatus.remainingMinute : null;
+            const remainingDay = typeof(rateLimitStatus.remainingDay) === "number" ? rateLimitStatus.remainingDay : null;
+            await this.setState('info.rateLimitMinute', {val: limitMinute, ack: true});
+            await this.setState('info.rateLimitDay', {val: limitDay, ack: true});
+            await this.setState('info.rateRemainingMinute', {val: remainingMinute, ack: true});
+            await this.setState('info.rateRemainingDay', {val: remainingDay, ack: true});
+        });
     }
 
     normalizeDataStructure(data) {
@@ -126,7 +134,7 @@ class DaikinCloudAdapter extends utils.Adapter {
     }
 
     async cleanupObsoleteObjects() {
-        const delIds = Object.keys(this.objectHelper.existingStates).filter(id => id.includes("."));
+        const delIds = Object.keys(this.objectHelper.existingStates).filter(id => id.includes(".") && !id.startsWith('info.'));
         if (delIds.length) {
             this.log.info(`Deleting the following obsolete states: ${JSON.stringify(delIds)}`);
             for (let i = 0; i < delIds.length; i++) {
@@ -362,14 +370,14 @@ class DaikinCloudAdapter extends utils.Adapter {
         if (isNaN(this.config.pollingInterval) || this.config.pollingInterval < 300) {
             this.log.warn(`Polling interval invalid or too low, set to 300 seconds (5 minutes)`);
             this.config.pollingInterval = 300;
-        } else if (this.config.pollingInterval < 600) {
-            this.log.warn(`Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`);
+        } else if (this.config.pollingInterval < 500) {
+            this.log.info(`Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`);
         }
         if (isNaN(this.config.slowPollingInterval) || this.config.slowPollingInterval < 300) {
-            this.log.warn(`Slow Polling interval invalid or too low, set to 6000 seconds (10 minutes)`);
+            this.log.warn(`Slow Polling interval invalid or too low, set to 600 seconds (10 minutes)`);
             this.config.slowPollingInterval = 600;
-        } else if (this.config.slowPollingInterval < 600) {
-            this.log.warn(`Slow Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`);
+        } else if (this.config.slowPollingInterval < 500) {
+            this.log.info(`Slow Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`);
         }
 
         if (this.config.slowPollingInterval < this.config.pollingInterval) {

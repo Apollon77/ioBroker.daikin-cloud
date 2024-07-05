@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "news": {
       "0.3.0": {
         "en": "Make compatible with Node.js 18+ too\nAdjust name fallback",
@@ -26,7 +26,8 @@
         "it": "Cancellare il tokenset quando l'email o la password viene modificata in configurazione",
         "es": "Despejar el tokenset cuando el correo electrónico o la contraseña se cambia en config",
         "pl": "Wyraźny symbol, gdy e-mail lub hasło zmienia się w konfiguście",
-        "zh-cn": "当电子邮件或密码发生变化时,明示点"
+        "zh-cn": "当电子邮件或密码发生变化时,明示点",
+        "uk": "Очищайте набір токенів, коли електронну адресу чи пароль змінено в конфігурації"
       },
       "0.2.2": {
         "en": "Add naming support for devices using old WLAN adapters but updated for Onecta",
@@ -38,7 +39,8 @@
         "it": "Aggiungi supporto per i nomi per i dispositivi che utilizzano vecchi adattatori WLAN ma aggiornati per Onecta",
         "es": "Añadir soporte para nombres de dispositivos con adaptadores WLAN antiguos pero actualizado para Onecta",
         "pl": "Addd naming support dla urządzeń korzystających ze starych adapterów WLAN, ale aktualizował dla Onecta",
-        "zh-cn": "增加使用旧的WLAN适应器对装置的命名支助,但对单一气体的更新"
+        "zh-cn": "增加使用旧的WLAN适应器对装置的命名支助,但对单一气体的更新",
+        "uk": "Додайте підтримку імен для пристроїв, які використовують старі адаптери WLAN, але оновлені для Onecta"
       },
       "0.2.1": {
         "en": "Fix the device info and count for connected devices in Admin UI",
@@ -50,7 +52,8 @@
         "it": "Fissare le informazioni del dispositivo e contare per i dispositivi collegati in Admin UI",
         "es": "Fijar la información del dispositivo y contar para dispositivos conectados en Admin UI",
         "pl": "Fix info i count dla urządzeń połączonych w Admin UI",
-        "zh-cn": "Fix 在阿德明·乌伊内设计和计算相关装置的装置"
+        "zh-cn": "Fix 在阿德明·乌伊内设计和计算相关装置的装置",
+        "uk": "Виправте інформацію про пристрій і кількість підключених пристроїв в інтерфейсі адміністратора"
       },
       "0.2.0": {
         "en": "Add name lookup for Altherma devices\nSend data to Sentry on unknown device types",
@@ -62,7 +65,8 @@
         "it": "Aggiungi ricerca nome per dispositivi Altherma\nInvia i dati a Sentry su tipi di dispositivo sconosciuti",
         "es": "Agregar nombre de búsqueda para dispositivos Altherma\nEnviar datos a Sentry en tipos de dispositivo desconocidos",
         "pl": "Addd – nazwa urządzeń Altherma\nDane dotyczące wjazdu na nieznane typy urządzeń",
-        "zh-cn": "圣诞节装置的名称调查\n未知装置类型的数据"
+        "zh-cn": "圣诞节装置的名称调查\n未知装置类型的数据",
+        "uk": "Додайте пошук імен для пристроїв Altherma\nНадсилати дані до Sentry на пристрої невідомого типу"
       },
       "0.1.4": {
         "en": "Adjust logging on Login to be more clear",
@@ -74,7 +78,8 @@
         "it": "Regolare la registrazione su Login per essere più chiaro",
         "es": "Ajuste el registro en Iniciar sesión para ser más claro",
         "pl": "Adjust logowanie na Loginie jest bardziej jasne",
-        "zh-cn": "更清楚的逻辑调整"
+        "zh-cn": "更清楚的逻辑调整",
+        "uk": "Налаштуйте вхід у систему, щоб було зрозуміліше"
       },
       "0.1.3": {
         "en": "Optimizations and fixes",
@@ -86,7 +91,8 @@
         "it": "Ottimizzazioni e correzioni",
         "es": "Optimizaciones y arreglos",
         "pl": "Optymalizacje i poprawki",
-        "zh-cn": "优化和修复"
+        "zh-cn": "优化和修复",
+        "uk": "Оптимізації та виправлення"
       }
     },
     "title": "Daikin Cloud",
@@ -100,7 +106,8 @@
       "it": "Daikin Cloud",
       "es": "Nube Daikin",
       "pl": "Chmura Daikin",
-      "zh-cn": "大金云"
+      "zh-cn": "大金云",
+      "uk": "Daikin Cloud"
     },
     "desc": {
       "en": "Control Daikin Devices that are only connected to the Daikin Cloud",
@@ -112,7 +119,8 @@
       "it": "Controlla i dispositivi Daikin che sono collegati solo a Daikin Cloud",
       "es": "Controle los dispositivos Daikin que solo están conectados a Daikin Cloud",
       "pl": "Kontroluj urządzenia Daikin, które są podłączone tylko do chmury Daikin",
-      "zh-cn": "控制仅连接到大金云的大金设备"
+      "zh-cn": "控制仅连接到大金云的大金设备",
+      "uk": "Керуйте пристроями Daikin, які підключені лише до Daikin Cloud"
     },
     "authors": [
       "Apollon77 <iobroker@fischer-ka.de>"
@@ -196,6 +204,54 @@
         "read": true,
         "write": false,
         "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.rateLimitMinute",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Rate Limit per minute",
+        "type": "number",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.rateRemainingMinute",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Remaining rate Limit per minute",
+        "type": "number",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.rateLimitDay",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Rate Limit per day",
+        "type": "number",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.rateRemainingDay",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Remaining rate Limit per day",
+        "type": "number",
+        "read": true,
+        "write": false
       },
       "native": {}
     },

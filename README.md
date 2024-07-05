@@ -43,8 +43,7 @@ Additionally, there is a rate limit of 200 requests per day for the Daikin Cloud
 The current rate limit details are contained in the adapter i fo states and are updated every time the adapter makes a request to the Daikin Cloud.
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 0.4.3 (2024-07-05)
 * IMPORTANT: Minimum Node.js version is 18.2
 * (Apollon77) BREAKING: Adjusted to new Daiking Cloud API - You need to reauthenticate!
 * (Apollon77) BREAKING: New rate limit of new API is 200 requests per day!! Adjust your usage!

@@ -63,6 +63,8 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.unloaded = false;
         this.authenticationPromise = null;
         this.expectedAuthenticationState = null;
+
+        this.initDelayTimeout = null;
     }
 
     async initDaikinCloud() {
@@ -319,16 +321,6 @@ class DaikinCloudAdapter extends utils.Adapter {
                 }
                 const errorDetails = err.response && err.response.body && err.response.body.message;
                 this.log.warn(`Error on update (${this.errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
-                if (/*this.knownDevices[deviceId].errorCount > 30 || */(errorDetails === 'Invalid Refresh Token' || errorDetails === 'Refresh Token has expired')) {
-                    this.log.warn(`Try to reinitialize adapter`);
-                    this.tokenSet = null;
-                    await this.updateTokenSetForAdapter(null);
-                    this.log.info('Token seems to be invalid, try automatic re-login ...');
-                    await this.onUnload(() => {
-                        this.onReady();
-                    });
-                    return;
-                }
             }
         }
         this.pollTimeout = setTimeout(async () => {
@@ -404,13 +396,23 @@ class DaikinCloudAdapter extends utils.Adapter {
             await this.initDaikinDevices();
         } catch (err) {
             const errorDetails = err.response && err.response.body && err.response.body.message;
-            this.log.warn(`Error on Daikin Cloud communication: ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
-            this.tokenSet = null;
-            await this.updateTokenSetForAdapter(null);
-            this.log.info('Token seems to be invalid, try automatic re-login ...');
-            await this.onUnload(() => {
-               this.onReady();
-            });
+            this.log.warn(`Error on Daikin Cloud communication on adapter initialization: ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
+            let retryAfter = err instanceof RateLimitedError ? err.retryAfter : undefined;
+            if (retryAfter !== undefined) {
+                if (retryAfter > 24 * 60 * 60) {
+                    retryAfter = Math.round(retryAfter / 1000);
+                }
+                if (isNaN(retryAfter) || retryAfter < 0) {
+                    retryAfter = undefined;
+                }
+            }
+            const initRetryDelay = retryAfter !== undefined ? Math.min(retryAfter, 60000) : 60000;
+            this.log.info(`Retry initialization in ${initRetryDelay} seconds ...`);
+            this.initDelayTimeout = setTimeout(async () => {
+                await this.onUnload(() => {
+                    this.onReady();
+                });
+            }, initRetryDelay);
             return;
         }
 
@@ -440,6 +442,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.unloaded = true;
         try {
             this.pollTimeout && clearTimeout(this.pollTimeout);
+            this.initDelayTimeout && clearTimeout(this.initDelayTimeout);
             callback();
         } catch (e) {
             callback();

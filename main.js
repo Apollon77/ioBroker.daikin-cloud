@@ -395,6 +395,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         try {
             await this.initDaikinDevices();
         } catch (err) {
+            if (this.unloaded) return;
             const errorDetails = err.response && err.response.body && err.response.body.message;
             this.log.warn(`Error on Daikin Cloud communication on adapter initialization: ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
             let retryAfter = err instanceof RateLimitedError ? err.retryAfter : undefined;
@@ -412,7 +413,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                 await this.onUnload(() => {
                     this.onReady();
                 });
-            }, initRetryDelay);
+            }, initRetryDelay * 1000);
             return;
         }
 

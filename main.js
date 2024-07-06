@@ -65,6 +65,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.expectedAuthenticationState = null;
 
         this.initDelayTimeout = null;
+        this.doNotCommunicateBefore = Date.now();
     }
 
     async initDaikinCloud() {
@@ -269,6 +270,11 @@ class DaikinCloudAdapter extends utils.Adapter {
                 if (obj && obj.type === 'state' && obj.common) {
                     if (obj.common.write) {
                         onChange = async (value) => {
+                            if (this.unloaded) return;
+                            if (this.doNotCommunicateBefore > Date.now()) {
+                                this.log.info(`Ignore state change for ${objId} because communication blocked!`);
+                                return;
+                            }
                             const writeValue = this.dataMapper.convertValueWrite(objId, value, obj);
                             this.log.info(`Send state change for ${objId} with value=${writeValue} to ${obj.native.managementPoint} : ${obj.native.dataPoint} : ${obj.native.dataPointPath}`)
                             try {
@@ -311,16 +317,26 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.pollTimeout && clearTimeout(this.pollTimeout);
         if (!delay) {
             delay = this.pollingInterval * 1000;
-            try {
-                await this.daikinCloud.updateAllDeviceData();
-            } catch (err) {
-                if (err instanceof RateLimitedError) {
-                    this.log.warn(`Rate Limit reached, you did too many requests to the Daikin Cloud API!`);
-                } else {
-                    this.errorCount++;
+            if (this.doNotCommunicateBefore <= Date.now()) {
+                try {
+                    await this.daikinCloud.updateAllDeviceData();
+                } catch (err) {
+                    if (err instanceof RateLimitedError) {
+                        this.log.warn(`Rate Limit reached, you did too many requests to the Daikin Cloud API! All requests blocked for ${err.retryAfter} seconds!`);
+                        if (err.retryAfter != null) {
+                            const retryAfter = parseInt(err.retryAfter);
+                            if (!isNaN(retryAfter) && retryAfter > 0) {
+                                this.doNotCommunicateBefore = Date.now() + retryAfter * 1000;
+                            }
+                        }
+                    } else {
+                        this.errorCount++;
+                        const errorDetails = err.response && err.response.body && err.response.body.message;
+                        this.log.warn(`Error on update (${this.errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
+                    }
                 }
-                const errorDetails = err.response && err.response.body && err.response.body.message;
-                this.log.warn(`Error on update (${this.errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
+            } else {
+                this.log.info(`Communication blocked till ${new Date(this.doNotCommunicateBefore).toISOString()}`);
             }
         }
         this.pollTimeout = setTimeout(async () => {
@@ -332,7 +348,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         return new Promise(resolve => {
             this.objectHelper.processObjectQueue(() => {
                 resolve(true);
-            })
+            });
         });
     }
 
@@ -400,14 +416,12 @@ class DaikinCloudAdapter extends utils.Adapter {
             this.log.warn(`Error on Daikin Cloud communication on adapter initialization: ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
             let retryAfter = err instanceof RateLimitedError ? err.retryAfter : undefined;
             if (retryAfter !== undefined) {
-                if (retryAfter > 24 * 60 * 60) {
-                    retryAfter = Math.round(retryAfter / 1000);
-                }
+                retryAfter = parseInt(retryAfter);
                 if (isNaN(retryAfter) || retryAfter < 0) {
                     retryAfter = undefined;
                 }
             }
-            const initRetryDelay = retryAfter !== undefined ? Math.min(retryAfter, 60000) : 60000;
+            const initRetryDelay = retryAfter !== undefined ? Math.min(retryAfter, 60) : 60;
             this.log.info(`Retry initialization in ${initRetryDelay} seconds ...`);
             this.initDelayTimeout = setTimeout(async () => {
                 await this.onUnload(() => {

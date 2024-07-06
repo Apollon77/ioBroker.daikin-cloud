@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "news": {
+      "0.4.5": {
+        "en": "Block communication when rate limited according to Daikin response",
+        "de": "Block-Kommunikation, wenn Rate begrenzt nach Daikin Antwort",
+        "ru": "Блоковая связь, когда скорость ограничена в соответствии с ответом Дайкина",
+        "pt": "Bloquear a comunicação quando a taxa limitada de acordo com a resposta Daikin",
+        "nl": "Blokkeer communicatie wanneer de snelheid beperkt is volgens Daikin respons",
+        "fr": "Bloquer la communication lorsque le taux est limité selon la réponse de Daikin",
+        "it": "Bloccare la comunicazione quando il tasso è limitato in base alla risposta Daikin",
+        "es": "Bloque de comunicación cuando la tasa se limita según la respuesta de Daikin",
+        "pl": "Komunikacja blokowa, gdy szybkość jest ograniczona w zależności od odpowiedzi Daikina",
+        "uk": "Блокування зв'язку при обмеженні курсу на Daikin",
+        "zh-cn": "根据Daikin的答复,费率有限时断断续续的通信"
+      },
       "0.4.4": {
         "en": "Fix initialization retry schedule",
         "de": "Fix Initialisierung Retry Zeitplan",
@@ -80,19 +93,6 @@
         "pl": "Fix info i count dla urządzeń połączonych w Admin UI",
         "zh-cn": "Fix 在阿德明·乌伊内设计和计算相关装置的装置",
         "uk": "Виправте інформацію про пристрій і кількість підключених пристроїв в інтерфейсі адміністратора"
-      },
-      "0.2.0": {
-        "en": "Add name lookup for Altherma devices\nSend data to Sentry on unknown device types",
-        "de": "Name Lookup für Altherma-Geräte hinzufügen\nDaten an Sentry über unbekannte Gerätetypen senden",
-        "ru": "Добавьте имя для устройств Altherma\nОтправьте данные в Sentry на неизвестные типы устройств",
-        "pt": "Adicionar pesquisa de nome para dispositivos Altherma\nEnviar dados para Sentry em tipos de dispositivos desconhecidos",
-        "nl": "Voeg de naam op voor Altherma apparatuur\nStuur gegevens naar Sentry op onbekende apparaten",
-        "fr": "Ajouter le lookup de nom pour les appareils Altherma\nEnvoyer des données à Sentry sur des types de périphériques inconnus",
-        "it": "Aggiungi ricerca nome per dispositivi Altherma\nInvia i dati a Sentry su tipi di dispositivo sconosciuti",
-        "es": "Agregar nombre de búsqueda para dispositivos Altherma\nEnviar datos a Sentry en tipos de dispositivo desconocidos",
-        "pl": "Addd – nazwa urządzeń Altherma\nDane dotyczące wjazdu na nieznane typy urządzeń",
-        "zh-cn": "圣诞节装置的名称调查\n未知装置类型的数据",
-        "uk": "Додайте пошук імен для пристроїв Altherma\nНадсилати дані до Sentry на пристрої невідомого типу"
       }
     },
     "title": "Daikin Cloud",

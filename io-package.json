@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.3",
+    "version": "0.4.4",
     "news": {
+      "0.4.4": {
+        "en": "Fix initialization retry schedule",
+        "de": "Fix Initialisierung Retry Zeitplan",
+        "ru": "График инициализации",
+        "pt": "Fix cronograma de retificação de inicialização",
+        "nl": "Repareren initialisatie opnieuw proberen schema",
+        "fr": "Correction de l'initialisation programme de réessayer",
+        "it": "Fissare il programma di inizializzazione",
+        "es": "Calendario de reingreso de inicialización",
+        "pl": "Napraw harmonogram ponownego testowania inicjalizacji",
+        "uk": "Фіксація графіка денності",
+        "zh-cn": "修复初始化重试时间表"
+      },
       "0.4.3": {
         "en": "IMPORTANT: Minimum Node.js version is 18.2\nBREAKING: Adjusted to new Daiking Cloud API - You need to reauthenticate!\nBREAKING: New rate limit of new API is 200 requests per day!! Adjust your usage!\nAdded option to set \"slow polling\" interval\nMake electrical data available as states (arrays for now)\nRestore last data updated timestamp\nMake sure cloudConnection always contains a boolean\nRefresh token also when error is \"Refresh Token has expired\"",
         "de": "WICHTIG: Minimum Node.js-Version ist 18.2\nBREAKING: Anpassung an neue Daiking Cloud API - Sie müssen neu authentifizieren!\nBREAKING: Neue Rate Limit der neuen API ist 200 Anfragen pro Tag!! Passen Sie Ihre Nutzung an!\nOption hinzugefügt, um \"slow polling\" Intervall einzustellen\nStellen Sie elektrische Daten als Zustände zur Verfügung (Arrays für jetzt)\nWiederherstellen der letzten Daten aktualisiert Zeitstempel\nStellen Sie sicher, dass cloudConnection immer ein boolean enthält\nRefresh-Token auch, wenn Fehler \"Refresh Token ist abgelaufen\"",
@@ -80,19 +93,6 @@
         "pl": "Addd – nazwa urządzeń Altherma\nDane dotyczące wjazdu na nieznane typy urządzeń",
         "zh-cn": "圣诞节装置的名称调查\n未知装置类型的数据",
         "uk": "Додайте пошук імен для пристроїв Altherma\nНадсилати дані до Sentry на пристрої невідомого типу"
-      },
-      "0.1.4": {
-        "en": "Adjust logging on Login to be more clear",
-        "de": "Loggen Sie sich auf Login ein, um deutlicher zu sein",
-        "ru": "Отрегулируйте вход в систему, чтобы быть более ясным",
-        "pt": "Ajuste o login para ser mais claro",
-        "nl": "Aanpassen op Login om duidelijker te zijn",
-        "fr": "Ajuster la connexion sur Login pour être plus clair",
-        "it": "Regolare la registrazione su Login per essere più chiaro",
-        "es": "Ajuste el registro en Iniciar sesión para ser más claro",
-        "pl": "Adjust logowanie na Loginie jest bardziej jasne",
-        "zh-cn": "更清楚的逻辑调整",
-        "uk": "Налаштуйте вхід у систему, щоб було зрозуміліше"
       }
     },
     "title": "Daikin Cloud",

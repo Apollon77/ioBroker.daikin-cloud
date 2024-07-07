@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.5",
+    "version": "0.4.6",
     "news": {
+      "0.4.6": {
+        "en": "Update dependencies with optimizations and second blocking layer for rate limiting",
+        "de": "Aktualisieren von Abhängigkeiten mit Optimierungen und zweiter Sperrschicht zur Ratenbegrenzung",
+        "ru": "Зависимости обновления с оптимизациями и второй блокирующий слой для ограничения скорости",
+        "pt": "Atualize dependências com otimizações e segunda camada de bloqueio para limitar a taxa",
+        "nl": "Afhankelijkheden bijwerken met optimalisaties en tweede blokkeringslaag voor snelheidsbeperking",
+        "fr": "Mettre à jour les dépendances avec les optimisations et la deuxième couche de blocage pour limiter le taux",
+        "it": "Aggiornare le dipendenze con le ottimizzazioni e il secondo strato di bloccaggio per limitare i tassi",
+        "es": "Actualizar las dependencias con optimizaciones y segunda capa de bloqueo para limitar la tasa",
+        "pl": "Aktualizuj zależności z optymalizacjami i drugą warstwą blokującą dla ograniczenia prędkości",
+        "uk": "Оновлення залежності з оптимізацією та другим шаром блокування для обмеження швидкості",
+        "zh-cn": "更新具有优化的依赖性和限制费率的第二个阻塞层"
+      },
       "0.4.5": {
         "en": "Block communication when rate limited according to Daikin response",
         "de": "Block-Kommunikation, wenn Rate begrenzt nach Daikin Antwort",
@@ -80,19 +93,6 @@
         "pl": "Addd naming support dla urządzeń korzystających ze starych adapterów WLAN, ale aktualizował dla Onecta",
         "zh-cn": "增加使用旧的WLAN适应器对装置的命名支助,但对单一气体的更新",
         "uk": "Додайте підтримку імен для пристроїв, які використовують старі адаптери WLAN, але оновлені для Onecta"
-      },
-      "0.2.1": {
-        "en": "Fix the device info and count for connected devices in Admin UI",
-        "de": "Festlegen der Geräte-Info und Zählung für angeschlossene Geräte in Admin UI",
-        "ru": "Исправьте информацию о устройстве и рассчитывайте на подключенные устройства в Admin UI",
-        "pt": "Corrigir a informação do dispositivo e contar para dispositivos conectados na interface do administrador",
-        "nl": "Repareer het apparaat info en tel op verbonden apparatuur in Admin UI",
-        "fr": "Fixer les informations de l'appareil et compter pour les appareils connectés dans Admin UI",
-        "it": "Fissare le informazioni del dispositivo e contare per i dispositivi collegati in Admin UI",
-        "es": "Fijar la información del dispositivo y contar para dispositivos conectados en Admin UI",
-        "pl": "Fix info i count dla urządzeń połączonych w Admin UI",
-        "zh-cn": "Fix 在阿德明·乌伊内设计和计算相关装置的装置",
-        "uk": "Виправте інформацію про пристрій і кількість підключених пристроїв в інтерфейсі адміністратора"
       }
     },
     "title": "Daikin Cloud",

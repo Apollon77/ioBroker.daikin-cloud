@@ -95,7 +95,6 @@
         "uk": "Додайте підтримку імен для пристроїв, які використовують старі адаптери WLAN, але оновлені для Onecta"
       }
     },
-    "title": "Daikin Cloud",
     "titleLang": {
       "en": "Daikin Cloud",
       "de": "Daikin Cloud",
@@ -134,7 +133,6 @@
       "type": "free"
     },
     "platform": "Javascript/Node.js",
-    "main": "main.js",
     "icon": "daikin-cloud.jpg",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/Apollon77/ioBroker.daikin-cloud/master/admin/daikin-cloud.jpg",

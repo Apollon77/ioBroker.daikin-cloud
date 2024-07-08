@@ -406,7 +406,7 @@ class DaikinCloudAdapter extends utils.Adapter {
 
         await this.initDaikinCloud();
 
-        await this.objectHelper.loadExistingObjects();
+        await new Promise(resolve => this.objectHelper.loadExistingObjects( () => resolve(true)));
 
         try {
             await this.initDaikinDevices();

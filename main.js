@@ -545,6 +545,13 @@ class DaikinCloudAdapter extends utils.Adapter {
                         }, msg.callback);
                         return;
                     }
+                    if (!args.redirectUriBase.startsWith('https://')) {
+                        this.sendTo(msg.from, msg.command, {
+                            result: null,
+                            error: 'Your Admin instance to to use HTTPS.'
+                        }, msg.callback);
+                        return;
+                    }
                     if (!args.redirectUriBase.endsWith('/')) args.redirectUriBase += '/';
                     args.redirectUriBase = `${args.redirectUriBase}oauth2_callbacks/${this.namespace}/`;
                     this.log.debug(`Get OAuth start link data: ${JSON.stringify(args)}`);
@@ -557,6 +564,20 @@ class DaikinCloudAdapter extends utils.Adapter {
                         this.sendTo(msg.from, msg.command, {
                             result: null,
                             error: 'Invalid arguments'
+                        }, msg.callback);
+                        return;
+                    }
+                    if (args.redirectUriBase.includes('127.0.0.1') || args.redirectUriBase.includes('localhost')) {
+                        this.sendTo(msg.from, msg.command, {
+                            result: null,
+                            error: 'Please use a local IP or domain for the redirect URL. Localhost is not allowed.'
+                        }, msg.callback);
+                        return;
+                    }
+                    if (!args.redirectUriBase.startsWith('https://')) {
+                        this.sendTo(msg.from, msg.command, {
+                            result: null,
+                            error: 'Your Admin instance to to use HTTPS.'
                         }, msg.callback);
                         return;
                     }

@@ -45,6 +45,7 @@ The current rate limit details are contained in the adapter i fo states and are 
 ## Changelog
 ### __WORK IN PROGRESS__
 * (Apollon77) Handles initialization issue where objects could be deleted wrongly
+* (Apollon77) Also check for HTTPS usage when returning the redirect URL
 
 ### 0.4.6 (2024-07-07)
 * (Apollon77) Update dependencies with optimizations and second blocking layer for rate limiting

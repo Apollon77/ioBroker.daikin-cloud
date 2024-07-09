@@ -43,7 +43,7 @@ Additionally, there is a rate limit of 200 requests per day for the Daikin Cloud
 The current rate limit details are contained in the adapter i fo states and are updated every time the adapter makes a request to the Daikin Cloud.
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 0.4.7 (2024-07-09)
 * (Apollon77) Handles initialization issue where objects could be deleted wrongly
 * (Apollon77) Also check for HTTPS usage when returning the redirect URL
 

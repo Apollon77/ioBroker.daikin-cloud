@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.6",
+    "version": "0.4.7",
     "news": {
+      "0.4.7": {
+        "en": "Handles initialization issue where objects could be deleted wrongly\nAlso check for HTTPS usage when returning the redirect URL",
+        "de": "Problem der Initialisierung, wo Objekte falsch gelöscht werden könnten\nÜberprüfen Sie auch die HTTPS-Nutzung, wenn Sie die Redirect URL zurückgeben",
+        "ru": "Проблема инициализации, когда объекты могут быть удалены неправильно\nТакже проверьте использование HTTPS при возврате URL перенаправления",
+        "pt": "Lida o problema de inicialização onde os objetos podem ser excluídos incorretamente\nVerifique também o uso do HTTPS ao retornar o URL de redirecionamento",
+        "nl": "Behandelt initialisatie probleem waar objecten foutief kunnen worden verwijderd\nControleer ook op HTTPS gebruik bij het terugsturen van de redirect URL",
+        "fr": "Gère la question de l'initialisation où les objets pourraient être supprimés à tort\nVérifiez également l'utilisation de HTTPS lors du retour de l'URL de redirection",
+        "it": "Manici problema di inizializzazione in cui gli oggetti potrebbero essere eliminati in modo errato\nControllare anche l'utilizzo HTTPS quando si ritorna l'URL redirect",
+        "es": "Tema de inicialización de las manijas donde se pueden eliminar objetos erróneamente\nTambién compruebe el uso de HTTPS al devolver la URL redireccionada",
+        "pl": "Obsługa problemu inicjalizacji, w którym obiekty mogą zostać usunięte nieprawidłowo\nSprawdź również czy HTTPS jest używany podczas zwracania przekierowanego adresu URL",
+        "uk": "Питання ініціалізації рук, де об'єкти можуть бути видалені неправильно\nТакож перевірте використання HTTPS при поверненні URL-адреси",
+        "zh-cn": "处理可错误删除对象的初始化问题\n返回重定向 URL 时还检查 HTTPS 使用情况"
+      },
       "0.4.6": {
         "en": "Update dependencies with optimizations and second blocking layer for rate limiting",
         "de": "Aktualisieren von Abhängigkeiten mit Optimierungen und zweiter Sperrschicht zur Ratenbegrenzung",
@@ -80,19 +93,6 @@
         "pl": "Wyraźny symbol, gdy e-mail lub hasło zmienia się w konfiguście",
         "zh-cn": "当电子邮件或密码发生变化时,明示点",
         "uk": "Очищайте набір токенів, коли електронну адресу чи пароль змінено в конфігурації"
-      },
-      "0.2.2": {
-        "en": "Add naming support for devices using old WLAN adapters but updated for Onecta",
-        "de": "Hinzufügen von Namensunterstützung für Geräte mit alten WLAN-Adaptern, aber aktualisiert für Onecta",
-        "ru": "Добавьте поддержку для устройств с использованием старых адаптеров WLAN, но обновлен для Onecta",
-        "pt": "Adicionar suporte de nome para dispositivos usando adaptadores WLAN antigos, mas atualizado para Onecta",
-        "nl": "Vermelden voor apparatuur met gebruik van oude WLAN adapters maar update voor Onecta",
-        "fr": "Ajouter le support de dénomination pour les appareils utilisant les anciens adaptateurs WLAN mais mis à jour pour Onecta",
-        "it": "Aggiungi supporto per i nomi per i dispositivi che utilizzano vecchi adattatori WLAN ma aggiornati per Onecta",
-        "es": "Añadir soporte para nombres de dispositivos con adaptadores WLAN antiguos pero actualizado para Onecta",
-        "pl": "Addd naming support dla urządzeń korzystających ze starych adapterów WLAN, ale aktualizował dla Onecta",
-        "zh-cn": "增加使用旧的WLAN适应器对装置的命名支助,但对单一气体的更新",
-        "uk": "Додайте підтримку імен для пристроїв, які використовують старі адаптери WLAN, але оновлені для Onecta"
       }
     },
     "titleLang": {

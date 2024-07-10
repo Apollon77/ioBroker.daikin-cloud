@@ -264,7 +264,13 @@ class DaikinCloudAdapter extends utils.Adapter {
                 const obj = this.dataMapper.objects.get(objId);
                 const existingObj = this.objectHelper.getObject(objId);
                 if (existingObj && existingObj.common && existingObj.common.write !== undefined) {
+                    const determinedWrite = obj.common.write;
                     obj.common.write = existingObj.common.write || obj.common.write; // once true we leave it true
+                    this.log.debug(`Check existing object ${objId} ${determinedWrite} vs ${existingObj.common.write} ==> ${obj.common.write}`);
+                    if (determinedWrite !== obj.common.write) {
+                        obj.common.role = this.dataMapper.defineRole(objId, obj);
+                        this.log.debug(`Update object ${objId} with write=${obj.common.write} and role=${obj.common.role}`);
+                    }
                 }
                 let onChange;
                 if (obj && obj.type === 'state' && obj.common) {

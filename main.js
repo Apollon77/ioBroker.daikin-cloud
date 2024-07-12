@@ -262,7 +262,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         if (objIds) {
             for (const objId of objIds) {
                 const obj = this.dataMapper.objects.get(objId);
-                const existingObj = this.objectHelper.getObject(objId);
+                const existingObj = this.objectHelper.existingStates[objId];
                 if (existingObj && existingObj.common && existingObj.common.write !== undefined) {
                     const determinedWrite = obj.common.write;
                     obj.common.write = existingObj.common.write || obj.common.write; // once true we leave it true

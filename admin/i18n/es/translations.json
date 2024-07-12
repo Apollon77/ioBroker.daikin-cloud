@@ -11,6 +11,9 @@
     "auth_step8": "8. Después de la autenticación exitosa y después de ver la página de éxito en la otra ventana, guarde la configuración y presione el botón \"Guardar y cerrar\" a continuación.",
     "polling_header": "Intervalos de sondeo de datos",
     "polling_info": "La nube de Daikin introduce limitaciones de velocidad para la API. ¡El límite principal es <b>un máximo de 200 solicitudes por día</b>! Utilice el sondeo lento en momentos en los que no se necesitan actualizaciones frecuentes. ¡Establezca el estado <b>useSlowPolling</b> en verdadero para utilizar el intervalo de sondeo lento! Los detalles más recientes sobre los límites de tarifas se pueden encontrar en info.* estados.",
-    "polling_interval": "Intervalo de sondeo de datos",
-    "polling_interval_slow": "Intervalo de sondeo de datos lento"
+    "polling_interval": "Intervalo de sondeo de datos (segundos)",
+    "polling_interval_slow": "Intervalo de sondeo de datos lento (segundos)",
+    "same_value_header": "¿Qué valores enviar a Daikin?",
+    "same_value_info": "Para reducir al máximo las interacciones con la nube de Daikin, puede definir aquí qué valores deben enviarse a la nube de Daikin.",
+    "sendSameValue": "¿Enviar los mismos valores otra vez?"
 }

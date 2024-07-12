@@ -20,9 +20,9 @@
     "node": ">=18.2"
   },
   "dependencies": {
-    "@apollon/iobroker-tools": "^0.2.1",
+    "@apollon/iobroker-tools": "^0.3.0",
     "@iobroker/adapter-core": "^3.1.6",
-    "daikin-controller-cloud": "^2.2.0"
+    "daikin-controller-cloud": "^2.3.0"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.7.0",

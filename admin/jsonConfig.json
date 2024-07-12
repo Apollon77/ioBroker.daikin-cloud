@@ -90,6 +90,29 @@
             "type": "staticText",
             "text": "auth_step8"
         },
+        "_sendSameValueHeader": {
+            "type": "header",
+            "newLine":  true,
+            "size": 4,
+            "style": {
+                "marginTop": 20
+            },
+            "sm": 12,
+            "text": "same_value_header"
+        },
+        "_sendSameValueInfo": {
+            "newLine":  true,
+            "type": "staticText",
+            "text": "same_value_info"
+        },
+        "sendSameValue": {
+            "newLine": true,
+            "type": "checkbox",
+            "label": "sendSameValue",
+            "sm": 6,
+            "lg": 3,
+            "default": false
+        },
         "_pollingIntervalsHeader": {
             "type": "header",
             "newLine":  true,
@@ -100,7 +123,7 @@
             "sm": 12,
             "text": "polling_header"
         },
-        "_poplling8": {
+        "_pollingInfo": {
             "newLine":  true,
             "type": "staticText",
             "text": "polling_info"

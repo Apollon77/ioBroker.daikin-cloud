@@ -11,6 +11,9 @@
     "auth_step8": "8. Après l'authentification réussie et après avoir vu la page de réussite dans l'autre fenêtre, enregistrez les paramètres et appuyez sur le bouton « Enregistrer et fermer » ci-dessous !",
     "polling_header": "Intervalles d'interrogation des données",
     "polling_info": "Le cloud Daikin introduit des limitations de débit pour l'API. La limite principale est de <b>200 demandes maximum par jour</b> ! Utilisez l'interrogation lente lorsque des mises à jour fréquentes ne sont pas nécessaires. Veuillez définir l'état <b>useSlowPolling</b> sur true pour utiliser l'intervalle d'interrogation lent ! Les derniers détails sur les limites de débit peuvent être trouvés dans les états info.*.",
-    "polling_interval": "Intervalle d'interrogation des données",
-    "polling_interval_slow": "Intervalle lent d'interrogation des données"
+    "polling_interval": "Intervalle d'interrogation des données (secondes)",
+    "polling_interval_slow": "Intervalle d'interrogation de données lent (secondes)",
+    "same_value_header": "Quelles valeurs envoyer à Daikin ?",
+    "same_value_info": "Pour réduire au mieux les interactions avec le cloud Daikin, vous pouvez définir ici quelles valeurs doivent être envoyées au cloud Daikin.",
+    "sendSameValue": "Envoyer à nouveau les mêmes valeurs ?"
 }

@@ -11,6 +11,9 @@
     "auth_step8": "8. Dopo l'autenticazione riuscita e dopo aver visto la pagina di successo nell'altra finestra, salva le impostazioni e premi il pulsante \"Salva e chiudi\" qui sotto!",
     "polling_header": "Intervalli di polling dei dati",
     "polling_info": "Il cloud Daikin introduce limitazioni di velocità per l'API. Il limite principale è <b>massimo 200 richieste al giorno</b>! Utilizzare il polling lento nei momenti in cui non sono necessari aggiornamenti frequenti. Imposta lo stato <b>useSlowPolling</b> su true per utilizzare l'intervallo di polling lento! I dettagli più recenti sulla limitazione della tariffa possono essere trovati negli stati info.*.",
-    "polling_interval": "Intervallo di polling dei dati",
-    "polling_interval_slow": "Intervallo lento di polling dei dati"
+    "polling_interval": "Intervallo di polling dei dati (secondi)",
+    "polling_interval_slow": "Intervallo di polling dati lento (secondi)",
+    "same_value_header": "Quali valori inviare a Daikin?",
+    "same_value_info": "Per ridurre al meglio le interazioni con il cloud Daikin, è possibile definire qui quali valori devono essere inviati al cloud Daikin.",
+    "sendSameValue": "Inviare di nuovo gli stessi valori?"
 }

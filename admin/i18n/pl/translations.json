@@ -11,6 +11,9 @@
     "auth_step8": "8. Po pomyślnym uwierzytelnieniu i wyświetleniu strony powodzenia w drugim oknie zapisz ustawienia i naciśnij przycisk „Zapisz i zamknij” poniżej!",
     "polling_header": "Interwały odpytywania danych",
     "polling_info": "Chmura Daikin wprowadza ograniczenia szybkości dla interfejsu API. Główny limit to <b>maksymalnie 200 żądań dziennie</b>! Użyj powolnego odpytywania w czasach, w których nie były potrzebne częste aktualizacje. Ustaw stan <b>useSlowPolling</b> na true, aby używać wolnego interwału odpytywania! Najnowsze szczegóły dotyczące limitów szybkości można znaleźć w stanach info.*.",
-    "polling_interval": "Interwał odpytywania danych",
-    "polling_interval_slow": "Powolne odpytywanie danych. Interwał"
+    "polling_interval": "Odpytywanie danych Interwał (sekundy)",
+    "polling_interval_slow": "Powolne odpytywanie danych. Interwał (sekundy)",
+    "same_value_header": "Jakie wartości wysłać do firmy Daikin?",
+    "same_value_info": "Aby jak najlepiej ograniczyć interakcje z chmurą Daikin, można tutaj zdefiniować, które wartości mają być wysyłane do chmury Daikin.",
+    "sendSameValue": "Wysłać ponownie te same wartości?"
 }

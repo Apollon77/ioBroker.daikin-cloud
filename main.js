@@ -275,8 +275,12 @@ class DaikinCloudAdapter extends utils.Adapter {
                 let onChange;
                 if (obj && obj.type === 'state' && obj.common) {
                     if (obj.common.write) {
-                        onChange = async (value) => {
+                        onChange = async (value, state) => {
                             if (this.unloaded) return;
+                            if (state && state.ts !== state.lc && !this.config.sendSameValue) {
+                                this.log.debug(`Ignore state change for ${objId} because value is the same as before`);
+                                return;
+                            }
                             if (this.doNotCommunicateBefore > Date.now()) {
                                 this.log.info(`Ignore state change for ${objId} because communication blocked!`);
                                 return;

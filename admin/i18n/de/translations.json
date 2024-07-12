@@ -11,6 +11,9 @@
     "auth_step8": "8. Nach erfolgreicher Authentifizierung und nachdem die Erfolgsseite im anderen Fenster angezeigt wurde, die Einstellungen bitte speichern und unten auf die Schaltfläche „Speichern und schließen“ klicken!",
     "polling_header": "Datenabfrageintervalle",
     "polling_info": "Die Daikin-Cloud führt Ratenbeschränkungen für die API ein. Das Hauptlimit liegt bei <b>maximal 200 Anfragen pro Tag</b>! Nutzen Sie die langsame Abfrage in Zeiten, in denen keine häufigen Updates erforderlich sind. Bitte setzen Sie den Status <b>useSlowPolling</b> auf true, um das langsame Abfrageintervall zu verwenden! Die neuesten Details zur Ratenbegrenzung finden Sie in den info.*-States.",
-    "polling_interval": "Datenabfrageintervall",
-    "polling_interval_slow": "Langsames Datenabfrageintervall"
+    "polling_interval": "Datenabfrageintervall (Sekunden)",
+    "polling_interval_slow": "Langsames Datenabfrageintervall (Sekunden)",
+    "same_value_header": "Welche Werte sollen an Daikin gesendet werden?",
+    "same_value_info": "Um die Interaktionen mit der Daikin-Cloud bestmöglich zu reduzieren, können Sie hier definieren, welche Werte an die Daikin-Cloud gesendet werden sollen.",
+    "sendSameValue": "Dieselben Werte noch einmal senden?"
 }

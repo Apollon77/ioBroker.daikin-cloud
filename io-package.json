@@ -180,7 +180,8 @@
     "clientId": "",
     "clientSecret": "",
     "pollingInterval": 900,
-    "slowPollingInterval": 1800
+    "slowPollingInterval": 1800,
+    "sendSameValue": false
   },
   "objects": [],
   "instanceObjects": [

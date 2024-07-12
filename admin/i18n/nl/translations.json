@@ -11,6 +11,9 @@
     "auth_step8": "8. Na de succesvolle authenticatie en nadat u de succespagina in het andere venster hebt gezien, slaat u de instellingen op en drukt u op de knop \"Opslaan en sluiten\" hieronder!",
     "polling_header": "Intervallen voor het opvragen van gegevens",
     "polling_info": "De Daikin-cloud introduceert tariefbeperkingen voor de API. De hoofdlimiet is <b>maximaal 200 verzoeken per dag</b>! Gebruik de langzame polling in tijden waarin er niet vaak updates nodig zijn. Stel de status <b>useSlowPolling</b> in op true om het langzame polling-interval te gebruiken! De meest recente informatie over de tarieflimieten vindt u in de info.*-staten.",
-    "polling_interval": "Interval voor gegevensopvragen",
-    "polling_interval_slow": "Trage gegevenspolling Interval"
+    "polling_interval": "Interval gegevensopvragen (seconden)",
+    "polling_interval_slow": "Langzaam opvragen van gegevens Interval (seconden)",
+    "same_value_header": "Welke waarden moeten naar Daikin worden gestuurd?",
+    "same_value_info": "Om de interacties met de Daikin-cloud zo goed mogelijk te beperken, kunt u hier definiëren welke waarden naar de Daikin-cloud moeten worden verzonden.",
+    "sendSameValue": "Dezelfde waarden opnieuw verzenden?"
 }

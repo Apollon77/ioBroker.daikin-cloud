@@ -11,6 +11,9 @@
     "auth_step8": "8. 验证成功后，在另一个窗口中看到成功页面后，请保存设置并按下面的“保存并关闭”按钮！",
     "polling_header": "数据轮询间隔",
     "polling_info": "大金云引入了 API 的速率限制。主要限制是<b>每天最多 200 个请求</b>！在不需要频繁更新的情况下使用慢速轮询。请将 <b>useSlowPolling</b> 状态设置为 true 以使用慢轮询间隔！最新的速率限制详细信息可以在 info.* 状态中找到。",
-    "polling_interval": "数据轮询间隔",
-    "polling_interval_slow": "慢速数据轮询间隔"
+    "polling_interval": "数据轮询间隔（秒）",
+    "polling_interval_slow": "慢速数据轮询间隔（秒）",
+    "same_value_header": "向大金发送哪些值？",
+    "same_value_info": "为了尽可能减少与大金云的交互，您可以在此处定义哪些值应发送到大金云。",
+    "sendSameValue": "再次发送相同的值？"
 }

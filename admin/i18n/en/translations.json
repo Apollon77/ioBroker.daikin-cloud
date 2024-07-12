@@ -11,6 +11,9 @@
     "auth_step8": "8. After the successfull authentication and after you saw the success page in the other window please save the settings and press the \"Save and Close\" button below!",
     "polling_header": "Data polling intervals",
     "polling_info": "The Daikin cloud introduces rate limitations for the API. The main limit are <b>maximum 200 requests per day</b>! Use the slow polling in times were not that frequent updates are needed. Please set the <b>useSlowPolling</b> state to true to use the slow polling interval! The latest rate limiting details can be found in the info.* states.",
-    "polling_interval": "Data polling Interval",
-    "polling_interval_slow": "Slow data polling Interval"
+    "polling_interval": "Data polling Interval (seconds)",
+    "polling_interval_slow": "Slow data polling Interval (seconds)",
+    "same_value_header": "Which values to send out to Daikin?",
+    "same_value_info": "To reduce the interactions with the Daikin cloud as best as possible you can define here which values should be sent to the Daikin cloud.",
+    "sendSameValue": "Send same values again?"
 }

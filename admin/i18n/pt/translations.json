@@ -11,6 +11,9 @@
     "auth_step8": "8. Após a autenticação bem-sucedida e depois de ver a página de sucesso na outra janela, salve as configurações e pressione o botão \"Salvar e Fechar\" abaixo!",
     "polling_header": "Intervalos de pesquisa de dados",
     "polling_info": "A nuvem Daikin introduz limitações de taxa para a API. O limite principal é <b>máximo de 200 solicitações por dia</b>! Use a pesquisa lenta em momentos em que não são necessárias atualizações frequentes. Defina o estado <b>useSlowPolling</b> como true para usar o intervalo de pesquisa lento! Os detalhes mais recentes sobre limites de taxa podem ser encontrados nos estados info.*.",
-    "polling_interval": "Intervalo de pesquisa de dados",
-    "polling_interval_slow": "Intervalo lento de pesquisa de dados"
+    "polling_interval": "Intervalo de pesquisa de dados (segundos)",
+    "polling_interval_slow": "Intervalo lento de pesquisa de dados (segundos)",
+    "same_value_header": "Quais valores enviar para a Daikin?",
+    "same_value_info": "Para reduzir ao máximo as interações com a nuvem Daikin, pode definir aqui quais os valores que devem ser enviados para a nuvem Daikin.",
+    "sendSameValue": "Enviar os mesmos valores novamente?"
 }

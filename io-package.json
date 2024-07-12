@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.7",
+    "version": "0.4.8",
     "news": {
+      "0.4.8": {
+        "en": "Optimized handling of rate limits, block maximum 24h and retry then\nAdded option to prevent sending the same values again (prevented by default!)",
+        "de": "Optimiertes Handling von Geschwindigkeitsgrenzen, Block maximal 24h und Retry dann\nOption hinzugefügt, um zu verhindern, dass die gleichen Werte wieder gesendet werden (vorbeugt durch Standard!)",
+        "ru": "Оптимизированная обработка лимитов скорости, блок максимум 24h и ответный затем\nДобавлена опция для предотвращения отправки одних и тех же значений снова (предназначена по умолчанию!)",
+        "pt": "Manuseamento otimizado de limites de taxa, bloquear o máximo 24h e retentar então\nAdicionado opção para evitar o envio dos mesmos valores novamente (prevenido por padrão!)",
+        "nl": "Geoptimaliseerde hantering van snelheidslimieten, blokkeer maximaal 24 uur en probeer het dan opnieuw\nToegevoegde optie om het opnieuw verzenden van dezelfde waarden te voorkomen (standaard uitgevonden!)",
+        "fr": "Manipulation optimisée des limites de vitesse, bloc maximum 24h et réessayer ensuite\nAjout d'une option pour empêcher l'envoi des mêmes valeurs à nouveau (préventé par défaut!)",
+        "it": "Movimentazione ottimizzata dei limiti di tasso, bloccare massimo 24 ore e riprovare poi\nAggiunta opzione per evitare di inviare nuovamente gli stessi valori (preventato per impostazione predefinita!)",
+        "es": "Manejo optimizado de los límites de velocidad, bloque máximo 24h y retry luego\nAñadido opción para evitar el envío de los mismos valores de nuevo (prevenido por defecto!)",
+        "pl": "Zoptymalizowane obchodzenie się z limitami prędkości, zablokować maksymalnie 24h i ponownie spróbować\nDodano opcję, aby zapobiec ponownemu wysyłaniu tych samych wartości (domyślnie zapobiegane!)",
+        "uk": "Оптимізоване обслуговування лімітів швидкості, блокування максимальної 24h і птиця, потім\nДодано параметр для запобігання відправки однакових значень знову (перевірено за замовчуванням!)",
+        "zh-cn": "优化处理速率限制,区块最高24小时,然后重试\n添加了选项, 防止再次发送相同的值( 默认已防止 !)"
+      },
       "0.4.7": {
         "en": "Handles initialization issue where objects could be deleted wrongly\nAlso check for HTTPS usage when returning the redirect URL",
         "de": "Problem der Initialisierung, wo Objekte falsch gelöscht werden könnten\nÜberprüfen Sie auch die HTTPS-Nutzung, wenn Sie die Redirect URL zurückgeben",
@@ -80,19 +93,6 @@
         "pl": "Jest kompatybilny z Node.js 18+\nAdjust name fallback (ang.)",
         "uk": "Використовуйте сумісний з Node.js 18+ занадто\nРегулювання назви",
         "zh-cn": "与第18+号不相容\n独立名称"
-      },
-      "0.2.3": {
-        "en": "Clear the tokenset when email or password is changed in config",
-        "de": "Löschen Sie den Tokenset, wenn E-Mail oder Passwort in config geändert wird",
-        "ru": "Очистить токены, когда электронная почта или пароль изменены в config",
-        "pt": "Limpar o tokenset quando e-mail ou senha é alterado em config",
-        "nl": "Ontruim het tokenet als e-mail of wachtwoord veranderd is",
-        "fr": "Effacer le bouton lorsque l'email ou le mot de passe est modifié dans la configuration",
-        "it": "Cancellare il tokenset quando l'email o la password viene modificata in configurazione",
-        "es": "Despejar el tokenset cuando el correo electrónico o la contraseña se cambia en config",
-        "pl": "Wyraźny symbol, gdy e-mail lub hasło zmienia się w konfiguście",
-        "zh-cn": "当电子邮件或密码发生变化时,明示点",
-        "uk": "Очищайте набір токенів, коли електронну адресу чи пароль змінено в конфігурації"
       }
     },
     "titleLang": {

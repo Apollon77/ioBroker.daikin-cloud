@@ -268,7 +268,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                     obj.common.write = existingObj.common.write || obj.common.write; // once true we leave it true
                     this.log.debug(`Check existing object ${objId} ${determinedWrite} vs ${existingObj.common.write} ==> ${obj.common.write}`);
                     if (determinedWrite !== obj.common.write) {
-                        obj.common.role = this.dataMapper.defineRole(objId, obj);
+                        obj.common.role = this.dataMapper.defineRole(objId, obj.common);
                         this.log.debug(`Update object ${objId} with write=${obj.common.write} and role=${obj.common.role}`);
                     }
                 }
@@ -288,7 +288,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                             const writeValue = this.dataMapper.convertValueWrite(objId, value, obj);
                             this.log.info(`Send state change for ${objId} with value=${writeValue} to ${obj.native.managementPoint} : ${obj.native.dataPoint} : ${obj.native.dataPointPath}`)
                             try {
-                                await dev.setData(obj.native.managementPoint, obj.native.dataPoint, obj.native.dataPointPath, writeValue);
+                                await dev.setData(obj.native.managementPoint, obj.native.dataPoint, obj.native.dataPointPath, writeValue, true);
                                 await this.setState(objId, {val: value, ack: true});
                             } catch (err) {
                                 this.log.warn(`Error on State update for ${objId} with value=${writeValue}: ${err.message}`);

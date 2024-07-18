@@ -13,7 +13,7 @@
 
 ## daikin-cloud adapter for ioBroker
 
-Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta App. The adapter connects to the Daikin-Cloud and polls the data from there. In order for this to work you need to dign up for a "Dailin Europe Developer Account" and create an application there. The adapter will then use the credentials of this application to connect to the Daikin Cloud.
+Control Daikin Devices that are only connected to the Daikin Cloud / the Onecta App. The adapter connects to the Daikin-Cloud and polls the data from there. In order for this to work you need to dign up for a "Daikin Europe Developer Account" and create an application there. The adapter will then use the credentials of this application to connect to the Daikin Cloud.
 
 ## Disclaimer
 **All product and company names or logos are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them or any associated subsidiaries! This personal project is maintained in spare time and has no business goal.**
@@ -37,7 +37,7 @@ After connecting to the Daikin Cloud account the adapter will automatically crea
 Additionally, there is a rate limit of 200 requests per day for the Daikin Cloud API. Because of this please consider the following best practices:
 
 * A default polling interval of 15 minutes should be sufficient for most use cases while leaving some space for controlling the devices too. Consider that each control action requires 2 requests (one to control, one to update the data 1 minute after the control call). Especially with many devices this can really get problematic.
-* The adapter also supports "Slow Polling" where you can define an own interval. Use the state `useSlowPolling`to enableor disable the slow polling based on your needs (e.g at night times poll just hourly ...)
+* The adapter also supports "Slow Polling" where you can define an own interval. Use the state `useSlowPolling`to enable or disable the slow polling based on your needs (e.g at night times poll just hourly ...)
 * Ideally have at least 10 minutes time between switching the device power status because else thats bad for the moving parts of the devices
 
 The current rate limit details are contained in the adapter i fo states and are updated every time the adapter makes a request to the Daikin Cloud.

@@ -158,6 +158,51 @@
         "admin": ">=6.2.13"
       }
     ],
+    "messages": [
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "oldVersion<0.4.0",
+            "newVersion>=0.4.0"
+          ]
+        },
+        "title": {
+          "en": "Breaking Change: Daikin Developer Account needed!",
+          "de": "Wichtige Änderung: Daikin Entwickler Konto erforderlich!",
+          "ru": "Breaking Change: Daikin Developer Счет нужен!",
+          "pt": "Mudança de ruptura: Daikin Developer Conta necessária!",
+          "nl": "Breaking Change: Daikin Developer Account nodig!",
+          "fr": "Breaking Change: Daikin Developer Compte nécessaire !",
+          "it": "Cambiamento di rottura: Daikin Sviluppatore Conto necessario!",
+          "es": "Cambio de ruptura: Daikin Developer ¡Cuenta necesaria!",
+          "pl": "Łamanie zmian: Programista Daikin Potrzebne konto!",
+          "uk": "Зміна несправностей: Daikin Developer Облік необхідно!",
+          "zh-cn": "突破更改: Daikin 开发者 需要账户!"
+        },
+        "text": {
+          "en": "Starting with v0.4.0 a Daikin Developer Account is needed now and there is a new maximum of <b> 200 requests per day!</b> Please Follow the instructions on the Admin configuration page after updating and adjust your scripts to prevent issues with the maximum requests per day!",
+          "de": "Beginnend mit v0.4.0 ein Daikin Developer Konto ist jetzt erforderlich und es gibt ein neues Maximum von <b> 200 Anfragen pro Tag!</b> Bitte nach dem Update die Anweisungen auf der Admin-Konfigurationsseite befolgen und eigene Skripte anpassen, um Probleme mit den maximalen Anfragen pro Tag zu verhindern!",
+          "ru": "Начиная с v0.4.0 Счет нужен сейчас, и есть новый максимум <b> 200 запросов в день!</b> Пожалуйста, следуйте инструкциям на странице настройки Админ после обновления и корректировки сценариев, чтобы предотвратить проблемы с максимальными запросами в день!",
+          "pt": "Começando com v0.4.0 a Daikin Developer A conta é necessária agora e há um novo máximo de <b> 200 pedidos por dia!</b> Siga as instruções na página de configuração do administrador após atualizar e ajustar seus scripts para evitar problemas com os pedidos máximos por dia!",
+          "nl": "Te beginnen met v0.4.0 a Daikin Developer Account is nu nodig en er is een nieuw maximum van <b> 200 verzoeken per dag!</b> Volg de instructies op de Admin configuratie pagina na het bijwerken en aanpassen van uw scripts om problemen met de maximale verzoeken per dag te voorkomen!",
+          "fr": "En commençant par v0.4.0 un développeur Daikin Le compte est nécessaire maintenant et il y a un nouveau maximum de <b> 200 demandes par jour!</b> Suivez les instructions sur la page de configuration Admin après la mise à jour et ajustez vos scripts pour éviter les problèmes avec le maximum de demandes par jour!",
+          "it": "A partire da v0.4.0 a Daikin Developer L'account è necessario ora e c'è un nuovo massimo di <b> 200 richieste al giorno! Seguire le istruzioni sulla pagina di configurazione di Admin dopo l'aggiornamento e la regolazione degli script per evitare problemi con le richieste massime al giorno!",
+          "es": "Empezando con v0.4.0 a Daikin Developer ¡La cuenta es necesaria ahora y hay un nuevo máximo de <b título 200 solicitudes por día! Siga las instrucciones en la página de configuración de Admin después de actualizar y ajustar sus scripts para evitar problemas con las solicitudes máximas por día!",
+          "pl": "Począwszy od v0.4.0 a Daikin Developer Konto jest teraz potrzebne i istnieje nowe maksimum < b > 200 wniosków dziennie! < / b > Proszę postępować zgodnie z instrukcjami na stronie konfiguracji Admin po aktualizacji i dostosować skrypty, aby zapobiec problemom z maksymalnymi żądaniami dziennie!",
+          "uk": "Починаючи з v0.4.0 розробник Daikin Акаун зараз і є новий максимум запитів <b> 200 на день!</b> Будь ласка, дотримуйтесь інструкцій на сторінці налаштування адміністратора після оновлення та налаштування сценаріїв, щоб запобігти проблемам з максимальними запитами в день!",
+          "zh-cn": "从 n. 4. 0 开始 Daikin 开发者 现在需要核算,新的最高要求为每天<b>200个请求!</b> 请在更新和调整您的脚本后, 遵守行政配置页面上的指示, 以防止每天最多的请求出现问题 !"
+        },
+        "level": "warn",
+        "buttons": [
+          "agree",
+          "cancel"
+        ]
+      }
+    ],
+    "blockedVersions": [
+      "<0.4.0"
+    ],
     "plugins": {
       "sentry": {
         "dsn": "https://3ac7b6d04c3e4faf8c0bfe0cd38396a6@sentry.iobroker.net/197",

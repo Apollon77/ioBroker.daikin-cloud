@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.8",
+    "version": "0.4.9",
     "news": {
+      "0.4.9": {
+        "en": "Optimized write handling",
+        "de": "Optimiertes Schreibhandling",
+        "ru": "Оптимизированная обработка записи",
+        "pt": "Manipulação de gravação otimizada",
+        "nl": "Geoptimaliseerde schrijfbehandeling",
+        "fr": "Gestion optimisée de l'écriture",
+        "it": "Gestione ottimizzata della scrittura",
+        "es": "Manejo de escritura optimizado",
+        "pl": "Zoptymalizowana obsługa zapisu",
+        "uk": "Оптимізована обробка запису",
+        "zh-cn": "优化写处理"
+      },
       "0.4.8": {
         "en": "Optimized handling of rate limits, block maximum 24h and retry then\nAdded option to prevent sending the same values again (prevented by default!)",
         "de": "Optimiertes Handling von Geschwindigkeitsgrenzen, Block maximal 24h und Retry dann\nOption hinzugefügt, um zu verhindern, dass die gleichen Werte wieder gesendet werden (vorbeugt durch Standard!)",
@@ -80,19 +93,6 @@
         "pl": "WAŻNE: Minimalna wersja Node.js to 18.2\nBREAKING: Dostosowana do nowego Daiking Cloud API - Musisz ponownie uwierzytelnić!\nBREAKING: Nowy limit stawki nowego API wynosi 200 wniosków dziennie!! Dostosuj swoje użycie!\nDodano opcję ustawiania przerwy \"powolne sondaże\"\nUdostępnij dane elektryczne jako stany (tablice na razie)\nPrzywróć ostatni zaktualizowany znacznik czasu\nUpewnij się, że CloudConnection zawsze zawiera boolean\nOdśwież token również, gdy błąd jest \"Odśwież Token wygasł\"",
         "uk": "Імпортант: Мінімальна версія Node.js 18.2\nBREAKING: Налаштовано новий API Daiking Cloud - Вам потрібно переоцінити!\nBREAKING: Новий ліміт курсу нового API становить 200 запитів на день! Налаштування вашого використання!\nДодано опцію для встановлення інтервалу «повільне опитування»\nЗробіть електричні дані, доступні як штати (для цього)\nВідновити останні дані оновлений час\nПереконайтеся, що хмарнийConnection завжди містить булеван\nВідновити токен також при похибці \"Повідомлення Token\"",
         "zh-cn": "重要:最小节点.js版本为18.2\n适应了新的戴京云API - 你需要重新认证!\n新API的新费率限制是每天200个请求! 调整你的用法!\n设置“ 慢投票” 间隔的选项\n提供状态的电气数据(目前为阵列)\n恢复上次更新的时间戳数据\n确保云串总是包含布尔\n当错误是“ 更新托肯已过期 ” 时也刷新符号"
-      },
-      "0.3.0": {
-        "en": "Make compatible with Node.js 18+ too\nAdjust name fallback",
-        "de": "Kompatibel mit Node.js 18+ machen\nAdjust name fallback",
-        "ru": "Сделайте совместимость с Node.js 18+ слишком\nОтрегулируйте имя fallback",
-        "pt": "Faça compatível com Node.js 18+ também\nAjuste o nome fallback",
-        "nl": "Maak het ook goed met Node\nVertaling:",
-        "fr": "Make compatible with Node.js 18+ too\nAjuster le nom",
-        "it": "Rendere compatibile anche con Node.js 18+\nRegolare il nome fallback",
-        "es": "Hacer compatible con Node.js 18+ también\nRetroceder de nombre ajustado",
-        "pl": "Jest kompatybilny z Node.js 18+\nAdjust name fallback (ang.)",
-        "uk": "Використовуйте сумісний з Node.js 18+ занадто\nРегулювання назви",
-        "zh-cn": "与第18+号不相容\n独立名称"
       }
     },
     "titleLang": {

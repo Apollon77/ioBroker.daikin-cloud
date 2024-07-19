@@ -1,6 +1,6 @@
 {
   "name": "iobroker.daikin-cloud",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "description": "Control Daikin Devices that are only connected to the Daikin Cloud",
   "author": {
     "name": "Apollon77",

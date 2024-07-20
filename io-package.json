@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.9",
+    "version": "0.4.10",
     "news": {
+      "0.4.10": {
+        "en": "Fixes some error cases reported by Sentry",
+        "de": "Behebt einige von Sentry gemeldete Fehlerfälle",
+        "ru": "Исправления некоторых случаев ошибок, о которых сообщает Sentry",
+        "pt": "Corrige alguns casos de erro relatados pela Sentry",
+        "nl": "Repareert een aantal fouten gemeld door Sentry",
+        "fr": "Correction de certains cas d'erreur signalés par Sentry",
+        "it": "Risolve alcuni casi di errore segnalati da Sentry",
+        "es": "Arregla algunos casos de error reportados por Sentry",
+        "pl": "Określa niektóre przypadki błędów zgłoszone przez Sentry",
+        "uk": "Виправлення деяких випадків помилок, які повідомляються Sentry",
+        "zh-cn": "纠正哨兵报告的一些错误案例"
+      },
       "0.4.9": {
         "en": "Optimized write handling",
         "de": "Optimiertes Schreibhandling",
@@ -80,19 +93,6 @@
         "pl": "Napraw harmonogram ponownego testowania inicjalizacji",
         "uk": "Фіксація графіка денності",
         "zh-cn": "修复初始化重试时间表"
-      },
-      "0.4.3": {
-        "en": "IMPORTANT: Minimum Node.js version is 18.2\nBREAKING: Adjusted to new Daiking Cloud API - You need to reauthenticate!\nBREAKING: New rate limit of new API is 200 requests per day!! Adjust your usage!\nAdded option to set \"slow polling\" interval\nMake electrical data available as states (arrays for now)\nRestore last data updated timestamp\nMake sure cloudConnection always contains a boolean\nRefresh token also when error is \"Refresh Token has expired\"",
-        "de": "WICHTIG: Minimum Node.js-Version ist 18.2\nBREAKING: Anpassung an neue Daiking Cloud API - Sie müssen neu authentifizieren!\nBREAKING: Neue Rate Limit der neuen API ist 200 Anfragen pro Tag!! Passen Sie Ihre Nutzung an!\nOption hinzugefügt, um \"slow polling\" Intervall einzustellen\nStellen Sie elektrische Daten als Zustände zur Verfügung (Arrays für jetzt)\nWiederherstellen der letzten Daten aktualisiert Zeitstempel\nStellen Sie sicher, dass cloudConnection immer ein boolean enthält\nRefresh-Token auch, wenn Fehler \"Refresh Token ist abgelaufen\"",
-        "ru": "ВАЖНО: Минимальная версия Node.js 18.2\nBREAKING: Настроен на новый Daiking Cloud API - вам нужно обновить!\nBREAKING: Новый лимит курса нового API составляет 200 запросов в день! Настройте свое использование!\nДобавлена опция для установки интервала \"медленный опрос\"\nСделайте электрические данные доступными в виде состояний (предъявления на данный момент)\nВосстановление последних данных\nУбедитесь, что CloudConnection всегда содержит булеан\nПовторите также, когда ошибка «Refresh Token истекла»",
-        "pt": "IMPORTANTE: A versão mínima do Node.js é 18.2\nBREAKING: Ajustado a nova API Daiking Cloud - Você precisa reauthenticar!\nBREAKING: Novo limite de taxa de nova API é 200 pedidos por dia!! Ajuste seu uso!\nOpção adicionada para definir o intervalo de \"slow polling\"\nFaça dados elétricos disponíveis como estados (arrays por agora)\nRestaurar os últimos dados atualizados timestamp\nCertifique-se de cloudConnection sempre contém um booleano\nAtualizar token também quando o erro é \"Refresh Token expirou\"",
-        "nl": "BELANGRIJK: Minimale Node.js versie is 18,2\nAangepast aan de nieuwe Daiking Cloud API - Je moet herauthenticeren!\nBreaking: Nieuwe tarieflimiet van nieuwe API is 200 verzoeken per dag!! Pas uw gebruik aan!\nToegevoegde optie om \"langzame polling\" interval in te stellen\nElektrische gegevens beschikbaar stellen als states (arrays voor nu)\nLaatste bijgewerkte tijdstempel van gegevens herstellen\nZorg ervoor dat cloudConnection altijd een boolean bevat\nVernieuw token ook wanneer fout is \"Vernieuwen Token is verlopen\"",
-        "fr": "IMPORTANT: La version minimum Node.js est 18.2\nBREAKING: Ajusté à la nouvelle API Daiking Cloud - Vous devez reauthenticate!\nBREAKING: Nouvelle limite de taux de nouvelle API est 200 demandes par jour!! Ajustez votre utilisation !\nAjout de l'option pour définir l'intervalle de \"slow scruting\"\nMettre les données électriques à disposition dans les états (pour le moment)\nRestaurer les dernières données mises à jour timestamp\nAssurez-vous que CloudConnection contient toujours un booléen\nRefresh token aussi quand l'erreur est \"Reresh Token a expiré\"",
-        "it": "IMPORTANTE: Versione minima Node.js è 18.2\nBREAKING: Regolato alla nuova Daiking Cloud API - È necessario ripristinare!\nBREAKING: Il nuovo limite di velocità delle nuove API è di 200 richieste al giorno!! Regolare il vostro utilizzo!\nAggiunta opzione per impostare \"slow polling\" intervallo\nRendere i dati elettrici disponibili come stati (arrays per ora)\nRipristinare gli ultimi dati aggiornato timestamp\nAssicurati che cloudConnection contenga sempre un booleano\nToken di aggiornamento anche quando l'errore è \"Refresh Token è scaduto\"",
-        "es": "IMPORTANTE: versión mínima Node.js es 18.2\nBREAKING: Ajustado a la nueva API de Daiking Cloud - ¡Necesita volver a autenticar!\nBREAKING: ¡El nuevo límite de tarifas de la nueva API es de 200 solicitudes por día! ¡Ajusta tu uso!\nOpción agregada para establecer intervalo de \"slow polling\"\nPoner datos eléctricos disponibles como estados (arrayas por ahora)\nRestaurar los últimos datos actualizados\nAsegúrese de que la nubeConnection siempre contiene un booleano\nRefresh token también cuando el error es \"Refresh Token ha expirado\"",
-        "pl": "WAŻNE: Minimalna wersja Node.js to 18.2\nBREAKING: Dostosowana do nowego Daiking Cloud API - Musisz ponownie uwierzytelnić!\nBREAKING: Nowy limit stawki nowego API wynosi 200 wniosków dziennie!! Dostosuj swoje użycie!\nDodano opcję ustawiania przerwy \"powolne sondaże\"\nUdostępnij dane elektryczne jako stany (tablice na razie)\nPrzywróć ostatni zaktualizowany znacznik czasu\nUpewnij się, że CloudConnection zawsze zawiera boolean\nOdśwież token również, gdy błąd jest \"Odśwież Token wygasł\"",
-        "uk": "Імпортант: Мінімальна версія Node.js 18.2\nBREAKING: Налаштовано новий API Daiking Cloud - Вам потрібно переоцінити!\nBREAKING: Новий ліміт курсу нового API становить 200 запитів на день! Налаштування вашого використання!\nДодано опцію для встановлення інтервалу «повільне опитування»\nЗробіть електричні дані, доступні як штати (для цього)\nВідновити останні дані оновлений час\nПереконайтеся, що хмарнийConnection завжди містить булеван\nВідновити токен також при похибці \"Повідомлення Token\"",
-        "zh-cn": "重要:最小节点.js版本为18.2\n适应了新的戴京云API - 你需要重新认证!\n新API的新费率限制是每天200个请求! 调整你的用法!\n设置“ 慢投票” 间隔的选项\n提供状态的电气数据(目前为阵列)\n恢复上次更新的时间戳数据\n确保云串总是包含布尔\n当错误是“ 更新托肯已过期 ” 时也刷新符号"
       }
     },
     "titleLang": {

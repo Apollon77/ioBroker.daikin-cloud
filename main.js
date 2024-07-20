@@ -411,6 +411,11 @@ class DaikinCloudAdapter extends utils.Adapter {
             return;
         }
 
+        if (!this.config.clientId || !this.config.clientSecret) {
+            this.log.warn('No client id or secret configured, please enter client id and secret of your Daikin Developer Account in Adapter settings!');
+            return;
+        }
+
         const useSlowPolling = await this.getStateAsync(`${this.namespace}.useSlowPolling`);
         this.pollingInterval = useSlowPolling && useSlowPolling.val ? this.config.slowPollingInterval : this.config.pollingInterval;
 
@@ -627,7 +632,12 @@ class DaikinCloudAdapter extends utils.Adapter {
                             });
                         });
 
-                        await daikinCloud.getApiInfo(); // trigger authentication
+                        try {
+                            await daikinCloud.getApiInfo(); // trigger authentication
+                        } catch (err) {
+                            this.log.error(`Error on OAuth process: ${err}`);
+                            msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud error: ${err}. Please try again.`}, msg.callback);
+                        }
                     });
                     break;
                 }

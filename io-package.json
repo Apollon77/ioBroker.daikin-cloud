@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.10",
+    "version": "0.4.11",
     "news": {
+      "0.4.11": {
+        "en": "Increase communication timeout to 10s to prevent refresh issues",
+        "de": "Erhöhen Sie die Kommunikationszeit auf 10er Jahre, um Erfrischungsprobleme zu verhindern",
+        "ru": "Увеличить время связи до 10-х, чтобы предотвратить проблемы обновления",
+        "pt": "Aumentar o tempo de comunicação para 10s para evitar problemas de atualização",
+        "nl": "Verhoog de communicatie timeout tot 10s om verfrissingen te voorkomen",
+        "fr": "Augmenter le délai de communication à 10 pour prévenir les problèmes de rafraîchissement",
+        "it": "Aumentare il timeout di comunicazione a 10s per evitare problemi di aggiornamento",
+        "es": "Aumentar el tiempo de comunicación a 10s para evitar problemas de actualización",
+        "pl": "Zwiększenie czasu komunikacji do 10s, aby uniknąć problemów odświeżania",
+        "uk": "Збільшити час спілкування до 10-х, щоб запобігти проблемам з оновленням",
+        "zh-cn": "将通信超时时间增加到10小时,以防止出现新问题"
+      },
       "0.4.10": {
         "en": "Fixes some error cases reported by Sentry",
         "de": "Behebt einige von Sentry gemeldete Fehlerfälle",
@@ -80,19 +93,6 @@
         "pl": "Komunikacja blokowa, gdy szybkość jest ograniczona w zależności od odpowiedzi Daikina",
         "uk": "Блокування зв'язку при обмеженні курсу на Daikin",
         "zh-cn": "根据Daikin的答复,费率有限时断断续续的通信"
-      },
-      "0.4.4": {
-        "en": "Fix initialization retry schedule",
-        "de": "Fix Initialisierung Retry Zeitplan",
-        "ru": "График инициализации",
-        "pt": "Fix cronograma de retificação de inicialização",
-        "nl": "Repareren initialisatie opnieuw proberen schema",
-        "fr": "Correction de l'initialisation programme de réessayer",
-        "it": "Fissare il programma di inizializzazione",
-        "es": "Calendario de reingreso de inicialización",
-        "pl": "Napraw harmonogram ponownego testowania inicjalizacji",
-        "uk": "Фіксація графіка денності",
-        "zh-cn": "修复初始化重试时间表"
       }
     },
     "titleLang": {

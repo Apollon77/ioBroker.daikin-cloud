@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "daikin-cloud",
-    "version": "0.4.11",
+    "version": "0.4.12",
     "news": {
+      "0.4.12": {
+        "en": "Always send writable entries to the device, irrelevant of status, always update local values\nOptimize role detection for some states\nTried to prevent too luch logging of the same error in a short time on Wifi issues",
+        "de": "Senden Sie immer schreibbare Einträge an das Gerät, irrelevant für den Status, immer lokale Werte aktualisieren\nOptimieren Sie die Rollenerkennung für einige Staaten\nVersucht, zu luch Protokollierung des gleichen Fehlers in kurzer Zeit auf Wifi-Probleme zu verhindern",
+        "ru": "Всегда отправляйте записи на устройство, не относящиеся к статусу, всегда обновляйте локальные значения\nОптимизация ролевого обнаружения для некоторых стран\nПытался предотвратить слишком много ошибок в Wi-Fi за короткое время",
+        "pt": "Sempre envie entradas para o dispositivo, irrelevante de status, sempre atualize valores locais\nOtimizar a detecção de funções para alguns estados\nTentei evitar o registro demasiado luch do mesmo erro em pouco tempo em questões Wifi",
+        "nl": "Stuur altijd schrijfbare items naar het apparaat, irrelevant van status, altijd lokale waarden bijwerken\nOptimaliseer roldetectie voor sommige staten\nGeprobeerd om te veel logging van dezelfde fout in een korte tijd op Wifi-problemen te voorkomen",
+        "fr": "Toujours envoyer des entrées en écriture sur le périphérique, sans rapport avec le statut, toujours mettre à jour les valeurs locales\nOptimiser la détection des rôles pour certains états\nEssayé d'éviter un enregistrement trop louche de la même erreur en peu de temps sur les problèmes Wifi",
+        "it": "Invia sempre le voci scrivibili al dispositivo, irrilevante dello stato, aggiorna sempre i valori locali\nOttimizzare il rilevamento dei ruoli per alcuni stati\nHo cercato di evitare troppo luch registrazione dello stesso errore in breve tempo su problemi Wifi",
+        "es": "Enviar siempre entradas de escritura al dispositivo, irrelevante del estado, siempre actualizar los valores locales\nOptimize role detection for some states\nTrató de prevenir el registro demasiado exuberante del mismo error en poco tiempo en problemas de Wifi",
+        "pl": "Zawsze wysyłaj wpisy do urządzenia, bez względu na status, zawsze aktualizuj wartości lokalne\nOptymalizacja wykrywania ról dla niektórych państw\nPróbowałem zapobiec zbyt luch logowanie tego samego błędu w krótkim czasie na Wifi problemów",
+        "uk": "Завжди надішлемо чіткі записи до пристрою, незалежно від стану, завжди оновлювати локальні значення\nОптимальне визначення ролі для деяких держав\nВипробувано, щоб уникнути занадто luch журналювання тієї ж помилки в короткий час на питаннях Wifi",
+        "zh-cn": "总是向设备发送可写条目, 与状态无关, 总是更新本地值\n优化对某些州的角色检测\n试图在短短的时间内防止同样错误的过度记录 Wifi 问题"
+      },
       "0.4.11": {
         "en": "Increase communication timeout to 10s to prevent refresh issues",
         "de": "Erhöhen Sie die Kommunikationszeit auf 10er Jahre, um Erfrischungsprobleme zu verhindern",
@@ -80,19 +93,6 @@
         "pl": "Aktualizuj zależności z optymalizacjami i drugą warstwą blokującą dla ograniczenia prędkości",
         "uk": "Оновлення залежності з оптимізацією та другим шаром блокування для обмеження швидкості",
         "zh-cn": "更新具有优化的依赖性和限制费率的第二个阻塞层"
-      },
-      "0.4.5": {
-        "en": "Block communication when rate limited according to Daikin response",
-        "de": "Block-Kommunikation, wenn Rate begrenzt nach Daikin Antwort",
-        "ru": "Блоковая связь, когда скорость ограничена в соответствии с ответом Дайкина",
-        "pt": "Bloquear a comunicação quando a taxa limitada de acordo com a resposta Daikin",
-        "nl": "Blokkeer communicatie wanneer de snelheid beperkt is volgens Daikin respons",
-        "fr": "Bloquer la communication lorsque le taux est limité selon la réponse de Daikin",
-        "it": "Bloccare la comunicazione quando il tasso è limitato in base alla risposta Daikin",
-        "es": "Bloque de comunicación cuando la tasa se limita según la respuesta de Daikin",
-        "pl": "Komunikacja blokowa, gdy szybkość jest ograniczona w zależności od odpowiedzi Daikina",
-        "uk": "Блокування зв'язку при обмеженні курсу на Daikin",
-        "zh-cn": "根据Daikin的答复,费率有限时断断续续的通信"
       }
     },
     "titleLang": {

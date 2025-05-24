@@ -230,27 +230,36 @@ class DaikinCloudAdapter extends utils.Adapter {
 
         dev.on('updated', async () => {
             if (this.unloaded) return;
-            const newLastUpdated = dev.getLastUpdated().getTime();
-            const newCloudConnected = dev.isCloudConnectionUp();
-            if (newCloudConnected !== this.knownDevices[deviceId].cloudConnected) {
-                await this.setState(`${deviceId}.cloudConnected`, {val: dev.isCloudConnectionUp(), ack: true});
-                this.log.info(`${deviceId}: Cloud connection status changed to ${dev.isCloudConnectionUp()} - Reinitialize all Objects`);
-                await this.initDaikinDevice(dev.getId(), dev);
-                await this.createOrUpdateAllObjects();
-            }
-            if (newLastUpdated !== this.knownDevices[deviceId].lastUpdated) {
-                const normalizedDeviceData = this.normalizeDataStructure(dev.getData());
-                const updatedStateIds = this.dataMapper.updateValues(normalizedDeviceData, deviceId);
-                if (updatedStateIds) {
-                    for (const stateId of updatedStateIds) {
-                        const val = this.dataMapper.values.get(stateId);
-                        this.log.debug(`update state: ${stateId} = ${val}`);
-                        if (val !== undefined) {
-                            await this.setState(stateId, val, true);
+            if (this.knownDevices[deviceId].updateInProgress) return;
+            this.knownDevices[deviceId].updateInProgress = true;
+            try {
+                const newLastUpdated = dev.getLastUpdated().getTime();
+                const newCloudConnected = dev.isCloudConnectionUp();
+                if (newCloudConnected !== this.knownDevices[deviceId].cloudConnected) {
+                    await this.setState(`${deviceId}.cloudConnected`, {val: dev.isCloudConnectionUp(), ack: true});
+                    this.log.info(`${deviceId}: Cloud connection status changed to ${dev.isCloudConnectionUp()} - Reinitialize all Objects`);
+                    await this.initDaikinDevice(dev.getId(), dev);
+                    await this.createOrUpdateAllObjects();
+                }
+                if (newLastUpdated !== this.knownDevices[deviceId].lastUpdated) {
+                    const normalizedDeviceData = this.normalizeDataStructure(dev.getData());
+                    const updatedStateIds = this.dataMapper.updateValues(normalizedDeviceData, deviceId);
+                    if (updatedStateIds) {
+                        for (const stateId of updatedStateIds) {
+                            const val = this.dataMapper.values.get(stateId);
+                            this.log.debug(`update state: ${stateId} = ${val}`);
+                            if (val !== undefined) {
+                                await this.setState(stateId, val, true);
+                            }
                         }
                     }
+                    await this.setState(`${deviceId}.lastUpdateReceived`, {
+                        val: dev.getLastUpdated().getTime(),
+                        ack: true
+                    });
                 }
-                await this.setState(`${deviceId}.lastUpdateReceived`, {val: dev.getLastUpdated().getTime(), ack: true});
+            } finally {
+                this.knownDevices[deviceId].updateInProgress = false;
             }
         });
 
@@ -288,7 +297,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                             const writeValue = this.dataMapper.convertValueWrite(objId, value, obj);
                             this.log.info(`Send state change for ${objId} with value=${writeValue} to ${obj.native.managementPoint} : ${obj.native.dataPoint} : ${obj.native.dataPointPath}`)
                             try {
-                                await dev.setData(obj.native.managementPoint, obj.native.dataPoint, obj.native.dataPointPath, writeValue, true);
+                                await dev.setData(obj.native.managementPoint, obj.native.dataPoint, obj.native.dataPointPath, writeValue, { ignoreWritableCheck: true , updateLocalData: true });
                                 await this.setState(objId, {val: value, ack: true});
                             } catch (err) {
                                 this.log.warn(`Error on State update for ${objId} with value=${writeValue}: ${err.message}`);

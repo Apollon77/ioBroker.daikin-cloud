@@ -9,6 +9,7 @@
   "homepage": "https://github.com/Apollon77/ioBroker.daikin-cloud",
   "license": "MIT",
   "keywords": [
+    "ioBroker",
     "Daikin",
     "Daikin Cloud"
   ],
@@ -17,7 +18,7 @@
     "url": "https://github.com/Apollon77/ioBroker.daikin-cloud"
   },
   "engines": {
-    "node": ">=18.2"
+    "node": ">=20"
   },
   "dependencies": {
     "@apollon/iobroker-tools": "^0.3.0",
@@ -36,6 +37,14 @@
     "typescript": "~5.9.2"
   },
   "main": "main.js",
+  "files": [
+    "main.js",
+    "io-package.json",
+    "LICENSE",
+    "README.md",
+    "admin/",
+    "lib/"
+  ],
   "scripts": {
     "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
     "test:package": "mocha test/package --exit",

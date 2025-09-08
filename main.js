@@ -25,9 +25,9 @@ function getDeferredPromise() {
         rej = reject;
     });
 
-    // @ts-ignore
+    // @ts-expect-error extending Promise with resolve/reject properties
     resultPromise.resolve = res;
-    // @ts-ignore
+    // @ts-expect-error extending Promise with resolve/reject properties
     resultPromise.reject = rej;
 
     return resultPromise;
@@ -554,7 +554,7 @@ class DaikinCloudAdapter extends utils.Adapter {
             this.pollTimeout && clearTimeout(this.pollTimeout);
             this.initDelayTimeout && clearTimeout(this.initDelayTimeout);
             callback();
-        } catch (e) {
+        } catch {
             callback();
         }
     }
@@ -630,7 +630,7 @@ class DaikinCloudAdapter extends utils.Adapter {
         if (typeof msg === 'object' && msg.message) {
             this.log.debug(`Message received: ${JSON.stringify(msg)}`);
             switch (msg.command) {
-                case 'getRedirectBaseUrl':
+                case 'getRedirectBaseUrl': {
                     const args = msg.message;
                     this.log.debug(`Received OAuth start message: ${JSON.stringify(args)}`);
                     if (!args || !args.clientId || !args.clientSecret || !args.redirectUriBase) {
@@ -682,6 +682,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                             msg.callback,
                         );
                     break;
+                }
                 case 'getOAuthStartLink': {
                     const args = msg.message;
                     this.log.debug(`Received OAuth start message: ${JSON.stringify(args)}`);
@@ -826,7 +827,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                             );
                         return;
                     }
-                    // @ts-ignore
+                    // @ts-expect-error authenticationPromise is dynamically extended with resolve method
                     this.authenticationPromise.resolve(args.code);
 
                     msg.callback &&

@@ -11,4 +11,4 @@ const { should, use } = require('chai');
 
 should();
 use(sinonChai);
-use(chaiAsPromised);
+use(chaiAsPromised.default || chaiAsPromised);

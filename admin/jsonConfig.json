@@ -8,7 +8,11 @@
             "style": {
                 "marginTop": 20
             },
+            "xs": 12,
             "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12,
             "text": "auth_header"
         },
         "_auth1": {
@@ -37,16 +41,22 @@
             "newLine": true,
             "label": "ClientID",
             "help": "Daikin Developer Account Client ID",
-            "sm": 6,
-            "lg": 3
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
         },
         "clientSecret": {
             "type": "password",
             "repeat": false,
             "help": "Daikin Developer Account Client Secret",
             "label": "ClientSecret",
-            "sm": 6,
-            "lg": 3
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
         },
         "_auth4":{
             "newLine": true,
@@ -97,7 +107,11 @@
             "style": {
                 "marginTop": 20
             },
+            "xs": 12,
             "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12,
             "text": "same_value_header"
         },
         "_sendSameValueInfo": {
@@ -109,8 +123,11 @@
             "newLine": true,
             "type": "checkbox",
             "label": "sendSameValue",
-            "sm": 6,
-            "lg": 3,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4,
             "default": false
         },
         "_pollingIntervalsHeader": {
@@ -120,7 +137,11 @@
             "style": {
                 "marginTop": 20
             },
+            "xs": 12,
             "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12,
             "text": "polling_header"
         },
         "_pollingInfo": {
@@ -132,16 +153,22 @@
             "newLine": true,
             "type": "number",
             "label": "polling_interval",
-            "sm": 6,
-            "lg": 3,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4,
             "min": 300
         },
         "slowPollingInterval": {
             "newLine": true,
             "type": "number",
             "label": "polling_interval_slow",
-            "sm": 6,
-            "lg": 3,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4,
             "min": 300
         }
     }

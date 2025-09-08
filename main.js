@@ -8,7 +8,7 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 const Tools = require('@apollon/iobroker-tools');
-const { DaikinCloudController, RateLimitedError} = require('daikin-controller-cloud');
+const { DaikinCloudController, RateLimitedError } = require('daikin-controller-cloud');
 const DataMapper = require('./lib/mapper');
 
 /**
@@ -25,9 +25,9 @@ function getDeferredPromise() {
         rej = reject;
     });
 
-    // @ts-ignore
+    // @ts-expect-error extending Promise with resolve/reject properties
     resultPromise.resolve = res;
-    // @ts-ignore
+    // @ts-expect-error extending Promise with resolve/reject properties
     resultPromise.reject = rej;
 
     return resultPromise;
@@ -35,7 +35,7 @@ function getDeferredPromise() {
 
 class DaikinCloudAdapter extends utils.Adapter {
     /**
-     * @param {Partial<utils.AdapterOptions>} [options={}]
+     * @param {Partial<utils.AdapterOptions>} [options]
      */
     constructor(options) {
         super({
@@ -85,19 +85,20 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.daikinCloud.on('token_update', async tokenSet => {
             this.log.info('Daikin-Cloud tokens updated ...');
             this.tokenSet = tokenSet;
-            await this.updateTokenSetForAdapter(tokenSet)
+            await this.updateTokenSetForAdapter(tokenSet);
         });
 
         this.daikinCloud.on('rate_limit_status', async rateLimitStatus => {
             this.log.debug(`Rate Limit Status: ${JSON.stringify(rateLimitStatus)}`);
-            const limitMinute = typeof(rateLimitStatus.limitMinute) === "number" ? rateLimitStatus.limitMinute : null;
-            const limitDay = typeof(rateLimitStatus.limitDay) === "number" ? rateLimitStatus.limitDay : null;
-            const remainingMinute = typeof(rateLimitStatus.remainingMinute) === "number" ? rateLimitStatus.remainingMinute : null;
-            const remainingDay = typeof(rateLimitStatus.remainingDay) === "number" ? rateLimitStatus.remainingDay : null;
-            await this.setState('info.rateLimitMinute', {val: limitMinute, ack: true});
-            await this.setState('info.rateLimitDay', {val: limitDay, ack: true});
-            await this.setState('info.rateRemainingMinute', {val: remainingMinute, ack: true});
-            await this.setState('info.rateRemainingDay', {val: remainingDay, ack: true});
+            const limitMinute = typeof rateLimitStatus.limitMinute === 'number' ? rateLimitStatus.limitMinute : null;
+            const limitDay = typeof rateLimitStatus.limitDay === 'number' ? rateLimitStatus.limitDay : null;
+            const remainingMinute =
+                typeof rateLimitStatus.remainingMinute === 'number' ? rateLimitStatus.remainingMinute : null;
+            const remainingDay = typeof rateLimitStatus.remainingDay === 'number' ? rateLimitStatus.remainingDay : null;
+            await this.setState('info.rateLimitMinute', { val: limitMinute, ack: true });
+            await this.setState('info.rateLimitDay', { val: limitDay, ack: true });
+            await this.setState('info.rateRemainingMinute', { val: remainingMinute, ack: true });
+            await this.setState('info.rateRemainingDay', { val: remainingDay, ack: true });
         });
     }
 
@@ -109,10 +110,12 @@ class DaikinCloudAdapter extends utils.Adapter {
         // we need to move the "unit" field to the sub properties and remove the "unit" field on the main level.
 
         for (const dataKeys of Object.keys(data)) {
-            this.log.debug(`Normalize data for ${dataKeys} - /electrical found? ${data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData['/electrical'] ? 'yes' : 'no'}`);
+            this.log.debug(
+                `Normalize data for ${dataKeys} - /electrical found? ${data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData['/electrical'] ? 'yes' : 'no'}`,
+            );
             if (data[dataKeys] && data[dataKeys].consumptionData && data[dataKeys].consumptionData['/electrical']) {
                 const electrical = data[dataKeys].consumptionData['/electrical'];
-                if (typeof electrical.unit === "string") {
+                if (typeof electrical.unit === 'string') {
                     const unit = electrical.unit;
                     delete electrical.unit;
                     Object.keys(electrical).forEach(key => {
@@ -120,7 +123,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                             Object.keys(electrical[key]).forEach(subKey => {
                                 if (Array.isArray(electrical[key][subKey])) {
                                     const value = electrical[key][subKey];
-                                    electrical[key][`${subKey}-raw`] = {unit, value};
+                                    electrical[key][`${subKey}-raw`] = { unit, value };
                                     delete electrical[key][subKey];
                                 } else {
                                     this.log.debug(`Ignore electrical data for ${key}/${subKey} because not an array.`);
@@ -128,7 +131,9 @@ class DaikinCloudAdapter extends utils.Adapter {
                             });
                         }
                     });
-                    this.log.debug(`Normalize data for ${dataKeys} - electrical found and normalized: ${JSON.stringify(electrical)}`);
+                    this.log.debug(
+                        `Normalize data for ${dataKeys} - electrical found and normalized: ${JSON.stringify(electrical)}`,
+                    );
                     data[dataKeys].consumptionData['/electrical'] = electrical;
                 }
             }
@@ -137,7 +142,9 @@ class DaikinCloudAdapter extends utils.Adapter {
     }
 
     async cleanupObsoleteObjects() {
-        const delIds = Object.keys(this.objectHelper.existingStates).filter(id => id.includes(".") && !id.startsWith('info.'));
+        const delIds = Object.keys(this.objectHelper.existingStates).filter(
+            id => id.includes('.') && !id.startsWith('info.'),
+        );
         if (delIds.length) {
             this.log.info(`Deleting the following obsolete states: ${JSON.stringify(delIds)}`);
             for (let i = 0; i < delIds.length; i++) {
@@ -159,14 +166,18 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.knownDevices[deviceId] = this.knownDevices[deviceId] || {};
         this.knownDevices[deviceId].device = dev;
         this.knownDevices[deviceId].cloudConnected = dev.isCloudConnectionUp();
-        this.log.info(`Initialize device ${deviceId}: connected ${dev.isCloudConnectionUp()}, lastUpdated ${dev.getLastUpdated()}`);
+        this.log.info(
+            `Initialize device ${deviceId}: connected ${dev.isCloudConnectionUp()}, lastUpdated ${dev.getLastUpdated()}`,
+        );
 
         let deviceNameObj = dev.getData('climateControl', 'name');
         let deviceName = deviceId;
-        if (!deviceNameObj) { // Fallback for Altherma devices
+        if (!deviceNameObj) {
+            // Fallback for Altherma devices
             deviceNameObj = dev.getData('climateControlMainZone', 'name');
         }
-        if (!deviceNameObj) { // Fallback for other Daikin devices
+        if (!deviceNameObj) {
+            // Fallback for other Daikin devices
             const allData = dev.getData();
             for (let key of Object.keys(allData)) {
                 if (
@@ -187,57 +198,78 @@ class DaikinCloudAdapter extends utils.Adapter {
                 const devDataStr = JSON.stringify(dev.getData());
                 this.log.debug(`No name found for device ${deviceId}: ${devDataStr}`);
                 this.deviceInfoSent[deviceId] = true;
-                this.Sentry && this.Sentry.withScope(scope => {
-                    scope.setLevel('info');
-                    scope.setExtra('deviceData', devDataStr);
-                    this.Sentry.captureMessage(`Unknown Device Name ${deviceId}`, 'info');
-                });
+                this.Sentry &&
+                    this.Sentry.withScope(scope => {
+                        scope.setLevel('info');
+                        scope.setExtra('deviceData', devDataStr);
+                        this.Sentry.captureMessage(`Unknown Device Name ${deviceId}`, 'info');
+                    });
             }
         }
-        this.objectHelper.setOrUpdateObject(deviceId, {
-            type: 'device',
-            common: {
-                name: deviceName,
-                statusStates: {
-                    onlineId: `${this.namespace}.${deviceId}.cloudConnected`
-                }
+        this.objectHelper.setOrUpdateObject(
+            deviceId,
+            {
+                type: 'device',
+                common: {
+                    name: deviceName,
+                    statusStates: {
+                        onlineId: `${this.namespace}.${deviceId}.cloudConnected`,
+                    },
+                },
+                native: {
+                    id: deviceId,
+                },
             },
-            native: {
-                id: deviceId
-            }
-        }, ['name']);
+            ['name'],
+        );
 
-        this.objectHelper.setOrUpdateObject(`${deviceId}.cloudConnected`, {
-            common: {
-                name: 'connected',
-                type: 'boolean',
-                role: 'indicator.reachable',
-                read: true,
-                write: false
-            }
-        }, undefined, this.knownDevices[deviceId].cloudConnected);
+        this.objectHelper.setOrUpdateObject(
+            `${deviceId}.cloudConnected`,
+            {
+                common: {
+                    name: 'connected',
+                    type: 'boolean',
+                    role: 'indicator.reachable',
+                    read: true,
+                    write: false,
+                },
+            },
+            undefined,
+            this.knownDevices[deviceId].cloudConnected,
+        );
 
         this.knownDevices[deviceId].lastUpdated = dev.getLastUpdated().getTime();
-        this.objectHelper.setOrUpdateObject(`${deviceId}.lastUpdateReceived`, {
-            common: {
-                name: 'lastUpdateReceived',
-                type: 'number',
-                role: 'date',
-                read: true,
-                write: false
-            }
-        }, undefined, this.knownDevices[deviceId].lastUpdated);
+        this.objectHelper.setOrUpdateObject(
+            `${deviceId}.lastUpdateReceived`,
+            {
+                common: {
+                    name: 'lastUpdateReceived',
+                    type: 'number',
+                    role: 'date',
+                    read: true,
+                    write: false,
+                },
+            },
+            undefined,
+            this.knownDevices[deviceId].lastUpdated,
+        );
 
         dev.on('updated', async () => {
-            if (this.unloaded) return;
-            if (this.knownDevices[deviceId].updateInProgress) return;
+            if (this.unloaded) {
+                return;
+            }
+            if (this.knownDevices[deviceId].updateInProgress) {
+                return;
+            }
             this.knownDevices[deviceId].updateInProgress = true;
             try {
                 const newLastUpdated = dev.getLastUpdated().getTime();
                 const newCloudConnected = dev.isCloudConnectionUp();
                 if (newCloudConnected !== this.knownDevices[deviceId].cloudConnected) {
-                    await this.setState(`${deviceId}.cloudConnected`, {val: dev.isCloudConnectionUp(), ack: true});
-                    this.log.info(`${deviceId}: Cloud connection status changed to ${dev.isCloudConnectionUp()} - Reinitialize all Objects`);
+                    await this.setState(`${deviceId}.cloudConnected`, { val: dev.isCloudConnectionUp(), ack: true });
+                    this.log.info(
+                        `${deviceId}: Cloud connection status changed to ${dev.isCloudConnectionUp()} - Reinitialize all Objects`,
+                    );
                     await this.initDaikinDevice(dev.getId(), dev);
                     await this.createOrUpdateAllObjects();
                 }
@@ -255,7 +287,7 @@ class DaikinCloudAdapter extends utils.Adapter {
                     }
                     await this.setState(`${deviceId}.lastUpdateReceived`, {
                         val: dev.getLastUpdated().getTime(),
-                        ack: true
+                        ack: true,
                     });
                 }
             } finally {
@@ -275,17 +307,23 @@ class DaikinCloudAdapter extends utils.Adapter {
                 if (existingObj && existingObj.common && existingObj.common.write !== undefined) {
                     const determinedWrite = obj.common.write;
                     obj.common.write = existingObj.common.write || obj.common.write; // once true we leave it true
-                    this.log.debug(`Check existing object ${objId} ${determinedWrite} vs ${existingObj.common.write} ==> ${obj.common.write}`);
+                    this.log.debug(
+                        `Check existing object ${objId} ${determinedWrite} vs ${existingObj.common.write} ==> ${obj.common.write}`,
+                    );
                     if (determinedWrite !== obj.common.write) {
                         obj.common.role = this.dataMapper.defineRole(objId, obj.common);
-                        this.log.debug(`Update object ${objId} with write=${obj.common.write} and role=${obj.common.role}`);
+                        this.log.debug(
+                            `Update object ${objId} with write=${obj.common.write} and role=${obj.common.role}`,
+                        );
                     }
                 }
                 let onChange;
                 if (obj && obj.type === 'state' && obj.common) {
                     if (obj.common.write) {
                         onChange = async (value, state) => {
-                            if (this.unloaded) return;
+                            if (this.unloaded) {
+                                return;
+                            }
                             if (state && state.ts !== state.lc && !this.config.sendSameValue) {
                                 this.log.debug(`Ignore state change for ${objId} because value is the same as before`);
                                 return;
@@ -295,12 +333,22 @@ class DaikinCloudAdapter extends utils.Adapter {
                                 return;
                             }
                             const writeValue = this.dataMapper.convertValueWrite(objId, value, obj);
-                            this.log.info(`Send state change for ${objId} with value=${writeValue} to ${obj.native.managementPoint} : ${obj.native.dataPoint} : ${obj.native.dataPointPath}`)
+                            this.log.info(
+                                `Send state change for ${objId} with value=${writeValue} to ${obj.native.managementPoint} : ${obj.native.dataPoint} : ${obj.native.dataPointPath}`,
+                            );
                             try {
-                                await dev.setData(obj.native.managementPoint, obj.native.dataPoint, obj.native.dataPointPath, writeValue, { ignoreWritableCheck: true , updateLocalData: true });
-                                await this.setState(objId, {val: value, ack: true});
+                                await dev.setData(
+                                    obj.native.managementPoint,
+                                    obj.native.dataPoint,
+                                    obj.native.dataPointPath,
+                                    writeValue,
+                                    { ignoreWritableCheck: true, updateLocalData: true },
+                                );
+                                await this.setState(objId, { val: value, ack: true });
                             } catch (err) {
-                                this.log.warn(`Error on State update for ${objId} with value=${writeValue}: ${err.message}`);
+                                this.log.warn(
+                                    `Error on State update for ${objId} with value=${writeValue}: ${err.message}`,
+                                );
                             }
                             await this.pollDevices(60000);
                         };
@@ -309,14 +357,16 @@ class DaikinCloudAdapter extends utils.Adapter {
                             this.log.info(`Ignore state change for ${objId} because not writable!`);
                             const lastValue = this.dataMapper.values.get(objId);
                             if (lastValue !== undefined) {
-                                await this.setState(objId, {val: lastValue, ack: true});
+                                await this.setState(objId, { val: lastValue, ack: true });
                             }
                         };
                     }
                 }
                 const val = obj && obj.type === 'state' ? this.dataMapper.values.get(objId) : undefined;
                 this.objectHelper.setOrUpdateObject(objId, obj, ['name'], val, onChange);
-                this.log.debug(`Added object ${objId} (${obj && obj.type})${obj && obj.type === 'state' ? ` with initial value = ${val}` : ''}`);
+                this.log.debug(
+                    `Added object ${objId} (${obj && obj.type})${obj && obj.type === 'state' ? ` with initial value = ${val}` : ''}`,
+                );
             }
         }
     }
@@ -324,7 +374,7 @@ class DaikinCloudAdapter extends utils.Adapter {
     async initDaikinDevices() {
         const devices = await this.daikinCloud.getCloudDevices();
         if (!devices && !devices.length) {
-            this.log.info('No Devices found in the Daikin Cloud account')
+            this.log.info('No Devices found in the Daikin Cloud account');
         }
         this.log.info(`Initialize ${devices.length} Daikin devices`);
         for (let dev of devices) {
@@ -341,7 +391,9 @@ class DaikinCloudAdapter extends utils.Adapter {
                     await this.daikinCloud.updateAllDeviceData();
                 } catch (err) {
                     if (err instanceof RateLimitedError) {
-                        this.log.warn(`Rate Limit reached, you did too many requests to the Daikin Cloud API! All requests blocked for ${err.retryAfter} seconds!`);
+                        this.log.warn(
+                            `Rate Limit reached, you did too many requests to the Daikin Cloud API! All requests blocked for ${err.retryAfter} seconds!`,
+                        );
                         if (err.retryAfter != null) {
                             const retryAfter = parseInt(err.retryAfter);
                             if (!isNaN(retryAfter) && retryAfter > 0) {
@@ -351,7 +403,9 @@ class DaikinCloudAdapter extends utils.Adapter {
                     } else {
                         this.errorCount++;
                         const errorDetails = err.response && err.response.body && err.response.body.message;
-                        this.log.warn(`Error on update (${this.errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
+                        this.log.warn(
+                            `Error on update (${this.errorCount}): ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`,
+                        );
                     }
                 }
             } else {
@@ -383,7 +437,8 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.dataMapper = new DataMapper();
 
         const tokenObject = await this.getObjectAsync('_config');
-        this.tokenSet = tokenObject && tokenObject.native && tokenObject.native.tokenSet ? tokenObject.native.tokenSet : null;
+        this.tokenSet =
+            tokenObject && tokenObject.native && tokenObject.native.tokenSet ? tokenObject.native.tokenSet : null;
 
         if (!this.Sentry && this.supportsFeature && this.supportsFeature('PLUGINS')) {
             const sentryInstance = this.getPluginInstance('sentry');
@@ -398,17 +453,23 @@ class DaikinCloudAdapter extends utils.Adapter {
             this.log.warn(`Polling interval invalid or too low, set to 300 seconds (5 minutes)`);
             this.config.pollingInterval = 300;
         } else if (this.config.pollingInterval < 500) {
-            this.log.info(`Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`);
+            this.log.info(
+                `Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`,
+            );
         }
         if (isNaN(this.config.slowPollingInterval) || this.config.slowPollingInterval < 300) {
             this.log.warn(`Slow Polling interval invalid or too low, set to 600 seconds (10 minutes)`);
             this.config.slowPollingInterval = 600;
         } else if (this.config.slowPollingInterval < 500) {
-            this.log.info(`Slow Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`);
+            this.log.info(
+                `Slow Polling interval is set to ${this.config.pollingInterval} seconds, this could conflict with the rate limit of 200 calls per day! be aware!`,
+            );
         }
 
         if (this.config.slowPollingInterval < this.config.pollingInterval) {
-            this.log.warn(`Slow Polling interval is lower than the normal polling interval, this could lead to problems with the rate limit of 200 calls per day! be aware! Adjusting to polling interval`);
+            this.log.warn(
+                `Slow Polling interval is lower than the normal polling interval, this could lead to problems with the rate limit of 200 calls per day! be aware! Adjusting to polling interval`,
+            );
             this.config.slowPollingInterval = this.config.pollingInterval;
         }
 
@@ -416,28 +477,37 @@ class DaikinCloudAdapter extends utils.Adapter {
         await this.setState('info.connection', false, true);
 
         if (!this.tokenSet || !this.tokenSet.refresh_token || !this.tokenSet.access_token) {
-            this.log.warn('No tokens existing, please enter client id and secret of your Daikin Developer Account in Adapter settings and Authenticate via Admin Interface!');
+            this.log.warn(
+                'No tokens existing, please enter client id and secret of your Daikin Developer Account in Adapter settings and Authenticate via Admin Interface!',
+            );
             return;
         }
 
         if (!this.config.clientId || !this.config.clientSecret) {
-            this.log.warn('No client id or secret configured, please enter client id and secret of your Daikin Developer Account in Adapter settings!');
+            this.log.warn(
+                'No client id or secret configured, please enter client id and secret of your Daikin Developer Account in Adapter settings!',
+            );
             return;
         }
 
         const useSlowPolling = await this.getStateAsync(`${this.namespace}.useSlowPolling`);
-        this.pollingInterval = useSlowPolling && useSlowPolling.val ? this.config.slowPollingInterval : this.config.pollingInterval;
+        this.pollingInterval =
+            useSlowPolling && useSlowPolling.val ? this.config.slowPollingInterval : this.config.pollingInterval;
 
         await this.initDaikinCloud();
 
-        await new Promise(resolve => this.objectHelper.loadExistingObjects( () => resolve(true)));
+        await new Promise(resolve => this.objectHelper.loadExistingObjects(() => resolve(true)));
 
         try {
             await this.initDaikinDevices();
         } catch (err) {
-            if (this.unloaded) return;
+            if (this.unloaded) {
+                return;
+            }
             const errorDetails = err.response && err.response.body && err.response.body.message;
-            this.log.warn(`Error on Daikin Cloud communication on adapter initialization: ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`);
+            this.log.warn(
+                `Error on Daikin Cloud communication on adapter initialization: ${err.message}${errorDetails ? ` (${errorDetails})` : ''}`,
+            );
             let retryAfter = err instanceof RateLimitedError ? err.retryAfter : undefined;
             if (retryAfter !== undefined) {
                 retryAfter = parseInt(retryAfter);
@@ -475,6 +545,7 @@ class DaikinCloudAdapter extends utils.Adapter {
 
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
+     *
      * @param {() => void} callback
      */
     async onUnload(callback) {
@@ -483,13 +554,14 @@ class DaikinCloudAdapter extends utils.Adapter {
             this.pollTimeout && clearTimeout(this.pollTimeout);
             this.initDelayTimeout && clearTimeout(this.initDelayTimeout);
             callback();
-        } catch (e) {
+        } catch {
             callback();
         }
     }
 
     /**
      * Is called if a subscribed state changes
+     *
      * @param {string} id
      * @param {ioBroker.State | null | undefined} state
      */
@@ -519,8 +591,8 @@ class DaikinCloudAdapter extends utils.Adapter {
         this.log.info('Daikin token updated in adapter configuration ...');
         await this.extendObject(`_config`, {
             native: {
-                tokenSet
-            }
+                tokenSet,
+            },
         });
     }
 
@@ -533,79 +605,126 @@ class DaikinCloudAdapter extends utils.Adapter {
             }
         }
 
-        this.sendTo(msg.from, msg.command, {
-            result: {
-                devices: numDevices,
-                numConnectedToCloud,
-                tokenSetExisting: this.tokenSet && this.tokenSet.refresh_token && this.tokenSet.access_token
+        this.sendTo(
+            msg.from,
+            msg.command,
+            {
+                result: {
+                    devices: numDevices,
+                    numConnectedToCloud,
+                    tokenSetExisting: this.tokenSet && this.tokenSet.refresh_token && this.tokenSet.access_token,
+                },
+                error: null,
             },
-            error: null
-        }, msg.callback);
+            msg.callback,
+        );
     }
 
     /**
      * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
      * Using this method requires "common.messagebox" property to be set to true in io-package.json
+     *
      * @param {ioBroker.Message} msg
      */
     async onMessage(msg) {
         if (typeof msg === 'object' && msg.message) {
             this.log.debug(`Message received: ${JSON.stringify(msg)}`);
             switch (msg.command) {
-                case 'getRedirectBaseUrl':
+                case 'getRedirectBaseUrl': {
                     const args = msg.message;
                     this.log.debug(`Received OAuth start message: ${JSON.stringify(args)}`);
                     if (!args || !args.clientId || !args.clientSecret || !args.redirectUriBase) {
-                        this.sendTo(msg.from, msg.command, {
-                            result: null,
-                            error: 'Invalid arguments'
-                        }, msg.callback);
+                        this.sendTo(
+                            msg.from,
+                            msg.command,
+                            {
+                                result: null,
+                                error: 'Invalid arguments',
+                            },
+                            msg.callback,
+                        );
                         return;
                     }
                     if (args.redirectUriBase.includes('127.0.0.1') || args.redirectUriBase.includes('localhost')) {
-                        this.sendTo(msg.from, msg.command, {
-                            result: null,
-                            error: 'Please use a local IP or domain for the redirect URL. Localhost is not allowed.'
-                        }, msg.callback);
+                        this.sendTo(
+                            msg.from,
+                            msg.command,
+                            {
+                                result: null,
+                                error: 'Please use a local IP or domain for the redirect URL. Localhost is not allowed.',
+                            },
+                            msg.callback,
+                        );
                         return;
                     }
                     if (!args.redirectUriBase.startsWith('https://')) {
-                        this.sendTo(msg.from, msg.command, {
-                            result: null,
-                            error: 'Your Admin instance to to use HTTPS.'
-                        }, msg.callback);
+                        this.sendTo(
+                            msg.from,
+                            msg.command,
+                            {
+                                result: null,
+                                error: 'Your Admin instance to to use HTTPS.',
+                            },
+                            msg.callback,
+                        );
                         return;
                     }
-                    if (!args.redirectUriBase.endsWith('/')) args.redirectUriBase += '/';
+                    if (!args.redirectUriBase.endsWith('/')) {
+                        args.redirectUriBase += '/';
+                    }
                     args.redirectUriBase = `${args.redirectUriBase}oauth2_callbacks/${this.namespace}/`;
                     this.log.debug(`Get OAuth start link data: ${JSON.stringify(args)}`);
-                    msg.callback && this.sendTo(msg.from, msg.command, {error: `Redirect URL: ${args.redirectUriBase} ... Enter in Daikin Developer App!`} , msg.callback);
+                    msg.callback &&
+                        this.sendTo(
+                            msg.from,
+                            msg.command,
+                            { error: `Redirect URL: ${args.redirectUriBase} ... Enter in Daikin Developer App!` },
+                            msg.callback,
+                        );
                     break;
+                }
                 case 'getOAuthStartLink': {
                     const args = msg.message;
                     this.log.debug(`Received OAuth start message: ${JSON.stringify(args)}`);
                     if (!args || !args.clientId || !args.clientSecret || !args.redirectUriBase) {
-                        this.sendTo(msg.from, msg.command, {
-                            result: null,
-                            error: 'Invalid arguments'
-                        }, msg.callback);
+                        this.sendTo(
+                            msg.from,
+                            msg.command,
+                            {
+                                result: null,
+                                error: 'Invalid arguments',
+                            },
+                            msg.callback,
+                        );
                         return;
                     }
                     if (args.redirectUriBase.includes('127.0.0.1') || args.redirectUriBase.includes('localhost')) {
-                        this.sendTo(msg.from, msg.command, {
-                            result: null,
-                            error: 'Please use a local IP or domain for the redirect URL. Localhost is not allowed.'
-                        }, msg.callback);
+                        this.sendTo(
+                            msg.from,
+                            msg.command,
+                            {
+                                result: null,
+                                error: 'Please use a local IP or domain for the redirect URL. Localhost is not allowed.',
+                            },
+                            msg.callback,
+                        );
                         return;
                     }
                     if (!args.redirectUriBase.startsWith('https://')) {
-                        this.sendTo(msg.from, msg.command, {
-                            result: null,
-                            error: 'Your Admin instance to to use HTTPS.'
-                        }, msg.callback);
+                        this.sendTo(
+                            msg.from,
+                            msg.command,
+                            {
+                                result: null,
+                                error: 'Your Admin instance to to use HTTPS.',
+                            },
+                            msg.callback,
+                        );
                         return;
                     }
-                    if (!args.redirectUriBase.endsWith('/')) args.redirectUriBase += '/';
+                    if (!args.redirectUriBase.endsWith('/')) {
+                        args.redirectUriBase += '/';
+                    }
                     args.redirectUriBase = `${args.redirectUriBase}oauth2_callbacks/${this.namespace}/`;
                     this.log.debug(`Get OAuth start link data: ${JSON.stringify(args)}`);
 
@@ -620,12 +739,12 @@ class DaikinCloudAdapter extends utils.Adapter {
                             oidcCallbackServerPort: 1234, // remove
                             customOidcCodeReceiver: async (authUrl, reqState) => {
                                 this.log.debug(`Get OAuth start link: ${authUrl} / reqState: ${reqState}`);
-                                msg.callback && this.sendTo(msg.from, msg.command, {openUrl: authUrl}, msg.callback);
+                                msg.callback && this.sendTo(msg.from, msg.command, { openUrl: authUrl }, msg.callback);
                                 const authenticationPromise = getDeferredPromise();
                                 this.authenticationPromise = authenticationPromise;
                                 this.expectedAuthenticationState = reqState;
                                 return authenticationPromise;
-                            }
+                            },
                         });
 
                         daikinCloud.on('token_update', async tokenSet => {
@@ -636,8 +755,8 @@ class DaikinCloudAdapter extends utils.Adapter {
                             this.extendForeignObject(`system.adapter.${this.namespace}`, {
                                 native: {
                                     clientId: this.encrypt(args.clientId),
-                                    clientSecret: this.encrypt(args.clientSecret)
-                                }
+                                    clientSecret: this.encrypt(args.clientSecret),
+                                },
                             });
                         });
 
@@ -645,7 +764,13 @@ class DaikinCloudAdapter extends utils.Adapter {
                             await daikinCloud.getApiInfo(); // trigger authentication
                         } catch (err) {
                             this.log.error(`Error on OAuth process: ${err}`);
-                            msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud error: ${err}. Please try again.`}, msg.callback);
+                            msg.callback &&
+                                this.sendTo(
+                                    msg.from,
+                                    msg.command,
+                                    { error: `Daikin Cloud error: ${err}. Please try again.` },
+                                    msg.callback,
+                                );
                         }
                     });
                     break;
@@ -657,28 +782,56 @@ class DaikinCloudAdapter extends utils.Adapter {
                     if (!args.state || !args.code) {
                         this.log.warn(`Error on OAuth callback: ${JSON.stringify(args)}`);
                         if (args.error) {
-                            msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud error: ${args.error}. Please try again.`}, msg.callback);
+                            msg.callback &&
+                                this.sendTo(
+                                    msg.from,
+                                    msg.command,
+                                    { error: `Daikin Cloud error: ${args.error}. Please try again.` },
+                                    msg.callback,
+                                );
                         } else {
-                            msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud invalid response: ${JSON.stringify(args)}. Please try again.`}, msg.callback);
+                            msg.callback &&
+                                this.sendTo(
+                                    msg.from,
+                                    msg.command,
+                                    {
+                                        error: `Daikin Cloud invalid response: ${JSON.stringify(args)}. Please try again.`,
+                                    },
+                                    msg.callback,
+                                );
                         }
                         return;
                     }
 
                     if (this.expectedAuthenticationState !== args.state) {
-                        this.log.warn(`Error on OAuth callback: Invalid state received: ${args.state} (expected: ${this.expectedAuthenticationState})`);
-                        msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud invalid state received. Please try again.`}, msg.callback);
+                        this.log.warn(
+                            `Error on OAuth callback: Invalid state received: ${args.state} (expected: ${this.expectedAuthenticationState})`,
+                        );
+                        msg.callback &&
+                            this.sendTo(
+                                msg.from,
+                                msg.command,
+                                { error: `Daikin Cloud invalid state received. Please try again.` },
+                                msg.callback,
+                            );
                         return;
                     }
                     if (!this.authenticationPromise) {
                         this.log.warn(`Error on OAuth callback: No authentication promise available!`);
-                        msg.callback && this.sendTo(msg.from, msg.command, {error: `Daikin Cloud internal error. Please try again.`}, msg.callback);
+                        msg.callback &&
+                            this.sendTo(
+                                msg.from,
+                                msg.command,
+                                { error: `Daikin Cloud internal error. Please try again.` },
+                                msg.callback,
+                            );
                         return;
                     }
-                    // @ts-ignore
+                    // @ts-expect-error authenticationPromise is dynamically extended with resolve method
                     this.authenticationPromise.resolve(args.code);
 
-
-                    msg.callback && this.sendTo(msg.from, msg.command, {result: 'Tokens updated successfully.'}, msg.callback);
+                    msg.callback &&
+                        this.sendTo(msg.from, msg.command, { result: 'Tokens updated successfully.' }, msg.callback);
                     break;
                 }
                 case 'getDeviceInfo':
@@ -687,15 +840,14 @@ class DaikinCloudAdapter extends utils.Adapter {
             }
         }
     }
-
 }
 
 if (require.main !== module) {
     // Export the constructor in compact mode
     /**
-     * @param {Partial<utils.AdapterOptions>} [options={}]
+     * @param {Partial<utils.AdapterOptions>} [options]
      */
-    module.exports = (options) => new DaikinCloudAdapter(options);
+    module.exports = options => new DaikinCloudAdapter(options);
 } else {
     // otherwise start the instance directly
     new DaikinCloudAdapter();

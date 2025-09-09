@@ -18,23 +18,43 @@
         "_auth1": {
             "newLine":  true,
             "type": "staticText",
-            "text": "auth_step1"
+            "text": "auth_step1",
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
         },
         "_auth2": {
             "newLine":  true,
             "type": "staticText",
-            "text": "auth_step2"
+            "text": "auth_step2",
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
         },
         "_authlink": {
             "newLine":  true,
             "type": "staticLink",
             "text": "auth_link",
-            "href": "https://developer.cloud.daikineurope.com/"
+            "href": "https://developer.cloud.daikineurope.com/",
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
         },
         "_auth3": {
             "newLine":  true,
             "type": "staticText",
-            "text": "auth_step3"
+            "text": "auth_step3",
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
         },
         "clientId": {
             "type": "text",
@@ -67,7 +87,12 @@
             "label": "auth_step4",
             "icon": "info",
             "command": "getRedirectBaseUrl",
-            "jsonData": "{ \"clientId\": \"${data.clientId}\",\"clientSecret\": \"${data.clientSecret}\",\"redirectUriBase\": \"${data._origin}\" }"
+            "jsonData": "{ \"clientId\": \"${data.clientId}\",\"clientSecret\": \"${data.clientSecret}\",\"redirectUriBase\": \"${data._origin}\" }",
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
         },
         "_auth5": {
             "newLine":  true,

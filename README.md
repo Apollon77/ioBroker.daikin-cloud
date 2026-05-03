@@ -116,6 +116,8 @@ The current rate limit details are contained in the adapter i fo states and are 
 ### 0.1.0 (2022-05-23)
 * (Apollon77) initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Disclaimer
 **Daikin is a trademark of DAIKIN INDUSTRIES, LTD. I am in no way endorsed by or affiliated with DAIKIN INDUSTRIES, LTD., or any associated subsidiaries, logos or trademarks. This personal project is maintained in spare time.**
 

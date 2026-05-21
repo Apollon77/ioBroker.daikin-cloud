@@ -43,6 +43,10 @@ Additionally, there is a rate limit of 200 requests per day for the Daikin Cloud
 The current rate limit details are contained in the adapter i fo states and are updated every time the adapter makes a request to the Daikin Cloud.
 
 ## Changelog
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 0.4.12 (2025-05-24)
 * (@JeroenVdb) Always send writable entries to the device, irrelevant of status, always update local values
 * (@Apollon77) Optimize role detection for some states

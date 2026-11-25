@@ -10,6 +10,7 @@ const utils = require('@iobroker/adapter-core');
 const Tools = require('@apollon/iobroker-tools');
 const { DaikinCloudController, RateLimitedError } = require('daikin-controller-cloud');
 const DataMapper = require('./lib/mapper');
+const { normalizeOutdoorTemperature } = require('./lib/tools');
 
 /**
  * Utility function to create a Promise that can be resolved/rejected deferred
@@ -135,6 +136,22 @@ class DaikinCloudAdapter extends utils.Adapter {
                         `Normalize data for ${dataKeys} - electrical found and normalized: ${JSON.stringify(electrical)}`,
                     );
                     data[dataKeys].consumptionData['/electrical'] = electrical;
+                }
+            }
+
+            const sensoryData = data[dataKeys] && data[dataKeys].sensoryData;
+            if (sensoryData && typeof sensoryData === 'object') {
+                for (const tempKey of ['/outdoorTemperature', 'outdoorTemperature']) {
+                    const outdoorTemp = sensoryData[tempKey];
+                    if (outdoorTemp && typeof outdoorTemp.value === 'number') {
+                        const correctedTemp = normalizeOutdoorTemperature(outdoorTemp.value);
+                        if (correctedTemp !== outdoorTemp.value) {
+                            this.log.debug(
+                                `Normalize data for ${dataKeys} - fix uint8 underflow for ${tempKey}: ${outdoorTemp.value} -> ${correctedTemp}`,
+                            );
+                            outdoorTemp.value = correctedTemp;
+                        }
+                    }
                 }
             }
         }
